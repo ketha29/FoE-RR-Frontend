@@ -9,6 +9,7 @@ import DayView from "./components/DayView"
 import CalendarHeaderDay from "./components/CalendarHeaderDay"
 import BookingForm1 from "./components/BookingForm1"
 import BookingForm from "./components/BookingForm"
+import ListBooking from "./components/ListBooking"
 
 function App() {
   const [currentMonth, setCurrentMonth] = useState(getMonth());
@@ -23,10 +24,11 @@ function App() {
   console.table(getMonth(3))
   return (
     <React.Fragment>
-      {showBookingForm && <BookingForm />}
+      <ListBooking />
+      {/* {showBookingForm && <BookingForm />} */}
       {/* <DayView day={currentDay} /> */}
       {/* <BookingForm /> */}
-      <div className="h-screen flex flex-col">
+      {/* <div className="h-screen flex flex-col">
         {(view === "month") && <CalendarHeader view={view} setView={setView} />}
         {(view === "day") && <CalendarHeaderDay view={view} setView={setView} />}
         <div className="flex flex-1">
@@ -34,7 +36,7 @@ function App() {
           {(view === "month") && <Month month={currentMonth} />}
           {(view === "day") && <DayView day={currentDay} />}
         </div>
-      </div>
+      </div> */}
     </React.Fragment>
   );
 }
