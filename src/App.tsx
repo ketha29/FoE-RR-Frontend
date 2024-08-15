@@ -7,12 +7,13 @@ import Month from "./components/Month"
 import GlobalContext from "./context/GlobalContext"
 import DayView from "./components/DayView"
 import CalendarHeaderDay from "./components/CalendarHeaderDay"
+import BookingForm1 from "./components/BookingForm1"
+import BookingForm from "./components/BookingForm"
 
 function App() {
   const [currentMonth, setCurrentMonth] = useState(getMonth());
-  const {monthIndex} = useContext(GlobalContext);
-  const [view, setView] = useState("month");
-
+  const {monthIndex, dayIndex, showBookingForm} = useContext(GlobalContext);
+  const [view, setView] = useState("day");
   const [currentDay, setCurretDay] = useState(getDay());
 
   useEffect(( )=> {
@@ -22,6 +23,7 @@ function App() {
   console.table(getMonth(3))
   return (
     <React.Fragment>
+      {showBookingForm && <BookingForm />}
       {/* <DayView day={currentDay} /> */}
       {/* <BookingForm /> */}
       <div className="h-screen flex flex-col">

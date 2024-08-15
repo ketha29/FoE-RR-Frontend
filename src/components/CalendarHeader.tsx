@@ -1,26 +1,22 @@
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import GlobalContext from '../context/GlobalContext'
 import dayjs from 'dayjs';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import BookingForm from './BookingForm';
-import { getDay } from '../util';
-import DayView from './DayView';
+import AddBookingButton from './AddBookingButton';
 
 interface CalendarHeaderProps {
   view: String;
   setView: React.Dispatch<React.SetStateAction<string>>;
 }
 
-function CalendarHeader({view, setView}: CalendarHeaderProps) {
+function CalendarHeader({ setView }: CalendarHeaderProps) {
   const {monthIndex, setMonthIndex} = useContext(GlobalContext);
   const handlePrevMonth = () => setMonthIndex(monthIndex - 1);
   const handleNextMonth = () => setMonthIndex(monthIndex + 1);
   const handleToday = () => setMonthIndex(dayjs().month());
-  const [addBooking, setAddBooking] = useState(false);
 
   return (
-    <>
     <header className='flex px-5 py-3 items-center justify-between'>
       <h2 className='m1-4 text-xl text-grey-500 font-bold'>
         {dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM YYYY")}
@@ -50,16 +46,9 @@ function CalendarHeader({view, setView}: CalendarHeaderProps) {
           </button>
         </div>
         <div className="ml-6 h-6 w-px bg-gray-300"></div>
-        <button 
-          className="ml-6 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-          onClick={() => setAddBooking(true)}
-        >
-          Add Booking
-        </button>
+        <AddBookingButton />
       </div>
     </header>
-    {(addBooking === true) && <BookingForm />}
-    </>
   )
 }
 

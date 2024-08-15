@@ -1,9 +1,12 @@
+import { useContext } from "react";
 import { FieldValues, useForm } from "react-hook-form";
+import GlobalContext from "../context/GlobalContext";
 
 const BookingForm = () => {
     const {register, handleSubmit, formState: {errors}} = useForm();
     
     const onSubmit = (data: FieldValues) => console.log(data);  
+    const {setShowBookingForm} = useContext(GlobalContext);
 
   return (
     <form onSubmit={handleSubmit((data) => console.log(data))}>

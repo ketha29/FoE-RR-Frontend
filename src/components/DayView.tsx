@@ -1,7 +1,4 @@
 import dayjs from "dayjs";
-import CalendarHeader from "./CalendarHeader";
-import CalendarHeaderDay from "./CalendarHeaderDay";
-import Day from "./Day";
 
 interface DayViewProps {
   day: dayjs.Dayjs[];
