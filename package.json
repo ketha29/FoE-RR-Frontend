@@ -16,6 +16,7 @@
     "@material-ui/icons": "^4.11.3",
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
+    "axios": "^1.7.4",
     "dayjs": "^1.11.12",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-normalize": "^10.0.1",
