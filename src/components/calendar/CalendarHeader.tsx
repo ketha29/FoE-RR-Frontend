@@ -1,9 +1,9 @@
 import { useContext } from 'react'
-import GlobalContext from '../context/GlobalContext'
+import GlobalContext from '../../context/GlobalContext'
 import dayjs from 'dayjs';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import AddBookingButton from './AddBookingButton';
+import AddBookingButton from '../AddBookingButton';
 
 interface CalendarHeaderProps {
   view: String;
