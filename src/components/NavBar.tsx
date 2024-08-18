@@ -7,8 +7,8 @@ import user from '../assets/user.jpg'
 const navigation = [
   { name: 'Home', href: '/home' },
   { name: 'Booking', href: '/booking/all' },
-  { name: 'Projects', href: '/oter' },
-  { name: 'Calendar', href: '/other' },
+  { name: 'Users', href: '/oter' },
+  { name: 'Rooms', href: '/other' },
 ]
 
 const NavBar = () => {
@@ -26,7 +26,7 @@ const NavBar = () => {
             </DisclosureButton>
           </div>
           <div className="flex flex-1 items-center justify-center md:items-stretch md:justify-start">
-            <div className="flex flex-shrink-0 items-center">
+            <div className="flex items-center ">
               <img
                 alt="FoE RR"
                 src={logo}

@@ -28,6 +28,7 @@ function App() {
       <BrowserRouter>
       <NavBar />
         <Routes>
+          <Route path="/add-booking" element={ showBookingForm && <BookingForm /> }></Route>
           <Route path="/booking/all" element={ <ListBooking /> }></Route>
           <Route path="/home" element={  
             <div className="h-screen flex flex-col">
@@ -40,7 +41,6 @@ function App() {
             </div>
           }>
           </Route>
-          <Route path="/add-booking" element={ <BookingForm /> }></Route>
         </Routes>
       </BrowserRouter>
       {/* {showBookingForm && <BookingForm />} */}
