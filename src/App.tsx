@@ -6,11 +6,11 @@ import Month from "./components/calendar/Month"
 import GlobalContext from "./context/GlobalContext"
 import DayView from "./components/calendar/DayView"
 import CalendarHeaderDay from "./components/calendar/CalendarHeaderDay"
-import BookingForm1 from "./components/BookingForm1"
 import BookingForm from "./components/BookingForm"
 import ListBooking from "./components/ListBooking"
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import NavBar from "./components/NavBar"
+import ListRoom from "./components/ListRoom"
 
 function App() {
   const [currentMonth, setCurrentMonth] = useState(getMonth());
@@ -41,6 +41,7 @@ function App() {
             </div>
           }>
           </Route>
+          <Route path="/room/all" element={ <ListRoom /> } />
         </Routes>
       </BrowserRouter>
       {/* {showBookingForm && <BookingForm />} */}

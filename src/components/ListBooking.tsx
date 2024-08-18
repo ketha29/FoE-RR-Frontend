@@ -17,7 +17,7 @@ const ListBooking = () => {
     useEffect(() => {
         const fetchData = async () => {
             const response = await getAllBookings();
-            setBookingList(response.data.bookingList)
+            setBookingList(response.data.bookingList);
             console.log(response.data.bookingList);            
         }
         fetchData();

@@ -7,12 +7,12 @@ import user from '../assets/user.jpg'
 const navigation = [
   { name: 'Home', href: '/home' },
   { name: 'Booking', href: '/booking/all' },
-  { name: 'Users', href: '/oter' },
-  { name: 'Rooms', href: '/other' },
+  { name: 'Users', href: '/fds' },
+  { name: 'Rooms', href: '/room/all' },
 ]
 
 const NavBar = () => {
-  
+
   return (
     <Disclosure as="nav" className="bg-slate-700">
       <div className='mx-auto max-w-7xl px-2 sm:px-6 lg:px-8'>

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const REST_API_BASE_URL = "http://localhost:8082/booking/all";
-const ADD_BOOKING = "http://localhost:8082/booking/ADD-BOOKING"
+const ADD_BOOKING = "http://localhost:8082/booking/add-booking";
 
 export const getAllBookings = () => axios.get(REST_API_BASE_URL);
 
