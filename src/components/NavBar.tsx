@@ -15,7 +15,7 @@ const NavBar = () => {
 
   return (
     <Disclosure as="nav" className="bg-slate-700">
-      <div className='mx-auto max-w-7xl px-2 sm:px-6 lg:px-8'>
+      <div className='mx-auto max-w-7xl px-2 sm:px-6'>
         <div className="relative flex h-14 items-center justify-between mb-5">
           <div className='absolute insert-y-0 left-0 flex items-center sm-hidden'>
             {/* Mobile menu button*/}

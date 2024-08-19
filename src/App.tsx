@@ -11,6 +11,7 @@ import ListBooking from "./components/ListBooking"
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import NavBar from "./components/NavBar"
 import ListRoom from "./components/ListRoom"
+import AddRoomForm from "./components/AddRoomForm"
 
 function App() {
   const [currentMonth, setCurrentMonth] = useState(getMonth());
@@ -28,8 +29,9 @@ function App() {
       <BrowserRouter>
       <NavBar />
         <Routes>
-          <Route path="/add-booking" element={ showBookingForm && <BookingForm /> }></Route>
+          <Route path="/add-booking" element={ <BookingForm /> }></Route>
           <Route path="/booking/all" element={ <ListBooking /> }></Route>
+          <Route path="/add-room" element={ <AddRoomForm /> }></Route>
           <Route path="/home" element={  
             <div className="h-screen flex flex-col">
               {(view === "month") && <CalendarHeader view={view} setView={setView} />}

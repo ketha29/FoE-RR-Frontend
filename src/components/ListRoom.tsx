@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getAllRooms } from '../services/RoomService';
+import AddRoomButton from './AddRoomButton';
 
 type Room = {
     roomId: number;
@@ -33,7 +34,7 @@ const ListRoom = () => {
                                         <th scope='col' className='px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase tracking-wider'>Room Name</th>
                                         <th scope='col' className='px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase tracking-wider'>Capacity</th>
                                         <th scope='col' className='px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase tracking-wider'>Description</th>
-                                        <th scope='col' className='px-6 py-3 text-right text-sm font-medium text-gray-700 uppercase tracking-wider'></th>
+                                        <th scope='col' className='px-6 py-3 text-right text-sm font-medium text-gray-700 uppercase tracking-wider'><AddRoomButton /></th>
                                     </tr>
                                 </thead>
                                 <tbody className='bg-white divide-y divide-gray-200'>
