@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getAllRooms } from '../services/RoomService';
 import AddRoomButton from './AddRoomButton';
+import { AxiosError } from 'axios';
 
 type Room = {
     roomId: number;
@@ -10,15 +11,21 @@ type Room = {
 }
 
 const ListRoom = () => {
-    const [roomList, setRoomList] = useState<Room[]>([])
+    const [roomList, setRoomList] = useState<Room[]>([]);
+    const [error, setError] = useState("");
 
     useEffect(() => {
-        const fetchData = async () => {
-            const response = await getAllRooms();
-            setRoomList(response.data.roomList);
-            console.log(response.data.roomList);
+        const fetchRooms = async () => {
+            try{
+                const response = await getAllRooms();
+                setRoomList(response.data.roomList);
+                console.log(response.data.roomList);
+            }
+            catch(error) {
+                setError((error as AxiosError).message);
+            }
         }
-        fetchData();
+        fetchRooms();
     }, []);
 
     return (

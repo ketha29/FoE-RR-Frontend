@@ -2,8 +2,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useContext } from 'react';
 import GlobalContext from '../context/GlobalContext';
 import { useNavigate } from 'react-router-dom';
-import { FieldValue, FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, useForm } from 'react-hook-form';
 import { addRoom } from '../services/RoomService';
+import { AxiosError } from 'axios';
 
 const AddRoomForm = () => {
     const { register, handleSubmit, formState: {errors} } = useForm();
@@ -13,20 +14,18 @@ const AddRoomForm = () => {
         setShowAddRoomForm(false);
         navigator('/room/all');
     }
-    const onSubmit = (data: FieldValues) => {
-        const sanitizedData = {
-            roomName: data.roomName,
-            capacity: data.capacity,
-            description: data.description,
-        }
+    
+    const onSubmit = async (data: FieldValues) => {
+        try {
+            console.log('Submitting data:', data);
+            
+            const response = await addRoom(data);
+            console.log('Room added successfully:', response.data);
 
-        console.log(sanitizedData);
-        
-        addRoom(data).then((response) => {
-        console.log(response.data);
-    }).catch(error => {
-        console.error("Error adding room:", error.response?.data || error.message);
-    });
+            closeBookingForm();
+        } catch (error) {
+            console.error("Error adding room:", (error as AxiosError).response?.data || (error as AxiosError).message);
+        }
     }
 
     return (
@@ -34,7 +33,7 @@ const AddRoomForm = () => {
             <div className='flex justify-center items-center h-screen bg-gray-300'>
                 <div className='sm:w-2/3 w-full h-auto justify-center p-7 shadow-xl rounded-md bg-white'>
                     <header className='flex bg-gray-100 px-4 py-4 justify-between items-center'>
-                        <h1 className="text-xl font-semibold">Add Booking</h1>
+                        <h1 className="text-xl font-semibold">Add Room</h1>
                         <button onClick={closeBookingForm} 
                             className="text-gray-400 hover:bg-gray-200 rounded-full">
                             <CloseIcon />
@@ -67,9 +66,9 @@ const AddRoomForm = () => {
                     {/* Description */}
                     <div className='mt-5'>
                         <div className="mt-4">
-                            <label htmlFor="descriptoin" className="text-lg font-medium">Room Descriptoin</label>
+                            <label htmlFor="description" className="text-lg font-medium">Room Description</label>
                             <input
-                                {...register('description')} id="descriptoin" type='string'
+                                {...register('description')} id="description" type='string'
                                 className="w-full border-2 border-gray-100 rounded-md p-2 mt-1"
                                 placeholder="Select the room to make booking"
                             />

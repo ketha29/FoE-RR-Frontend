@@ -27,9 +27,6 @@ const BookingForm = () => {
 
     const handleRecurrenceType = (event: any) => setBooking({...booking, recurrenceType: event.target.value})
 
-    const handleRecurrencePeriod = (event: any) => {
-        setBooking({...booking, recurrencePeriod: event.target.value})
-    }
     const onSubmit = (data: FieldValues) => {
         const sanitizedData = {
             room: data.room,
