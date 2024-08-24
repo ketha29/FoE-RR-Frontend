@@ -12,6 +12,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import NavBar from "./components/NavBar"
 import ListRoom from "./components/ListRoom"
 import AddRoomForm from "./components/AddRoomForm"
+import LoginIn from "./components/SignIn"
 
 function App() {
   const [currentMonth, setCurrentMonth] = useState(getMonth());
@@ -29,6 +30,7 @@ function App() {
       <BrowserRouter>
       <NavBar />
         <Routes>
+          <Route path="auth/login" element={ <LoginIn/> }></Route>
           <Route path="/add-booking" element={ <BookingForm /> }></Route>
           <Route path="/booking/all" element={ <ListBooking /> }></Route>
           <Route path="/add-room" element={ <AddRoomForm /> }></Route>

@@ -1,5 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import GlobalContext from '../context/GlobalContext';
 import { useNavigate } from 'react-router-dom';
 import { FieldValues, useForm } from 'react-hook-form';
@@ -14,14 +14,11 @@ const AddRoomForm = () => {
         setShowAddRoomForm(false);
         navigator('/room/all');
     }
-    
     const onSubmit = async (data: FieldValues) => {
         try {
-            console.log('Submitting data:', data);
-            
+            console.log('Submitting data:', data); 
             const response = await addRoom(data);
             console.log('Room added successfully:', response.data);
-
             closeBookingForm();
         } catch (error) {
             console.error("Error adding room:", (error as AxiosError).response?.data || (error as AxiosError).message);
