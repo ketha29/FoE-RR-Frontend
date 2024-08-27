@@ -30,7 +30,7 @@ function App() {
       <BrowserRouter>
       <NavBar />
         <Routes>
-          <Route path="auth/login" element={ <LoginIn/> }></Route>
+          <Route path="/auth/login" element={ <LoginIn/> }></Route>
           <Route path="/add-booking" element={ <BookingForm /> }></Route>
           <Route path="/booking/all" element={ <ListBooking /> }></Route>
           <Route path="/add-room" element={ <AddRoomForm /> }></Route>

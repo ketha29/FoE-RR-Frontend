@@ -11,14 +11,29 @@ const LoginIn = () => {
         try {
             const response = await signin({ userName: data.username, password: data.password });
             localStorage.setItem("userType", response.userType);
+            localStorage.setItem("token", response.token);
             console.log('User login successful');
             navigate("/home")
         } catch (error) {
-            console.error('Login failed:', (error as AxiosError).response?.data);
+            if(error instanceof AxiosError) {
+                if (!error.response) {
+                    console.error('Network error or server not responding');
+                    alert('Network error or server not responding. Please try again later.');
+                }
+                else if(error.response?.status === 400) {
+                    console.error('Invalid credentials:', error.response.data);
+                    alert('Invalid username or password. Please try again.');
+                }
+                else if(error.response?.status === 500) {
+                    console.error('Server error:', error.response.data);
+                    alert('An internal server error occurred. Please try again later.');
+                }
+            }
         }
     }
     
     console.log(localStorage.getItem('userType'));
+    console.log(localStorage.getItem('token'));
     
 
     return (
