@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import React, { Dispatch, SetStateAction } from "react";
 
 interface GlobalContextType {
@@ -9,6 +10,8 @@ interface GlobalContextType {
   setShowBookingForm: Dispatch<SetStateAction<boolean>>;
   showAddRoomForm: boolean;
   setShowAddRoomForm: Dispatch<SetStateAction<boolean>>;
+  daySelected: dayjs.Dayjs;
+  setDaySelected: Dispatch<SetStateAction<dayjs.Dayjs>>;
 }
 
 const GlobalContext = React.createContext<GlobalContextType>({
@@ -19,7 +22,9 @@ const GlobalContext = React.createContext<GlobalContextType>({
   showBookingForm: false,
   setShowBookingForm: () => {},
   showAddRoomForm: false,
-  setShowAddRoomForm: () => {}
+  setShowAddRoomForm: () => {},
+  daySelected: dayjs(),
+  setDaySelected: (day) => {},
 });
 
 export default GlobalContext;

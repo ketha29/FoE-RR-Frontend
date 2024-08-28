@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getAllBookings } from '../services/BookingService'
-import dayjs from 'dayjs';
 
 type Booking = {
     bookingId: number;
@@ -9,6 +8,7 @@ type Booking = {
     date: string;
     recurrence: string;
     recurrencePeriod: number;
+    details: string;
 }
 
 const ListBooking = () => {
@@ -35,6 +35,7 @@ const ListBooking = () => {
                     <th>Date</th>
                     <th>recurrence</th>
                     <th>recurrence period</th>
+                    <th>Details</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,6 +48,7 @@ const ListBooking = () => {
                             <td>{booking.date}</td>
                             <td>{booking.recurrence}</td>
                             <td>{booking.recurrencePeriod}</td>
+                            <td>{booking.details}</td>
                         </tr>
                     )
                 }

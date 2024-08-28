@@ -9,7 +9,7 @@ const recurrenceTypes = ['None', 'Daily', 'Weekly']
 
 const BookingForm = () => {
     const {register, handleSubmit, formState: {errors}} = useForm();
-    const {setShowBookingForm} = useContext(GlobalContext);
+    const { setShowBookingForm, daySelected } = useContext(GlobalContext);
     const navigator = useNavigate();
     const closeBookingForm = () => {
         setShowBookingForm(false);
@@ -20,7 +20,7 @@ const BookingForm = () => {
         purpose: '',
         startTime: '',
         endTime: '',
-        startDate: '',
+        date: '',
         recurrenceType: 'None',
         recurrencePeriod: 0,
     });
@@ -33,7 +33,7 @@ const BookingForm = () => {
             purpose: data.purpose,
             startTime: data.startTime,
             endTime: data.endTime,
-            startDate: data.startDate,
+            date: data.date,
             recurrenceType: data.recurrenceType,
             recurrencePeriod: data.recurrencePeriod,
         };
@@ -101,13 +101,14 @@ const BookingForm = () => {
 
                     {/* Start Date */}
                     <div className="mt-4">
-                        <label htmlFor="startDate" className="text-lg font-medium">Start Date</label>
+                        <label htmlFor="date" className="text-lg font-medium">Start Date</label>
                         <input
-                            {...register('startDate', {required: true})} id="startDate" type="date"
+                            {...register('date', {required: true})} id="date" type="date"
                             className="w-full border-2 border-gray-100 rounded-md p-2 mt-1"
                             placeholder="Select the room to make booking"
+                            defaultValue={daySelected.format('YYYY-MM-DD')}
                         />
-                        {errors.startDate?.type === 'required' && <p className="text-red-600">Start date field is required</p>}
+                        {errors.date?.type === 'required' && <p className="text-red-600">Start date field is required</p>}
                     </div>
 
                     {/* Recurrence Type Radio Buttons */}

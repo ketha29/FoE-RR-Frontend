@@ -46,7 +46,7 @@ function CalendarHeader({ setView }: CalendarHeaderProps) {
           </button>
         </div>
         <div className="ml-6 h-6 w-px bg-gray-300"></div>
-        <AddBookingButton />
+          <AddBookingButton />
       </div>
     </header>
   )

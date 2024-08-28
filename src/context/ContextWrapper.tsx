@@ -11,9 +11,22 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
   const [dayIndex, setDayIndex] = useState(dayjs().date());
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [showAddRoomForm, setShowAddRoomForm] = useState(false);
+  const [daySelected, setDaySelected] = useState(dayjs());
 
   return (
-    <GlobalContext.Provider value={{ monthIndex, setMonthIndex, dayIndex, setDayIndex, showBookingForm, setShowBookingForm, showAddRoomForm, setShowAddRoomForm }}>
+    <GlobalContext.Provider 
+      value={{ 
+        monthIndex, 
+        setMonthIndex, 
+        dayIndex, 
+        setDayIndex, 
+        showBookingForm, 
+        setShowBookingForm, 
+        showAddRoomForm, 
+        setShowAddRoomForm, 
+        daySelected, 
+        setDaySelected,
+      }}>
       {children}
     </GlobalContext.Provider>
   );
