@@ -1,9 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import GlobalContext from "../context/GlobalContext";
 import { useNavigate } from "react-router-dom";
 import CloseIcon from '@mui/icons-material/Close';
 import { addBooking } from "../services/BookingService";
+import { getAllRooms } from "../services/RoomService";
 
 const recurrenceTypes = ['None', 'Daily', 'Weekly']
 
@@ -15,6 +16,16 @@ const BookingForm = () => {
         setShowBookingForm(false);
         navigator('/home');
     }
+
+    // const [rooms, setRooms] = useState<{ roomId: number, roomName: string }[]>([]);
+    // useEffect(() => {
+    //     const fetchRooms = async () => {
+    //         const response = await getAllRooms();
+    //         setRooms(response.data.roomList);
+    //     }
+    //     fetchRooms();
+    // }, []);
+
     const [booking, setBooking] = useState({
         room: '',
         purpose: '',
@@ -28,17 +39,7 @@ const BookingForm = () => {
     const handleRecurrenceType = (event: any) => setBooking({...booking, recurrenceType: event.target.value})
 
     const onSubmit = (data: FieldValues) => {
-        const sanitizedData = {
-            room: data.room,
-            purpose: data.purpose,
-            startTime: data.startTime,
-            endTime: data.endTime,
-            date: data.date,
-            recurrenceType: data.recurrenceType,
-            recurrencePeriod: data.recurrencePeriod,
-        };
-    
-        addBooking(sanitizedData);
+        addBooking(data);
     };  
 
   return (
@@ -54,14 +55,17 @@ const BookingForm = () => {
                 </header>
 
                 <div className="mt-5">
-                    {/* Room */}
+                    {/* Room name */}
                     <div className="mt-4">
                         <label htmlFor="room" className="text-lg font-medium">Room</label>
                         <input
-                            {...register('room', {required: true})} id="room" type="string"
+                            {...register('room', {required: true})} id="roomId"
                             className="w-full border-2 border-gray-100 rounded-md p-2 mt-1"
-                            placeholder="Select the room to make booking"
                         />
+                            {/* <option value="">Select a room</option>
+                            {rooms.map(room => (
+                                <option key={room.roomId} value={room.roomName}>{room.roomName}</option>
+                            ))} */}
                         {errors.startTime?.type === 'required' && <p className="text-red-600">Room field is required</p>}
                     </div>
 

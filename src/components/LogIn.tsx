@@ -10,8 +10,6 @@ const LoginIn = () => {
     const onSignIn = async (data: FieldValues) => {
         try {
             const response = await signin({ userName: data.username, password: data.password });
-            localStorage.setItem("userType", response.userType);
-            localStorage.setItem("token", response.token);
             console.log('User login successful');
             navigate("/home")
         } catch (error) {

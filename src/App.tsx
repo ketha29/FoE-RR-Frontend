@@ -12,7 +12,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import NavBar from "./components/NavBar"
 import ListRoom from "./components/ListRoom"
 import AddRoomForm from "./components/AddRoomForm"
-import LoginIn from "./components/SignIn"
+import LoginIn from "./components/LogIn"
 
 function App() {
   const [currentMonth, setCurrentMonth] = useState(getMonth());

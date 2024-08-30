@@ -13,5 +13,32 @@ export async function signin(loginDetails :LoginDetails) {
             "Content-Type": "application/json",
         },
     });
+    localStorage.setItem("userType", response.data.userType);
+    localStorage.setItem("token", response.data.token);
     return response.data;
+}
+
+export const isAuthenticated = () => {
+    const token = localStorage.getItem('token');
+    return !!token;
+}
+
+export const isSuperAdmin = () => {
+    const role = localStorage.getItem('userType');
+    return role === 'superAdmin';
+}
+
+export const isAdmin = () => {
+    const role = localStorage.getItem('userType');
+    return role === 'admin';
+}
+
+export const isRegularUser = () => {
+    const role = localStorage.getItem('userType');
+    return role === 'regularUser';
+}
+
+export const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userType');
 }
