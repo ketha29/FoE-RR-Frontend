@@ -14,11 +14,11 @@ const getMonth = (month = dayjs().month()) => {
   return daysMatrix;
 }
 
-export const getDay = (day = dayjs().day()) => {
+export const getDay = (day = dayjs().date()) => {
   const year = dayjs().year();
   const month = dayjs().month();
-  let startHour = -1;
-  const hourArray = new Array(24).fill([]).map(() => {
+  let startHour = 5;
+  const hourArray = new Array(16).fill([]).map(() => {
     startHour++;
     return dayjs(new Date(year, month, day)).hour(startHour).minute(0);
   });

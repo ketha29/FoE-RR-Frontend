@@ -15,6 +15,7 @@ export async function signin(loginDetails :LoginDetails) {
     });
     localStorage.setItem("userType", response.data.userType);
     localStorage.setItem("token", response.data.token);
+    localStorage.setItem("userId", response.data.userId);    
     return response.data;
 }
 

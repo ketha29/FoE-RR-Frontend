@@ -22,7 +22,7 @@ const Day = ({day, rowIdx}: DayProps) => {
     useEffect(() => {
         const fetchData = async () => {
             const response = await getAllBookings();
-            const bookings = response.data.bookingList;
+            const bookings = response.data.bookingList;  
             const currentDayBookings = bookings.filter((booking: { date: dayjs.Dayjs }) =>
                 dayjs(booking.date).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
             );
@@ -30,7 +30,7 @@ const Day = ({day, rowIdx}: DayProps) => {
         }
         fetchData();
     }, [day]);
-
+          
     const { setShowBookingForm, setDaySelected } = useContext(GlobalContext)
     const navigator = useNavigate();
     // function to mark the current date background to blue

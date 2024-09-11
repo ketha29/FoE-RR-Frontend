@@ -20,11 +20,15 @@ function App() {
   const [view, setView] = useState("month");
   const [currentDay, setCurretDay] = useState(getDay());
 
-  useEffect(( )=> {
+  useEffect(()=> {
     setCurrentMonth(getMonth(monthIndex));
   }, [monthIndex]);
 
-  console.table(getMonth(3))
+  useEffect(() => {
+    setCurretDay(getDay(dayIndex));
+  }, [dayIndex]);
+
+  // console.table(getMonth(3))
   return (
     <React.Fragment>
       <BrowserRouter>

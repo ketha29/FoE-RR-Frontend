@@ -1,54 +1,67 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import GlobalContext from "../context/GlobalContext";
 import { useNavigate } from "react-router-dom";
 import CloseIcon from '@mui/icons-material/Close';
 import { addBooking } from "../services/BookingService";
-import { getAllRooms } from "../services/RoomService";
+import { AxiosError } from "axios";
 
-const recurrenceTypes = ['None', 'Daily', 'Weekly']
+const recurrenceTypes = ['none', 'daily', 'weekly']
 
 const BookingForm = () => {
     const {register, handleSubmit, formState: {errors}} = useForm();
-    const { setShowBookingForm, daySelected } = useContext(GlobalContext);
+    const { setShowBookingForm, daySelected, bookingSelection, setBookingSelection,setIsCellSelected } = useContext(GlobalContext);
     const navigator = useNavigate();
     const closeBookingForm = () => {
+        setIsCellSelected(false);
+        setBookingSelection({ roomName: null, startTime: null, endTime: null });
         setShowBookingForm(false);
         navigator('/home');
     }
 
-    // const [rooms, setRooms] = useState<{ roomId: number, roomName: string }[]>([]);
-    // useEffect(() => {
-    //     const fetchRooms = async () => {
-    //         const response = await getAllRooms();
-    //         setRooms(response.data.roomList);
-    //     }
-    //     fetchRooms();
-    // }, []);
-
     const [booking, setBooking] = useState({
-        room: '',
-        purpose: '',
+        roomName: '',
+        details: '',
         startTime: '',
         endTime: '',
-        date: '',
-        recurrenceType: 'None',
+        date: daySelected.format('YYYY-MM-DD'),
+        recurrence: 'none',
         recurrencePeriod: 0,
     });
 
-    const handleRecurrenceType = (event: any) => setBooking({...booking, recurrenceType: event.target.value})
+    const handleRecurrenceType = (event: any) => setBooking({...booking, recurrence: event.target.value})
 
-    const onSubmit = (data: FieldValues) => {
-        addBooking(data);
-    };  
+    const onSubmit = async (data: FieldValues) => {
+        try {
+            console.log('Submitting data: ', data);
+            const formattedBooking = {
+                ...booking,
+                startTime: `${data.startTime}:00`,
+                endTime: `${data.endTime}:00`,
+                date: data.date,
+                details: data.purpose ,
+                recurrence: data.recurrence,
+                recurrencePeriod: data.recurrencePeriod
+            };
+            const userIdString= localStorage.getItem('userId');            
+            const userId = userIdString ? parseInt(userIdString): -1;
+            const response = await addBooking(data.roomName, userId, formattedBooking);
+            console.log('Booking added successfully: ', response.data);
+            closeBookingForm();
+        } catch (error) {
+            console.error("Error adding booking:", (error as AxiosError).response?.data || (error as AxiosError).message);
+        }
+    }
 
-  return (
-    <form onSubmit={handleSubmit((data) => console.log(data))}>
+return (
+    <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex justify-center items-center h-screen bg-gray-300">
             <div className="sm:w-2/3 w-full h-auto justify-center p-7 shadow-xl rounded-md bg-white">
                 <header className="flex bg-gray-100 px-4 py-4 justify-between items-center">
                     <h1 className="text-xl font-semibold">Add Booking</h1>
-                    <button onClick={closeBookingForm} 
+                    {/* Close button */}
+                    <button 
+                        onClick={closeBookingForm}
                         className="text-gray-400 hover:bg-gray-200 rounded-full">
                         <CloseIcon />
                     </button>
@@ -57,23 +70,20 @@ const BookingForm = () => {
                 <div className="mt-5">
                     {/* Room name */}
                     <div className="mt-4">
-                        <label htmlFor="room" className="text-lg font-medium">Room</label>
+                        <label htmlFor="roomName" className="text-lg font-medium">Room</label>
                         <input
-                            {...register('room', {required: true})} id="roomId"
+                            {...register('roomName', {required: true})}
                             className="w-full border-2 border-gray-100 rounded-md p-2 mt-1"
+                            defaultValue={bookingSelection.roomName || ''}
                         />
-                            {/* <option value="">Select a room</option>
-                            {rooms.map(room => (
-                                <option key={room.roomId} value={room.roomName}>{room.roomName}</option>
-                            ))} */}
-                        {errors.startTime?.type === 'required' && <p className="text-red-600">Room field is required</p>}
+                        {errors.roomName?.type === 'required' && <p className="text-red-600">Room field is required</p>}
                     </div>
 
                     {/* Booking Purpose */}
                     <div className="mt-4">
                         <label htmlFor="purpose" className="text-lg font-medium">Purpose</label>
                         <input
-                            id="purpose" type="string"
+                            {...register('purpose')} id="purpose" type="string"
                             className="w-full border-2 border-gray-100 rounded-md p-2 mt-1"
                             placeholder="Enter the purpose or subject of booking"
                         />
@@ -86,7 +96,7 @@ const BookingForm = () => {
                             <input
                                 {...register('startTime', {required: true})} id="startTime" type="time"
                                 className="w-full border-2 border-gray-100 rounded-md p-2 mt-1"
-                                placeholder="Select the start time"
+                                defaultValue={bookingSelection.startTime ? bookingSelection.startTime.format('HH:mm') : ''}                                
                             />
                             {errors.startTime?.type === 'required' && <p className="text-red-600">Start time field is required</p>}
                         </div>
@@ -97,7 +107,7 @@ const BookingForm = () => {
                             <input
                                 {...register('endTime', {required: true})} id="endTime" type="time"
                                 className="w-full border-2 border-gray-100 rounded-md p-2 mt-1"
-                                placeholder="Select the end time"
+                                defaultValue={bookingSelection.endTime ? bookingSelection.endTime?.format('HH:mm') : ''}
                             />
                             {errors.endTime?.type === 'required' && <p className="text-red-600">End time field is required</p>}
                         </div>
@@ -110,7 +120,7 @@ const BookingForm = () => {
                             {...register('date', {required: true})} id="date" type="date"
                             className="w-full border-2 border-gray-100 rounded-md p-2 mt-1"
                             placeholder="Select the room to make booking"
-                            defaultValue={daySelected.format('YYYY-MM-DD')}
+                            defaultValue={booking.date}
                         />
                         {errors.date?.type === 'required' && <p className="text-red-600">Start date field is required</p>}
                     </div>
@@ -125,19 +135,19 @@ const BookingForm = () => {
                                         <input
                                             type="radio"
                                             value={type}
-                                            checked={booking.recurrenceType === type}
+                                            checked={booking.recurrence === type}
                                             onClick={handleRecurrenceType}
-                                            {...register('recurrenceType')}
+                                            {...register('recurrence')}
                                             className="hidden"
                                         />
                                         <div
                                         className={`w-4 h-4 rounded-full border-2 border-gray-300 flex items-center justify-center mr-2 cursor-pointer 
-                                            ${booking.recurrenceType === type 
+                                            ${booking.recurrence === type 
                                                 ? 'bg-blue-600 border-blue-600' 
                                                 : 'bg-white'
                                             }`}
                                         >
-                                            {booking.recurrenceType === type && (
+                                            {booking.recurrence === type && (
                                                 <div className="w-1 h-1 rounded-full bg-white"></div>
                                             )}
                                         </div>
@@ -161,7 +171,7 @@ const BookingForm = () => {
                     <div></div>
                     {/* Submit button */}
                     <button
-                        onClick={onSubmit}
+                        type="submit"
                         className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 border border-blue-700 rounded-md mt-4">
                         Submit
                     </button>

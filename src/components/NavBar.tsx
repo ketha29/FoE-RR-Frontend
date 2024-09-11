@@ -24,8 +24,8 @@ const NavBar = () => {
     navigate("/home");
   };
 
-  console.log(localStorage.getItem('token'));
-  console.log(authenticated);
+  // console.log(localStorage.getItem('token'));
+  // console.log(authenticated);
   
 
   return (

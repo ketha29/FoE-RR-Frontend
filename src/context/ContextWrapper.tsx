@@ -12,6 +12,16 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [showAddRoomForm, setShowAddRoomForm] = useState(false);
   const [daySelected, setDaySelected] = useState(dayjs());
+  const [bookingSelection, setBookingSelection] = useState<{ 
+    roomName: string | null;
+    startTime: dayjs.Dayjs | null;
+    endTime: dayjs.Dayjs | null 
+  }>({
+    roomName: null,
+    startTime: null,
+    endTime: null
+  });
+  const [isCellSelected, setIsCellSelected] = useState(false);
 
   return (
     <GlobalContext.Provider 
@@ -26,6 +36,10 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
         setShowAddRoomForm, 
         daySelected, 
         setDaySelected,
+        bookingSelection,
+        setBookingSelection,
+        isCellSelected,
+        setIsCellSelected,
       }}>
       {children}
     </GlobalContext.Provider>

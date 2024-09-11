@@ -1,6 +1,12 @@
 import dayjs from "dayjs";
 import React, { Dispatch, SetStateAction } from "react";
 
+interface BookingSelectionType {
+  roomName: string | null;
+  startTime: dayjs.Dayjs | null;
+  endTime: dayjs.Dayjs | null;
+}
+
 interface GlobalContextType {
   monthIndex: number;
   setMonthIndex: Dispatch<SetStateAction<number>>;
@@ -12,6 +18,10 @@ interface GlobalContextType {
   setShowAddRoomForm: Dispatch<SetStateAction<boolean>>;
   daySelected: dayjs.Dayjs;
   setDaySelected: Dispatch<SetStateAction<dayjs.Dayjs>>;
+  bookingSelection: BookingSelectionType;
+  setBookingSelection: Dispatch<BookingSelectionType>;
+  isCellSelected: boolean;
+  setIsCellSelected: Dispatch<SetStateAction<boolean>>;
 }
 
 const GlobalContext = React.createContext<GlobalContextType>({
@@ -25,6 +35,14 @@ const GlobalContext = React.createContext<GlobalContextType>({
   setShowAddRoomForm: () => {},
   daySelected: dayjs(),
   setDaySelected: (day) => {},
+  bookingSelection: {
+    roomName: null,
+    startTime: null,
+    endTime: null
+  },
+  setBookingSelection: () => {},
+  isCellSelected: false,
+  setIsCellSelected: () => {},
 });
 
 export default GlobalContext;
