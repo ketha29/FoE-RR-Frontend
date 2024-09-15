@@ -24,10 +24,6 @@ const NavBar = () => {
     navigate("/home");
   };
 
-  // console.log(localStorage.getItem('token'));
-  // console.log(authenticated);
-  
-
   return (
     <Disclosure as="nav" className="bg-slate-700">
       <div className='mx-auto max-w-7xl px-2 sm:px-6'>

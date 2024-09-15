@@ -9,6 +9,7 @@ interface ContextWrapperProps {
 const ContextWrapper = ({ children }: ContextWrapperProps) => {
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
   const [dayIndex, setDayIndex] = useState(dayjs().date());
+  const [view, setView] = useState("Month");
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [showAddRoomForm, setShowAddRoomForm] = useState(false);
   const [daySelected, setDaySelected] = useState(dayjs());
@@ -29,7 +30,9 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
         monthIndex, 
         setMonthIndex, 
         dayIndex, 
-        setDayIndex, 
+        setDayIndex,
+        view,
+        setView,
         showBookingForm, 
         setShowBookingForm, 
         showAddRoomForm, 

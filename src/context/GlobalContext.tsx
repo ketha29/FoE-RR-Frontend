@@ -13,6 +13,8 @@ interface GlobalContextType {
   dayIndex: number;
   setDayIndex: Dispatch<SetStateAction<number>>;
   showBookingForm: boolean;
+  view: string;
+  setView: Dispatch<SetStateAction<string>>;
   setShowBookingForm: Dispatch<SetStateAction<boolean>>;
   showAddRoomForm: boolean;
   setShowAddRoomForm: Dispatch<SetStateAction<boolean>>;
@@ -29,6 +31,8 @@ const GlobalContext = React.createContext<GlobalContextType>({
   setMonthIndex: (index) => {},
   dayIndex: 0,
   setDayIndex: (index) => {},
+  view: 'Month',
+  setView: () => {},
   showBookingForm: false,
   setShowBookingForm: () => {},
   showAddRoomForm: false,

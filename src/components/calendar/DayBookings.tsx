@@ -2,10 +2,11 @@ import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import { useEffect, useState } from "react";
 import { getAllBookings } from "../../services/BookingService";
+import { isAdmin, isAuthenticated, isRegularUser, isSuperAdmin } from "../../services/AuthService";
 
 dayjs.extend(isBetween);
 
-interface HourProps {
+interface DayBookingsProps {
     hour: dayjs.Dayjs;
     roomName: string;
     date: string;
@@ -23,9 +24,14 @@ interface Booking {
   };
 }
 
-const Hour = ({ hour, roomName, date }: HourProps) => {
+const DayBookings = ({ hour, roomName, date }: DayBookingsProps) => {
+  const authenticated = isAuthenticated();
+  const admin = isSuperAdmin();
+  const superAdmin = isAdmin();
+  const regularUser = isRegularUser();
   const [hourBooking, setHourBooking] = useState<Booking[]>([]);
 
+  // Filter bookings
   useEffect(() => {
     const fetchData = async () => {
       const response = await getAllBookings();
@@ -33,12 +39,10 @@ const Hour = ({ hour, roomName, date }: HourProps) => {
       const currentHourBookings = bookings.filter((booking: Booking) => {
         const bookingDate = dayjs(booking.date).format('YYYY-MM-DD');
         const bookingStart = dayjs(`${booking.date} ${booking.startTime}`);
-        // const bookingEnd = dayjs(`${booking.date} ${booking.endTime}`);
         return (
           bookingDate === date &&
           booking.room.roomName === roomName &&
           bookingStart.isSame(hour, 'hour')
-          // hour.isBetween(bookingStart, bookingEnd, null, '[)')
         );
       });
       setHourBooking(currentHourBookings);
@@ -51,18 +55,16 @@ const Hour = ({ hour, roomName, date }: HourProps) => {
       {hourBooking.map((booking, idx) => {
         const bookingStart = dayjs(`${booking.date} ${booking.startTime}`);
         const bookingEnd = dayjs(`${booking.date} ${booking.endTime}`);
-        // console.log(bookingStart.format('YYYY-MM-DD-HH:mm'), ' ',  bookingEnd.format('YYYY-MM-DD-HH:mm'));
         
         const startOffsetMinutes = bookingStart.diff(dayjs(`${date} 00:00`), 'minute');
         const spanMinutes = bookingEnd.diff(bookingStart, 'minute');
 
         const leftPercentage = ((startOffsetMinutes / 60) - bookingStart.hour()) * 100;
         const widthPercentage = (spanMinutes / 60) * 101;
-        // console.log('Left Percentage:', leftPercentage);
-        // console.log('Width Percentage:', widthPercentage);
         
         return (
-          startOffsetMinutes >= 0 && (
+          startOffsetMinutes >= 0 && authenticated && (
+            // Display booking according to the start time and time duration
             <div
               className="absolute bg-blue-300 text-gray-600 text-xs rounded-md h-full flex justify-start items-center hover:bg-blue-400 transition-transform ease-in-out group"
               key={idx}
@@ -88,24 +90,6 @@ const Hour = ({ hour, roomName, date }: HourProps) => {
       })}
     </div>
   );
-
-  // return (
-  //   <div className="h-full w-full">
-  //     {hourBooking.map((booking, idx) => (
-  //       <div
-  //         className="bg-sky-200 text-gray-500 text-sm rounded h-full w-full flex items-center justify-center hover:bg-sky-300 hover:scale-105 transition-transform ease-in-out"
-  //         key={idx}
-  //       >
-  //         <div className="truncate w-20">
-  //           {booking.details}
-  //         </div>
-  //         <div className='absolute bottom-full mb-1 bg-sky-400 transform text-white px-2 py-1 rounded'>
-  //           {booking.details}
-  //         </div>
-  //       </div>
-  //     ))}
-  //   </div>
-  // );
 }
 
-export default Hour;
+export default DayBookings;

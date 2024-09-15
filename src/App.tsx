@@ -1,11 +1,10 @@
 import React, { useState, useContext, useEffect } from "react"
 import './App.css'
 import getMonth, { getDay } from "./util"
-import CalendarHeader from "./components/calendar/CalendarHeader"
 import Month from "./components/calendar/Month"
 import GlobalContext from "./context/GlobalContext"
 import DayView from "./components/calendar/DayView"
-import CalendarHeaderDay from "./components/calendar/CalendarHeaderDay"
+import CalendarHeaderDay from "./components/calendar/CalendarHeade"
 import BookingForm from "./components/BookingForm"
 import ListBooking from "./components/ListBooking"
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
@@ -16,8 +15,8 @@ import LoginIn from "./components/LogIn"
 
 function App() {
   const [currentMonth, setCurrentMonth] = useState(getMonth());
-  const {monthIndex, dayIndex, showBookingForm} = useContext(GlobalContext);
-  const [view, setView] = useState("month");
+  const {monthIndex, dayIndex, view} = useContext(GlobalContext);
+  // const [view, setView] = useState("Month");
   const [currentDay, setCurretDay] = useState(getDay());
 
   useEffect(()=> {
@@ -40,11 +39,10 @@ function App() {
           <Route path="/add-room" element={ <AddRoomForm /> }></Route>
           <Route path="/home" element={  
             <div className="h-screen flex flex-col">
-              {(view === "month") && <CalendarHeader view={view} setView={setView} />}
-              {(view === "day") && <CalendarHeaderDay view={view} setView={setView} />}
+              <CalendarHeaderDay />
               <div className="flex flex-1">
-                {(view === "month") && <Month month={currentMonth} />}
-                {(view === "day") && <DayView day={currentDay} />}
+                {(view === "Month") && <Month month={currentMonth} />}
+                {(view === "Day") && <DayView day={currentDay} />}
               </div>
             </div>
           }>

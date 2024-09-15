@@ -1,9 +1,11 @@
 import dayjs from "dayjs";
-import Hour from "./Hour";
+import Hour from "./DayBookings";
 import { useContext, useEffect, useState } from "react";
 import { getAllRooms } from "../../services/RoomService";
 import GlobalContext from "../../context/GlobalContext";
 import { useNavigate } from "react-router-dom";
+import { isAuthenticated } from "../../services/AuthService";
+import DayBookings from "./DayBookings";
 
 interface DayViewProps {
   day: dayjs.Dayjs[];
@@ -17,6 +19,7 @@ type Room = {
 }
 
 const DayView = ({ day }: DayViewProps) => {
+  const authenticated = isAuthenticated();
   const navigator = useNavigate();
   const { dayIndex, setDaySelected, setShowBookingForm } = useContext(GlobalContext);
   const [roomNames, setRoomNames] = useState<string[]>([]);
@@ -56,7 +59,7 @@ const DayView = ({ day }: DayViewProps) => {
   // Ending the selection process
   const handleMouseUp = () => {
     setSelecting(false);
-    navigator("/add-booking");
+    authenticated && navigator("/add-booking");
     setShowBookingForm(true);
   };
 
@@ -82,10 +85,10 @@ const DayView = ({ day }: DayViewProps) => {
     <table className="h-full w-full overflow-y-scroll">
       <thead>
         <tr>
-          <th className="border-b border-gray-200 p-1"></th> 
+          <th className="border-b border-gray-200 p-1"></th>
           {day.map((day, idx) => (
-            <th key={idx} className="border-b border-gray-200 p-1 space-x-4">
-              {day.format("HH:mm")}              
+            <th key={idx} className="border-b border-l border-r border-t border-gray-200 p-1 text-sm">
+              {day.format("h A")}
             </th>
           ))}
         </tr>
@@ -118,7 +121,7 @@ const DayView = ({ day }: DayViewProps) => {
                   key={`${i}-${idx}`} 
                   className={
                     `relative border-t border-b border-r border-l border-gray-200 w-24
-                    ${setIsCellSelected(roomName, time) ? 'bg-blue-300 transition-all duration-300 ease-in-out' : ' '}
+                    ${authenticated && setIsCellSelected(roomName, time) ? 'bg-blue-300 transition-all duration-300 ease-in-out' : ' '}
                     ${isStartOfSelection(roomName, time) ? 'rounded-l-lg' : ''}
                     ${isEndOfSelection(roomName, time) ? 'rounded-r-lg' : ''}`
                   }
@@ -126,7 +129,7 @@ const DayView = ({ day }: DayViewProps) => {
                   data-col-index={idx}
                   onMouseDown={() => handleMouseDown(roomName, time)}
                 >
-                  <Hour hour={time} date={currentDate} roomName={roomName} key={idx} />
+                  <DayBookings hour={time} date={currentDate} roomName={roomName} key={idx} />
                 </td>
               ))}
             </tr>
