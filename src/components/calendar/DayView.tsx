@@ -96,7 +96,7 @@ const DayView = ({ day }: DayViewProps) => {
   };
   
   return (
-    <table className="h-full w-full overflow-y-scroll overflow-x-scroll">
+    <table className="h-full w-full overflow-y-scroll overflow-x-scroll bg-gray-50">
       <thead>
         <tr>
           <th className="border-b text-lg text-gray-700 border-gray-200 p-1">{ currentDateObj.format('dddd') }</th>

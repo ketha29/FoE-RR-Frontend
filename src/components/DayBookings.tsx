@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getAllBookings } from "../services/BookingService";
 import { isAdmin, isAuthenticated, isRegularUser, isSuperAdmin } from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
+import BookingXtaDetails from "./BookingXtaDetails";
 
 dayjs.extend(isBetween);
 
@@ -36,11 +37,30 @@ const DayBookings = ({ hour, roomName, date }: DayBookingsProps) => {
   const superAdmin = isAdmin();
   const regularUser = isRegularUser();
   const [hourBooking, setHourBooking] = useState<Booking[]>([]);
+  const [showXtraBookingDetails, setShowXtraBookingDetails] = useState(false);
+  const [moveBlock, setMoveBlock] = useState(false);
+  const [selectedBookingId, setSelectedBookingId] = useState<number | null>(null);
+  // Show extra details block and moving transition when clicking the booking
+  const handleClick = (bookingId: number) => {    
+    setSelectedBookingId((selectedBookingId === bookingId) ? null : bookingId);
+    setMoveBlock(!moveBlock);
+    setShowXtraBookingDetails(!showXtraBookingDetails);
+    console.log(selectedBookingId, bookingId);
+  }
+  // Hide the extra details and set the transition of details block to false when clicking the close button
+  const handleCloseDetails = () => {
+    setSelectedBookingId(null);
+    setMoveBlock(false);
+    setShowXtraBookingDetails(false);
+    console.log(selectedBookingId);
+    
+  }  
   const navigator = useNavigate();
-  const handleClick = (booking: Booking) => {
+  // Render update booking form when clicking the edit button
+  const handleClickEdit = (booking: Booking) => {
     console.log('event selected', booking.bookingId);
     navigator('/booking/update-booking', { state: { booking } });
-  }
+  }   
 
   // Filter bookings
   useEffect(() => {
@@ -77,8 +97,8 @@ const DayBookings = ({ hour, roomName, date }: DayBookingsProps) => {
           startOffsetMinutes >= 0 && authenticated && (
             // Display booking according to the start time and time duration
             <div
-              onClick={() => handleClick(booking)}
-              className="absolute group z-20 bg-blue-300 text-gray-600 text-xs rounded-md h-full flex justify-start items-center hover:bg-blue-400 transition-transform ease-in-out"
+              onClick={() => handleClick(booking.bookingId)}
+              className="absolute group z-20 bg-blue-300 rounded-md h-full flex justify-start items-center hover:bg-blue-400 transition-transform ease-in-out"
               key={idx}
               style={{
                 top: 0,
@@ -87,17 +107,19 @@ const DayBookings = ({ hour, roomName, date }: DayBookingsProps) => {
                 height: "85%",
               }}
             >
-              <div className="absolute ml-1 text-gray-700">
+              <div className="absolute ml-1 text-gray-600 text-xs">
                 {dayjs(bookingStart).format('h:mma')} - {dayjs(bookingEnd).format('h:mma')}
               </div>
-              {/* Extra details for the booking */}
-              <div 
-                className="absolute bottom-full mb-1 bg-blue-500 transform scale-105 text-white px-2 py-1 rounded hidden group-hover:block transition-transform duration-300 ease-in-out" 
-                style={{ minWidth: "120px", maxWidth: "180px" }}
+              {/* Transition style for extra details block */}
+              <div
+                style={{ 
+                  transformOrigin: "bottom center",
+                  transform: moveBlock ? "translateY(-20px)" : "translateY(0px)",
+                  transition: "transform 0.4s ease"
+              }}
               >
-                {booking.details !== '' ? booking.details : 'No booking details'} <br />
-                Booked by: {booking.user.firstName} {booking.user.lastName.charAt(0)} <br />
-                Recurrence: {booking.recurrence} {booking.recurrencePeriod !== 0 && booking.recurrencePeriod}
+                {/* Show the extra details for the bookings */}
+                {showXtraBookingDetails && <BookingXtaDetails closeBookingDetails={handleCloseDetails} editBookingDetails={() => handleClickEdit(booking)}  booking={booking} />}
               </div>
             </div>
           )
