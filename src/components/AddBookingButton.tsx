@@ -8,7 +8,7 @@ const AddBookingButton = () => {
     const navigator = useNavigate();
 
     const addBooking = () => {
-        navigator("/add-booking");
+        navigator("/booking/add-booking");
         setShowBookingForm(true);
     }
 

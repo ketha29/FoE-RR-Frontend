@@ -1,8 +1,9 @@
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import { useEffect, useState } from "react";
-import { getAllBookings } from "../../services/BookingService";
-import { isAdmin, isAuthenticated, isRegularUser, isSuperAdmin } from "../../services/AuthService";
+import { getAllBookings } from "../services/BookingService";
+import { isAdmin, isAuthenticated, isRegularUser, isSuperAdmin } from "../services/AuthService";
+import { useNavigate } from "react-router-dom";
 
 dayjs.extend(isBetween);
 
@@ -13,6 +14,7 @@ interface DayBookingsProps {
 }
 
 interface Booking {
+  bookingId: number;
   startTime: string;
   endTime: string;
   date: string;
@@ -22,6 +24,10 @@ interface Booking {
   room: {
     roomName: string;
   };
+  user: {
+    firstName: string;
+    lastName: string;
+  }
 }
 
 const DayBookings = ({ hour, roomName, date }: DayBookingsProps) => {
@@ -30,6 +36,11 @@ const DayBookings = ({ hour, roomName, date }: DayBookingsProps) => {
   const superAdmin = isAdmin();
   const regularUser = isRegularUser();
   const [hourBooking, setHourBooking] = useState<Booking[]>([]);
+  const navigator = useNavigate();
+  const handleClick = (booking: Booking) => {
+    console.log('event selected', booking.bookingId);
+    navigator('/booking/update-booking', { state: { booking } });
+  }
 
   // Filter bookings
   useEffect(() => {
@@ -61,12 +72,13 @@ const DayBookings = ({ hour, roomName, date }: DayBookingsProps) => {
 
         const leftPercentage = ((startOffsetMinutes / 60) - bookingStart.hour()) * 100;
         const widthPercentage = (spanMinutes / 60) * 101;
-        
+                
         return (
           startOffsetMinutes >= 0 && authenticated && (
             // Display booking according to the start time and time duration
             <div
-              className="absolute bg-blue-300 text-gray-600 text-xs rounded-md h-full flex justify-start items-center hover:bg-blue-400 transition-transform ease-in-out group"
+              onClick={() => handleClick(booking)}
+              className="absolute group z-20 bg-blue-300 text-gray-600 text-xs rounded-md h-full flex justify-start items-center hover:bg-blue-400 transition-transform ease-in-out"
               key={idx}
               style={{
                 top: 0,
@@ -75,15 +87,18 @@ const DayBookings = ({ hour, roomName, date }: DayBookingsProps) => {
                 height: "85%",
               }}
             >
-              <div className="absolute">
-                {booking.details} <br />
+              <div className="absolute ml-1 text-gray-700">
                 {dayjs(bookingStart).format('h:mma')} - {dayjs(bookingEnd).format('h:mma')}
               </div>
-              {/* <div className="absolute bottom-full mb-1 bg-blue-500 transform text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
-                {dayjs(bookingStart).format('h:mm a')} - {dayjs(bookingEnd).format('h:mm a')} <br />
-                Recurrence: {booking.recurrence} <br />
-                Period: {booking.recurrencePeriod}
-              </div> */}
+              {/* Extra details for the booking */}
+              <div 
+                className="absolute bottom-full mb-1 bg-blue-500 transform scale-105 text-white px-2 py-1 rounded hidden group-hover:block transition-transform duration-300 ease-in-out" 
+                style={{ minWidth: "120px", maxWidth: "180px" }}
+              >
+                {booking.details !== '' ? booking.details : 'No booking details'} <br />
+                Booked by: {booking.user.firstName} {booking.user.lastName.charAt(0)} <br />
+                Recurrence: {booking.recurrence} {booking.recurrencePeriod !== 0 && booking.recurrencePeriod}
+              </div>
             </div>
           )
         );

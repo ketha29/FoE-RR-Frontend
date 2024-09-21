@@ -7,7 +7,7 @@ import { isAdmin, isAuthenticated, isRegularUser, isSuperAdmin, logout } from '.
 
 const navigation = [
   { name: 'Home', href: '/home' },
-  { name: 'Booking', href: '/booking/all' },
+  { name: 'Booking', href: '/booking' },
   { name: 'Users', href: '/fds' },
   { name: 'Rooms', href: '/room/all' },
 ]
@@ -27,7 +27,7 @@ const NavBar = () => {
   return (
     <Disclosure as="nav" className="bg-slate-700">
       <div className='mx-auto max-w-7xl px-2 sm:px-6'>
-        <div className="relative flex h-14 items-center justify-between mb-5">
+        <div className="relative flex h-14 items-center justify-between mb-2">
           <div className='absolute insert-y-0 left-0 flex items-center sm-hidden'>
             {/* Mobile menu button*/}
             <DisclosureButton className="md:hidden group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
@@ -58,7 +58,7 @@ const NavBar = () => {
                   Home
                 </NavLink>
                 <NavLink
-                  to="/booking/all"
+                  to="/booking"
                   className={({ isActive }) =>
                     'block rounded-md px-3 py-2 text-base font-medium ' +
                     (isActive
