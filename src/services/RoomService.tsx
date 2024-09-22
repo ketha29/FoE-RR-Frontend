@@ -1,10 +1,16 @@
 import axios from 'axios';
 import qs from 'qs';
 
-const GET_ALL_ROOM = "http://localhost:8082/room/all";
-const ADD_ROOM = "http://localhost:8082/room/add";
+// Base URL for the API
+const BASE_URL = "http://localhost:8082/room";
 
-export const getAllRooms = () => axios.get(GET_ALL_ROOM);
+// Endpoints
+const GET_ROOMS = `${BASE_URL}/all`;
+const ADD_ROOM = `${BASE_URL}/add-room`;
+const UPDATE_ROOM = (roomId: number) => `${BASE_URL}/update-room/${roomId}`;
+const DELETE_ROOM = (roomId: number) => `${BASE_URL}/delete-room/${roomId}`;
+
+export const getAllRooms = () => axios.get(GET_ROOMS);
 
 export const addRoom = (room: any) => {
   return axios.post(ADD_ROOM, qs.stringify(room), {
@@ -13,3 +19,13 @@ export const addRoom = (room: any) => {
     },
   });
 };
+
+export const updateRoom = (roomId: number, room: any) => {
+  return axios.put(UPDATE_ROOM(roomId), room, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  });
+}
+
+export const deleteRoom = (roomId: number) => axios.delete(DELETE_ROOM(roomId));
