@@ -20,38 +20,50 @@ const CalendarHeaderDay = () => {
   // Throttle state is to prevent rapid clicks
   const [isThrottled, setIsThrottled] = useState(false);
   const todayIndex = dayjs().date();
+  const [animationDirection, setAnimationDirection] = useState<'next' | 'prev' | null>(null);
   
   const handlePrevDay = () => {
     if(!isThrottled) {
+      setAnimationDirection('prev');
       setDayIndex(dayIndex - 1);
       setIsThrottled(true);
       setTimeout(() => {
         setIsThrottled(false);
+        setAnimationDirection(null);
       }, 300);
     }
   }
 
   const handleNextDay = () => {
     if(!isThrottled) {
+      setAnimationDirection('next');
       setDayIndex(dayIndex + 1);
       setIsThrottled(true);
       setTimeout(() => {
         setIsThrottled(false);
+        setAnimationDirection(null);
       }, 300);
     }
   }
 
   const handleToday = () => setDayIndex(dayjs().date());
 
+  const transitionClass = animationDirection === 'next' 
+    ? 'transform translate-x-full opacity-0 transition-transform duration-300'
+    : animationDirection === 'prev'
+    ? 'transform -translate-x-full opacity-0 transition-transform duration-300'
+    : 'opacity-100 transition-opacity duration-300';
+
   return (
     <>
       <header className='flex px-5 py-3 items-center justify-between'>
         <div className='flex items-center space-x-10'>
-          <h2 className='m1-4 text-xl text-grey-500 font-bold'>
+          <h2 className={`m1-4 text-xl text-grey-500 font-bold ${transitionClass}`}>
             {view === 'Day' && dayjs(new Date(dayjs().year(), dayjs().month(), dayIndex)).format("DD MMMM YYYY")}
             {view === 'Month' && dayjs(new Date(dayjs().year(), dayjs().month(), dayIndex)).format("MMMM YYYY")}
           </h2>
-          <div className='relative flex items-center rounded-md bg-white shadow-sm md:items-stretch'>
+          <div 
+            className='relative flex items-center rounded-md bg-white shadow-sm md:items-stretch'>
               <button 
                 className={`right-arrow ${regularUser && (dayIndex <= todayIndex ? 'opacity-50 cursor-not-allowed' : '')}`}
                 onClick={handlePrevDay} 

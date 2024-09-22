@@ -3,24 +3,28 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
+import { deleteBooking } from '../services/BookingService';
 
 interface BookingXtaDetailsProps {
     booking: any;
     closeBookingDetails: () => void;
     editBookingDetails: () => void;
+    deleteBookingDetails: () => void;
 }
 
-const BookingXtaDetails = ({ booking, closeBookingDetails, editBookingDetails }: BookingXtaDetailsProps) => {
+const BookingXtaDetails = ({ booking, closeBookingDetails, editBookingDetails, deleteBookingDetails }: BookingXtaDetailsProps) => {
+    const navigator = useNavigate();
     const bookingStart = dayjs(`${booking.date} ${booking.startTime}`);
     const bookingEnd = dayjs(`${booking.date} ${booking.endTime}`);
     const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
         // Prevent the click event from reaching the parent component
         event.stopPropagation();
     }
+
     return (
         <div
             onClick={handleClick}
-            className="absolute bottom-full mb-1 bg-white shadow-2xl shadow-gray-600 text-gray-800 px-1 py-1 rounded-lg"
+            className="absolute bottom-full mb-1 bg-white shadow-2xl shadow-gray-600 text-gray-800 p-2 rounded-lg"
             style={{
                 minWidth: "200px",
                 maxWidth: "200px",
@@ -36,7 +40,8 @@ const BookingXtaDetails = ({ booking, closeBookingDetails, editBookingDetails }:
                 >
                     <EditOutlinedIcon fontSize='small' />
                 </button>
-                <button 
+                <button
+                    onClick={deleteBookingDetails}
                     className='font-bold text-gray-600 hover:bg-gray-200 p-0.5 w-8 h-8 hover:text-red-400 rounded-full'
                 >
                     <DeleteOutlinedIcon className='font-bold' fontSize='small' />
