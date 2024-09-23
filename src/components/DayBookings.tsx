@@ -127,8 +127,8 @@ const DayBookings = ({ hour, roomName, date }: DayBookingsProps) => {
               style={{
                 top: 0,
                 left: `${leftPercentage}%`,
-                width: `${widthPercentage}%`,
-                height: "85%",
+                height: `${widthPercentage}%`,
+                width: "85%",
               }}
             >
               <div className="absolute ml-1 text-gray-600 text-xs">

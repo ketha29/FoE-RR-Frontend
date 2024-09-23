@@ -15,7 +15,7 @@ type Room = {
   capacity: number;
   roomName: string;
   description: string;
-}
+};
 
 const DayView = ({ day }: DayViewProps) => {
   const authenticated = isAuthenticated();
@@ -23,40 +23,40 @@ const DayView = ({ day }: DayViewProps) => {
   const admin = isAdmin();
   const superAdmin = isSuperAdmin();
   const navigator = useNavigate();
-  const { dayIndex, setDaySelected, setShowBookingForm } = useContext(GlobalContext);
+  const { dayIndex, setDaySelected } = useContext(GlobalContext);
   const [roomNames, setRoomNames] = useState<string[]>([]);
-  // Indicates whether user is currently selecting a time range
   const [selecting, setSelecting] = useState<boolean>(false);
-  // Tracks the booking details (room name, start time and end time)
-  const { bookingSelection ,setBookingSelection } = useContext(GlobalContext);
+  const { bookingSelection, setBookingSelection } = useContext(GlobalContext);  
 
   const currentDateObj = dayjs(new Date(dayjs().year(), dayjs().month(), dayIndex));
-  const currentDate = currentDateObj.format('YYYY-MM-DD');
+  const currentDate = currentDateObj.format("YYYY-MM-DD");
   const startTimeDay = dayjs(new Date(dayjs().year(), dayjs().month(), dayIndex, 8, 0));
   const endTimeDay = dayjs(new Date(dayjs().year(), dayjs().month(), dayIndex, 17, 0));
   const isWeekend = currentDateObj.day() === 0 || currentDateObj.day() === 6;
-  const isAcademicHour = (hour: dayjs.Dayjs) => hour.isBetween(startTimeDay, endTimeDay, null, '[)');  
-  
-  // Fetch the room details and render the list of room names
+  const isAcademicHour = (hour: dayjs.Dayjs) => hour.isBetween(startTimeDay, endTimeDay, null, "[)");
+
+  // Fetch room details
   useEffect(() => {
     const fetchRooms = async () => {
       const response = await getAllRooms();
       const roomNameList = response.data.roomList.map((room: Room) => room.roomName);
       setRoomNames(roomNameList);
-    }
+    };
     fetchRooms();
   }, []);
-  
-  // Starts the selection when user clicks on a cell
-  // Set the intiial room name and time
+
+  // Triggers the start of the selection process. Sets the initial time for booking
   const handleMouseDown = (roomName: string, time: dayjs.Dayjs) => {
     setSelecting(true);
-    !isWeekend && isAcademicHour(time) && regularUser && setBookingSelection({ roomName, startTime: time, endTime: time });
-    (admin || superAdmin) && setBookingSelection({ roomName, startTime: time, endTime: time });
+    if (!isWeekend && isAcademicHour(time) && regularUser) {
+      setBookingSelection({ roomName, startTime: time, endTime: time });
+    } else if (admin || superAdmin) {
+      setBookingSelection({ roomName, startTime: time, endTime: time.add(1, 'hour') });
+    }
     setDaySelected(currentDateObj);
   };
-  
-  // Update the end time (when the user drags the mouse across the table and if still clicking the mouse)
+
+  // When dragging the mouse, function updates the booking's end time
   const handleMouseMove = (roomName: string, time: dayjs.Dayjs) => {
     if (selecting && roomName === bookingSelection.roomName) {
       if (time.isAfter(bookingSelection.startTime)) {
@@ -64,94 +64,105 @@ const DayView = ({ day }: DayViewProps) => {
       } else {
         setBookingSelection({ ...bookingSelection, startTime: time });
       }
-    }
+    }    
   };
-  
-  // Ending the selection process
+
+  // End the booking selection
+  // If the start time and end time are valid, user is redricted to the booking page
   const handleMouseUp = () => {
     setSelecting(false);
-    // bookingSelection.startTime !== bookingSelection.endTime && authenticated && navigator("/booking/add-booking");
-    if(!(bookingSelection.endTime && !isWeekend && isAcademicHour(bookingSelection.endTime)) && regularUser) {
-      setBookingSelection({ ...bookingSelection, endTime: endTimeDay })
+    if (!(bookingSelection.endTime && !isWeekend && isAcademicHour(bookingSelection.endTime)) && regularUser) {
+      setBookingSelection({ ...bookingSelection, endTime: endTimeDay });
     }
-    bookingSelection.startTime !== bookingSelection.endTime && (authenticated) && navigator("/booking/add-booking");
-  };  
+    if (bookingSelection.startTime !== bookingSelection.endTime && authenticated) {
+      navigator("/booking/add-booking");
+    }
+  };
+  // console.log('end time: ', (bookingSelection.endTime)?.format('h'), 'start time', (bookingSelection.startTime)?.format('h'));
 
   const setIsCellSelected = (roomName: string, time: dayjs.Dayjs) => {
     const { roomName: selectedRoom, startTime, endTime } = bookingSelection;
-    return (
-      selectedRoom === roomName &&
-      startTime !== null &&
-      endTime !== null &&
-      time.isBetween(startTime, endTime, null, '[)')
-    );
+    // console.log(startTime?.format("HH:mm"), endTime?.format("HH:mm")); 
+    return selectedRoom === roomName && startTime && endTime && time.isBetween(startTime, endTime, null, "[)");
   };
 
   const isStartOfSelection = (roomName: string, time: dayjs.Dayjs) => {
-    return bookingSelection.roomName === roomName && bookingSelection.startTime?.isSame(time, 'minute');
+    return bookingSelection.roomName === roomName && bookingSelection.startTime?.isSame(time, "minute");
   };
-  
+
   const isEndOfSelection = (roomName: string, time: dayjs.Dayjs) => {
-    return bookingSelection.roomName === roomName && bookingSelection.endTime?.isSame(time, 'minute');
+    return bookingSelection.roomName === roomName && bookingSelection.endTime?.isSame(time.add(1, "hour"), "minute");
   };
-  
+
   return (
-    <table className="h-full w-full overflow-y-scroll overflow-x-scroll bg-gray-50">
-      <thead>
-        <tr>
-          <th className="border-b text-lg text-gray-700 border-gray-200 p-1">{ currentDateObj.format('dddd') }</th>
-          {day.map((day, idx) => (
-            <th key={idx} className="p-0 text-xs border-l border-t text-gray-700">
-              {day.format("h A")} - {day.add(1, 'hour').format("h A")}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody
-        onMouseUp={handleMouseUp}
-        onMouseMove={(event) => {
-          const target = event.target as HTMLTableCellElement;
-          const rowIndex = parseInt(target.dataset.rowIndex || "-1");
-          const colIndex = parseInt(target.dataset.colIndex || "-1");
-          if (rowIndex !== -1 && colIndex !== -1) {
-            const time = day[colIndex];
-            const roomName = roomNames[rowIndex];
-            if (time && roomName) {
-              handleMouseMove(roomName, time);
-            }
-          }
-        }}
-      >
-          {roomNames.map((roomName, i) => (
-            <tr key={i}>
-              <td 
-                className="border-t border-b border-r border-l border-gray-200 px-1"
-                style={{ minWidth: "140px", maxWidth: "140px" }}
-              >
-                <div className='ml-1 text-gray-700 text-base'><b>{roomName}</b></div>
-              </td>
-              {day.map((time, idx) => (
-                <td 
-                  key={`${i}-${idx}`} 
-                  className={
-                    `relative border-t border-b border-r border-l border-gray-200 w-24
-                    ${regularUser && isWeekend ? 'absolute border-red-100 bg-red-100' : ''}
-                    ${regularUser && !isAcademicHour(time) ? 'absolute border-red-100 bg-red-100' : ''}
-                    ${authenticated && setIsCellSelected(roomName, time) ? 'bg-blue-300 transition-all duration-300 ease-in-out' : ''}
-                    ${isStartOfSelection(roomName, time) ? 'rounded-l-lg' : ''}
-                    ${isEndOfSelection(roomName, time) ? 'rounded-r-lg' : ''}`
-                  }
-                  data-row-index={i}
-                  data-col-index={idx}
-                  onMouseDown={() => handleMouseDown(roomName, time)}
-                >
-                  <DayBookings hour={time} date={currentDate} roomName={roomName} key={idx} />
+    <div className="h-full w-full flex">
+      {/* Fixed Time column */}
+      <div className="w-28">
+        <table className="border-r border-gray-200">
+          <thead>
+            <tr>
+              <th className="border-b border-t text-sm text-gray-700 items-center justify-center border-gray-200 p-1 w-32">{currentDateObj.format("dddd")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {day.map((time, i) => (
+              <tr key={i}>
+                <td className="select-none h-11 border border-gray-200 ">
+                  <div className="text-xs justify-center p-2 ml-1">
+                    {/* <span className="text-gray-600 text-xs ml-14 mr-2.5">
+                      {time.format("hh A")}
+                    </span>
+                    <hr className="flex-1 border-gray-200" /> */}
+                    {time.format("hh A")} - {time.add(1, "hour").format("hh A")}
+                  </div>
                 </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Scrollable Room Columns */}
+      <div className="flex-1 overflow-x-auto">
+        <table className="w-max bg-gray-50">
+          <thead>
+            <tr>
+              {roomNames.map((roomName, idx) => (
+                <th key={idx} className="border-t border-b border-r border-l select-none p-1 w-28">
+                  <div className="text-gray-600 text-sm">
+                    {roomName}
+                  </div>
+                </th>
               ))}
             </tr>
-          ))}
-      </tbody>
-    </table>
+          </thead>
+
+          <tbody onMouseUp={handleMouseUp}>
+            {day.map((time, i) => (
+              <tr key={i}>
+                {roomNames.map((roomName, idx) => (
+                  <td
+                    key={`${i}-${idx}`}
+                    className={`relative w-36 h-11
+                      ${regularUser && isWeekend ? "absolute border-red-100 bg-red-100" : ""}
+                      ${regularUser && !isAcademicHour(time) ? "absolute border-red-100 bg-red-100" : ""}
+                      ${authenticated && setIsCellSelected(roomName, time) ? "bg-blue-300 transition-all duration-300 ease-in-out border-none z-20" : "border-b border-r border-l border-gray-200"}
+                      ${isStartOfSelection(roomName, time) ? "rounded-t-lg" : ""}
+                      ${isEndOfSelection(roomName, time) ? "rounded-b-lg" : ""}`}
+                    data-row-index={idx}
+                    data-col-index={i}
+                    onMouseDown={() => handleMouseDown(roomName, time)}
+                    onMouseMove={() => handleMouseMove(roomName, time)}
+                  >
+                    <DayBookings hour={time} date={currentDate} roomName={roomName} />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 };
 
