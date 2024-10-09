@@ -8,6 +8,7 @@ interface ContextWrapperProps {
 
 const ContextWrapper = ({ children }: ContextWrapperProps) => {
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
+  const [weekIndex, setWeekIndex] = useState(dayjs().week());
   const [dayIndex, setDayIndex] = useState(dayjs().date());
   const [view, setView] = useState("Month");
   const [showBookingForm, setShowBookingForm] = useState(false);
@@ -16,11 +17,11 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
   const [bookingSelection, setBookingSelection] = useState<{ 
     roomName: string | null;
     startTime: dayjs.Dayjs | null;
-    endTime: dayjs.Dayjs | null 
+    endTime: dayjs.Dayjs | null;
   }>({
     roomName: null,
     startTime: null,
-    endTime: null
+    endTime: null,
   });
   const [isCellSelected, setIsCellSelected] = useState(false);
 
@@ -28,7 +29,9 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
     <GlobalContext.Provider 
       value={{ 
         monthIndex, 
-        setMonthIndex, 
+        setMonthIndex,
+        weekIndex,
+        setWeekIndex,
         dayIndex, 
         setDayIndex,
         view,

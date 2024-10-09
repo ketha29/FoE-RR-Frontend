@@ -10,6 +10,8 @@ interface BookingSelectionType {
 interface GlobalContextType {
   monthIndex: number;
   setMonthIndex: Dispatch<SetStateAction<number>>;
+  weekIndex: number;
+  setWeekIndex: Dispatch<SetStateAction<number>>;
   dayIndex: number;
   setDayIndex: Dispatch<SetStateAction<number>>;
   showBookingForm: boolean;
@@ -29,6 +31,8 @@ interface GlobalContextType {
 const GlobalContext = React.createContext<GlobalContextType>({
   monthIndex: 0,
   setMonthIndex: (index) => {},
+  weekIndex: 0,
+  setWeekIndex: (index) => {},
   dayIndex: 0,
   setDayIndex: (index) => {},
   view: 'Month',
@@ -42,7 +46,7 @@ const GlobalContext = React.createContext<GlobalContextType>({
   bookingSelection: {
     roomName: null,
     startTime: null,
-    endTime: null
+    endTime: null,
   },
   setBookingSelection: () => {},
   isCellSelected: false,
