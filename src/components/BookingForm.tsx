@@ -5,12 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import CloseIcon from '@mui/icons-material/Close';
 import { addBooking } from '../services/BookingService';
 import { AxiosError } from 'axios';
-import {
-  isAdmin,
-  isAuthenticated,
-  isRegularUser,
-  isSuperAdmin,
-} from '../services/AuthService';
+import { isAdmin, isRegularUser, isSuperAdmin } from '../services/AuthService';
 
 const recurrenceTypes = ['none', 'daily', 'weekly'];
 
@@ -28,6 +23,7 @@ const BookingForm = () => {
     setShowBookingForm,
     daySelected,
     bookingSelection,
+    view,
     setBookingSelection,
     setIsCellSelected,
   } = useContext(GlobalContext);
@@ -36,7 +32,7 @@ const BookingForm = () => {
     setIsCellSelected(false);
     setBookingSelection({ roomName: null, startTime: null, endTime: null });
     setShowBookingForm(false);
-    navigator('/booking');
+    navigator(`/booking/${view}`);
   };
 
   const [booking, setBooking] = useState({

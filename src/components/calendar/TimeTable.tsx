@@ -8,11 +8,11 @@ interface TimeTableProps {
 const TimeTable = ({ day, currentDay }: TimeTableProps) => {
   return (
     // Fixed Time column
-    <div className="w-28 sticky left-0 bg-white z-40">
+    <div className="w-32 sticky left-0 bg-white z-30">
       <table className="border-r border-gray-200">
         <thead>
           <tr>
-            <th className="border-b border-t text-sm text-gray-700 items-center justify-center border-gray-200 p-1 w-32">
+            <th className="border-b border-t text-sm text-gray-700 items-center justify-center border-gray-200 p-1 w-32 h-12">
               {currentDay.format('DD')} {currentDay.format('ddd').toUpperCase()}
             </th>
           </tr>

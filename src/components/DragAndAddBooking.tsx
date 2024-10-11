@@ -29,6 +29,8 @@ interface Booking {
   startTime: string;
   endTime: string;
   date: string;
+  startDate: string;
+  endDate: string;
   details: string;
   recurrence: string;
   recurrencePeriod: number;
@@ -38,6 +40,7 @@ interface Booking {
   user: {
     firstName: string;
     lastName: string;
+    userType: string;
   };
 }
 
@@ -64,10 +67,10 @@ const DragAndAddBooking = ({
   const currentDateObj = currentDay;
   const currentDate = currentDateObj.format('YYYY-MM-DD');
   const startTimeDay = dayjs(
-    new Date(dayjs().year(), dayjs().month(), dayIndex, 8, 0)
+    new Date(dayjs().year(), dayjs().month(), currentDay.date(), 8, 0)
   );
   const endTimeDay = dayjs(
-    new Date(dayjs().year(), dayjs().month(), dayIndex, 17, 0)
+    new Date(dayjs().year(), dayjs().month(), currentDay.date(), 17, 0)
   );
   const isWeekend = currentDateObj.day() === 0 || currentDateObj.day() === 6;
   const isAcademicHour = (hour: dayjs.Dayjs) =>
@@ -148,11 +151,19 @@ const DragAndAddBooking = ({
       setBookingSelection({ ...bookingSelection, endTime: endTimeDay });
     }
     if (
-      bookingSelection.startTime !== bookingSelection.endTime &&
+      !(
+        bookingSelection.startTime === bookingSelection.endTime ||
+        bookingSelection.startTime === null ||
+        bookingSelection.endTime === null
+      ) &&
       authenticated
     ) {
       navigator('/booking/add-booking');
     }
+    console.log(
+      bookingSelection.startTime?.format('HH:mm'),
+      bookingSelection.endTime?.format('HH:mm')
+    );
   };
 
   const setIsCellSelected = (
@@ -194,22 +205,21 @@ const DragAndAddBooking = ({
             <td
               key={timeIndex - roomIndex}
               className={`
-                        relative w-36 h-11
+                        relative w-36 h-11 transition-all duration-300 ease-in-out
                         ${
-                          regularUser && isWeekend
-                            ? 'absolute border-red-100 bg-red-100'
-                            : ''
-                        }
-                        ${
-                          regularUser && !isAcademicHour(time)
-                            ? 'absolute border-red-100 bg-red-100'
+                          regularUser && (!isAcademicHour(time) || isWeekend)
+                            ? roomIndex % 2 === 0
+                              ? 'bg-red-100  border-red-100'
+                              : 'bg-red-80 border-red-80'
                             : ''
                         }
                         ${
                           authenticated &&
                           setIsCellSelected(roomName, time, currentDateObj)
-                            ? 'bg-blue-300 transition-all duration-300 ease-in-out border-none z-20'
-                            : 'border-b border-r border-l border-gray-200'
+                            ? 'bg-blue-300 border-none z-20'
+                            : roomIndex % 2 === 0
+                            ? 'bg-gray-100 border-b border-gray-200'
+                            : 'bg-gray-50 border-b border-gray-200'
                         }
                         ${
                           isStartOfSelection(roomName, time)

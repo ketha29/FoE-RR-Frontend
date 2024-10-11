@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import GlobalContext from '../../context/GlobalContext';
 import dayjs from 'dayjs';
 import { Menu, MenuButton, MenuItems } from '@headlessui/react';
@@ -6,21 +6,14 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
 import AddBookingButton from '../AddBookingButton';
-import {
-  isAdmin,
-  isAuthenticated,
-  isRegularUser,
-  isSuperAdmin,
-} from '../../services/AuthService';
+import { isAuthenticated, isRegularUser } from '../../services/AuthService';
 import { MenuItem } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-const CalendarHeaderDay = () => {
-  const navigate = useNavigate();
+const CalendarHeader = () => {
   const authenticated = isAuthenticated();
   const regularUser = isRegularUser();
-  const admin = isAdmin();
-  const superAdmin = isSuperAdmin();
+  const location = useLocation();
   const {
     dayIndex,
     setDayIndex,
@@ -38,6 +31,17 @@ const CalendarHeaderDay = () => {
     'next' | 'prev' | null
   >(null);
 
+  // Update view state based on route
+  useEffect(() => {
+    if (location.pathname.includes('day')) {
+      setView('Day');
+    } else if (location.pathname.includes('week')) {
+      setView('Week');
+    } else if (location.pathname.includes('month')) {
+      setView('Month');
+    }
+  }, [location.pathname, setView]);
+
   const weekStart = dayjs()
     .week(weekIndex)
     .startOf('week')
@@ -49,6 +53,7 @@ const CalendarHeaderDay = () => {
       setAnimationDirection('prev');
       view == 'Day' && setDayIndex(dayIndex - 1);
       view == 'Week' && setWeekIndex(weekIndex - 1);
+      view == 'Month' && setMonthIndex(monthIndex - 1);
       setIsThrottled(true);
       setTimeout(() => {
         setIsThrottled(false);
@@ -61,13 +66,9 @@ const CalendarHeaderDay = () => {
   const handleNextDay = () => {
     if (!isThrottled) {
       setAnimationDirection('next');
-      // if (view == 'Day') {
-      //   dayIndex > 30 ? setDayIndex(0) : setDayIndex(dayIndex + 1) , setMonthIndex(monthIndex + 1);
-      // }
       view == 'Day' && setDayIndex(dayIndex + 1);
       view == 'Week' && setWeekIndex(weekIndex + 1);
       view == 'Month' && setMonthIndex(monthIndex + 1);
-      // view == 'Week' && setDayIndex(dayIndex + 7);
       setIsThrottled(true);
       setTimeout(() => {
         setIsThrottled(false);
@@ -86,17 +87,18 @@ const CalendarHeaderDay = () => {
 
   const transitionClass =
     animationDirection === 'next'
-      ? 'transform translate-x-full opacity-0 transition-transform duration-300'
+      ? 'transform translate-x-full opacity-0 transition-transform duration-150'
       : animationDirection === 'prev'
-      ? 'transform -translate-x-full opacity-0 transition-transform duration-300'
+      ? 'transform -translate-x-full opacity-0 transition-transform duration-150'
       : 'opacity-100 transition-opacity duration-300';
 
   return (
     <>
-      <header className="flex px-5 py-3 items-center justify-between bg-white border-b border-gray-400 fixed top-14 left-0 right-0 z-50">
-        <div className="flex items-center space-x-10">
+      <header className="flex px-6 py-4 items-center justify-between bg-gradient-to-r from-blue-200 to-purple-200 border-b border-blue-200 shadow-lg fixed top-14 left-0 right-0 z-40">
+        <div className="flex items-center space-x-12">
           <h2
-            className={`m1-4 text-xl text-grey-500 w-60 font-bold ${transitionClass}`}>
+            className={`text-2xl text-gray-800 font-bold transition-transform duration-150 ${transitionClass}`}
+            style={{ minWidth: '250px' }}>
             {view === 'Day' &&
               dayjs(new Date(dayjs().year(), dayjs().month(), dayIndex)).format(
                 'DD MMMM YYYY'
@@ -104,9 +106,10 @@ const CalendarHeaderDay = () => {
             {view === 'Week' && `${weekStart} - ${weekEnd}`}
             {view === 'Month' && dayjs().month(monthIndex).format('MMMM YYYY')}
           </h2>
-          <div className="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
+
+          <div className="relative flex items-center rounded-lg bg-white shadow-lg md:items-stretch">
             <button
-              className={`right-arrow ${
+              className={`right-arrow text-blue-600 hover:bg-blue-50 ${
                 regularUser &&
                 (dayIndex <= todayIndex ? 'opacity-50 cursor-not-allowed' : '')
               }`}
@@ -116,23 +119,26 @@ const CalendarHeaderDay = () => {
             </button>
             <button
               onClick={handleToday}
-              className="hidden border-y border-gray-300 px-2 text-lg font-semibold text-gray-900 hover:bg-gray-50 focus:relative md:block">
+              className="hidden border-y border-gray-300 px-2 text-lg font-semibold text-gray-700 hover:text-blue-700 hover:bg-blue-50 focus:relative md:block">
               Today
             </button>
-            <button className="left-arrow" onClick={handleNextDay}>
+            <button
+              className="left-arrow text-blue-600 hover:bg-blue-50"
+              onClick={handleNextDay}>
               <ChevronRightIcon />
             </button>
           </div>
         </div>
+
         <div className="flex items-center">
           {/* Drop down for calendar view */}
           <Menu as="div" className="relative ml-3">
             {({ close }) => (
               <>
                 <div>
-                  <MenuButton className="flex items-center justify-between mr-6 px-3 py-0.5 text-lg font-semibold rounded-md bg-white border border-gray-300 text-gray-900 hover:bg-gray-50 focus:outline-none">
+                  <MenuButton className="flex items-center justify-between mr-6 px-3 py-1 text-lg font-semibold rounded-lg shadow-lg bg-white border border-gray-300 text-gray-800 hover:bg-purple-50 focus:outline-none">
                     <span className="mr-1">{view} View</span>
-                    <ArrowDropDownOutlinedIcon className="w-5 h-5 text-gray-500" />
+                    <ArrowDropDownOutlinedIcon className="w-5 h-5 text-gray-600" />
                   </MenuButton>
                 </div>
 
@@ -142,9 +148,11 @@ const CalendarHeaderDay = () => {
                   {view !== 'Day' && (
                     <MenuItem>
                       <a
-                        className="block py-0 text-base font-medium text-gray-900 data-[focus]:bg-gray-100"
+                        href="/booking/day"
+                        className="block py-0 text-base font-medium text-gray-800 data-[focus]:bg-gray-100"
                         onClick={() => {
                           setView('Day');
+                          setDayIndex(dayjs().date());
                           close();
                         }}>
                         Day View
@@ -154,9 +162,11 @@ const CalendarHeaderDay = () => {
                   {view !== 'Week' && (
                     <MenuItem>
                       <a
-                        className="block py-0 text-base font-medium text-gray-900 data-[focus]:bg-gray-100"
+                        href="/booking/week"
+                        className="block py-0 text-base font-medium text-gray-800 data-[focus]:bg-gray-100"
                         onClick={() => {
                           setView('Week');
+                          setDayIndex(dayjs().week());
                           close();
                         }}>
                         Week View
@@ -166,9 +176,11 @@ const CalendarHeaderDay = () => {
                   {view !== 'Month' && (
                     <MenuItem>
                       <a
-                        className="block py-0 text-base font-medium text-gray-900 data-[focus]:bg-gray-100"
+                        href="/booking/month"
+                        className="block py-0 text-base font-medium text-gray-800 data-[focus]:bg-gray-100"
                         onClick={() => {
                           setView('Month');
+                          setDayIndex(dayjs().month());
                           close();
                         }}>
                         Month View
@@ -180,7 +192,7 @@ const CalendarHeaderDay = () => {
             )}
           </Menu>
 
-          {authenticated && <div className="ml-0 h-6 w-px bg-gray-300"></div>}
+          {/* {authenticated && <div className="ml-0 h-6 w-px bg-gray-500"></div>} */}
           {authenticated && <AddBookingButton />}
         </div>
       </header>
@@ -188,4 +200,4 @@ const CalendarHeaderDay = () => {
   );
 };
 
-export default CalendarHeaderDay;
+export default CalendarHeader;

@@ -5,6 +5,7 @@ import { deleteBooking } from '../services/BookingService';
 import { isAuthenticated } from '../services/AuthService';
 import { useNavigate } from 'react-router-dom';
 import BookingXtaDetails from './BookingXtaDetails';
+import React from 'react';
 
 dayjs.extend(isBetween);
 
@@ -18,6 +19,8 @@ interface Booking {
   startTime: string;
   endTime: string;
   date: string;
+  startDate: string;
+  endDate: string;
   details: string;
   recurrence: string;
   recurrencePeriod: number;
@@ -27,6 +30,7 @@ interface Booking {
   user: {
     firstName: string;
     lastName: string;
+    userType: string;
   };
 }
 
@@ -64,27 +68,53 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
   const handleCloseDetails = () => {
     setMoveBlock(false);
     setShowXtraBookingDetails(false);
-    navigator('/booking');
+    console.log('Close');
+
+    // navigator(`/booking/${view}`);
   };
   // Render update booking form when clicking the edit button
   const handleClickEdit = (booking: Booking) => {
     navigator('/booking/update-booking', { state: { booking } });
   };
 
+  // Get a speciic color for the booking strip
+  const getColor = (booking: Booking) => {
+    if (booking.user.userType === 'regularUser') {
+      return 'bg-yellow-500';
+    }
+    if (booking.user.userType === 'admin') {
+      switch (booking.recurrence) {
+        case 'none':
+          return 'bg-purple-500';
+        case 'daily':
+          return 'bg-violet-500';
+        case 'weekly':
+          return 'bg-blue-500';
+      }
+    }
+    if (booking.user.userType === 'superAdmin') {
+      switch (booking.recurrence) {
+        case 'none':
+          return 'bg-purple-500';
+        case 'daily':
+          return 'bg-violet-500';
+        case 'weekly':
+          return 'bg-blue-500';
+      }
+    }
+  };
+
   return (
     <div className="h-full w-full">
       {bookings.map((booking) => {
+        const stripColor = getColor(booking);
         const bookingStart = dayjs(`${booking.date} ${booking.startTime}`);
         const bookingEnd = dayjs(`${booking.date} ${booking.endTime}`);
-
         const startOffsetMinutes = bookingStart.diff(
           dayjs(`${date} 00:00`),
           'minute'
         );
         const spanMinutes = bookingEnd.diff(bookingStart, 'minute');
-        // console.log('Bookings length:', bookings.length);
-        // console.log('Start of minutes: ', startOffsetMinutes);
-
         const leftPercentage =
           (startOffsetMinutes / 60 - bookingStart.hour()) * 100;
         const heightPercentage = (spanMinutes / 60) * 102;
@@ -94,7 +124,7 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
           try {
             await deleteBooking(booking.bookingId);
             handleCloseDetails();
-            // fetchDayBookings();
+            console.log('deleted');
           } catch (error) {
             console.error('Error deleting booking:', error);
           }
@@ -104,27 +134,35 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
           startOffsetMinutes >= 0 &&
           authenticated && (
             // Display booking according to the start time and time duration
-            <>
+            <React.Fragment key={booking.bookingId}>
               <div
                 onClick={() => handleClick()}
-                className="absolute group z-10 bg-blue-300 rounded-md h-full flex justify-start items-center"
-                key={booking.bookingId}
+                className="absolute group z-10 bg-white shadow-lg shadow-gray-300 rounded-md h-full flex justify-start items-center"
                 style={{
                   top: 0,
                   left: `${leftPercentage}%`,
                   height: `${heightPercentage}%`,
                   width: '85%',
                 }}>
-                <div className="absolute ml-1 text-gray-600 text-xs select-none">
-                  {dayjs(bookingStart).format('h:mma')} -{' '}
-                  {dayjs(bookingEnd).format('h:mma')}
+                {/* strip */}
+                <div className={`${stripColor} w-3 h-full rounded-l-md`}></div>
+                {/* White background for the rest */}
+                <div className="flex-1 bg-white p-1 rounded-r-md">
+                  {/* Added padding for spacing */}
+                  <div className="text-gray-600 text-xs select-none">
+                    <div>
+                      {dayjs(bookingStart).format('h:mma')}-
+                      {dayjs(bookingEnd).format('h:mma')} <br />
+                    </div>
+                    <div className="mt-1 text-gray-400">{booking.details}</div>
+                  </div>
                 </div>
               </div>
               <div
                 className="z-20"
                 ref={bookingDetailsRef}
                 style={{
-                  top: '120px',
+                  top: '180px',
                   transformOrigin: 'top',
                   transform: moveBlock
                     ? 'translateX(125px)'
@@ -143,7 +181,7 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
                   />
                 )}
               </div>
-            </>
+            </React.Fragment>
           )
         );
       })}

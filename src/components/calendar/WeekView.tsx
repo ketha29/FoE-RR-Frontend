@@ -23,6 +23,8 @@ interface Booking {
   startTime: string;
   endTime: string;
   date: string;
+  startDate: string;
+  endDate: string;
   details: string;
   recurrence: string;
   recurrencePeriod: number;
@@ -32,19 +34,14 @@ interface Booking {
   user: {
     firstName: string;
     lastName: string;
+    userType: string;
   };
 }
 
 const WeekView = ({ day, week }: WeekViewProps) => {
   const [weekBookings, setWeekBookings] = useState<Booking[]>([]);
   const [roomNames, setRoomNames] = useState<string[]>([]);
-  const { dayIndex, weekIndex } = useContext(GlobalContext);
-
-  // const currentDateObj = dayjs(new Date(dayjs().year(), dayjs().month(), currentDay.date()));
-  const currentDateObj = dayjs(
-    new Date(dayjs().year(), dayjs().month(), dayIndex)
-  );
-  const today = dayjs();
+  const { weekIndex } = useContext(GlobalContext);
 
   // Get start and end of the current week for that date
   const startOfWeek = dayjs()
@@ -52,10 +49,6 @@ const WeekView = ({ day, week }: WeekViewProps) => {
     .startOf('week')
     .format('YYYY-MM-DD');
   const endOfWeek = dayjs().week(weekIndex).endOf('week').format('YYYY-MM-DD');
-  // console.log('Start of week:', startOfWeek);
-  // console.log('End of week:', endOfWeek);
-  // const startOfWeek = currentDateObj.startOf('week').format('YYYY-MM-DD');
-  // const endOfWeek = currentDateObj.endOf('week').format('YYYY-MM-DD');
 
   // Fetch room details
   useEffect(() => {
@@ -74,7 +67,7 @@ const WeekView = ({ day, week }: WeekViewProps) => {
     try {
       const response = await getWeekBookings(startOfWeek, endOfWeek);
       const bookings = response.data.bookingList;
-      console.log('Week bookings', bookings);
+      // console.log('Week bookings', bookings);
       setWeekBookings(bookings);
     } catch (error) {
       console.error('Error fetching bookings:', error);
@@ -90,21 +83,28 @@ const WeekView = ({ day, week }: WeekViewProps) => {
     <div>
       {week.map((currentDay, dayIndex) => {
         return (
-          <div className="w-full flex">
+          <div className="w-full flex" key={dayIndex}>
+            {/* Fixed Time column */}
             <TimeTable day={day} currentDay={currentDay} />
+
+            {/* Scrollable Room Columns */}
             <div key={dayIndex} className="flex-1 overflow-x-auto">
-              <table className="w-max bg-gray-50">
+              <table className="w-max bg-green-200">
                 <thead>
                   <tr>
                     {roomNames.map((roomName, roomIndex) => (
                       <th
                         key={roomIndex}
-                        className="border-t border-b border-r border-l select-none p-1 w-28">
-                        <div className="text-gray-600 text-sm">{roomName}</div>
+                        className="border-t border-b border-r border-white select-none p-1 w-28 h-12">
+                        <div className="text-gray-600 text-sm text-center">
+                          {roomName}
+                        </div>
                       </th>
                     ))}
                   </tr>
                 </thead>
+
+                {/* Table Body */}
                 <DragAndAddBooking
                   bookings={weekBookings}
                   currentDay={currentDay}

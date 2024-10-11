@@ -2,15 +2,7 @@ import dayjs from 'dayjs';
 import { useContext, useEffect, useState } from 'react';
 import { getAllRooms } from '../../services/RoomService';
 import GlobalContext from '../../context/GlobalContext';
-import { useNavigate } from 'react-router-dom';
-import {
-  isAdmin,
-  isAuthenticated,
-  isRegularUser,
-  isSuperAdmin,
-} from '../../services/AuthService';
-import DayBookings from '../RenderBookings';
-import { getAllBookings, getDayBookings } from '../../services/BookingService';
+import { getDayBookings } from '../../services/BookingService';
 import TimeTable from './TimeTable';
 import DragAndAddBooking from '../DragAndAddBooking';
 
@@ -39,6 +31,7 @@ interface Booking {
   user: {
     firstName: string;
     lastName: string;
+    userType: string;
   };
 }
 
@@ -69,7 +62,7 @@ const DayView = ({ day }: DayViewProps) => {
     try {
       const response = await getDayBookings(currentDate);
       const bookings = response.data.bookingList;
-      console.log('Day booking', bookings);
+      // console.log('Day booking', bookings);
       setDayBookings(bookings);
     } catch (error) {
       console.error('Error fetching bookings:', error);
@@ -88,14 +81,16 @@ const DayView = ({ day }: DayViewProps) => {
 
       {/* Scrollable Room Columns */}
       <div className="flex-1 overflow-x-auto">
-        <table className="w-max bg-gray-50">
+        <table className="w-max bg-green-200">
           <thead>
             <tr>
               {roomNames.map((roomName, idx) => (
                 <th
                   key={idx}
-                  className="border-t border-b border-r border-l select-none p-1 w-28">
-                  <div className="text-gray-600 text-sm">{roomName}</div>
+                  className="border-b border-t border-r border-white select-none p-1 h-12 w-28">
+                  <div className="text-gray-700 text-sm text-center">
+                    {roomName}
+                  </div>
                 </th>
               ))}
             </tr>

@@ -17,10 +17,12 @@ import {
   isSuperAdmin,
   logout,
 } from '../services/AuthService';
+import { useContext } from 'react';
+import GlobalContext from '../context/GlobalContext';
 
 const navigation = [
   { name: 'Home', href: '/home' },
-  { name: 'Booking', href: '/booking' },
+  { name: 'Booking', href: '/booking/day' },
   { name: 'Users', href: '/fds' },
   { name: 'Rooms', href: '/room/all' },
 ];
@@ -31,6 +33,7 @@ const NavBar = () => {
   const superAdmin = isAdmin();
   const regularUser = isRegularUser();
   const navigate = useNavigate();
+  const { view } = useContext(GlobalContext);
 
   const handleLogout = () => {
     logout();
@@ -42,7 +45,7 @@ const NavBar = () => {
       as="nav"
       className="bg-slate-700 fixed top-0 left-0 right-0 z-50">
       <div className="mx-auto max-w-7xl px-2 sm:px-6">
-        <div className="relative flex h-14 items-center justify-between mb-2">
+        <div className="relative flex h-14 items-center justify-between mb-0">
           <div className="absolute insert-y-0 left-0 flex items-center sm-hidden">
             {/* Mobile menu button*/}
             <DisclosureButton className="md:hidden group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
@@ -68,7 +71,7 @@ const NavBar = () => {
                   Home
                 </NavLink>
                 <NavLink
-                  to="/booking"
+                  to={`/booking/${view.toLowerCase()}`}
                   className={({ isActive }) =>
                     'block rounded-md px-3 py-2 text-base font-medium ' +
                     (isActive
