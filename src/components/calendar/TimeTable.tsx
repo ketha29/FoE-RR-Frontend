@@ -6,6 +6,7 @@ interface TimeTableProps {
 }
 
 const TimeTable = ({ day, currentDay }: TimeTableProps) => {
+  const today = dayjs();
   return (
     // Fixed Time column
     <div className="w-32 sticky left-0 bg-white z-30">
@@ -13,7 +14,15 @@ const TimeTable = ({ day, currentDay }: TimeTableProps) => {
         <thead>
           <tr>
             <th className="border-b border-t text-sm text-gray-700 items-center justify-center border-gray-200 p-1 w-32 h-12">
-              {currentDay.format('DD')} {currentDay.format('ddd').toUpperCase()}
+              <span
+                className={`px-2 py-1 rounded-full ${
+                  currentDay.isSame(today, 'day')
+                    ? 'bg-blue-600 text-white'
+                    : ''
+                }`}>
+                {currentDay.format('DD')}{' '}
+                {currentDay.format('ddd').toUpperCase()}
+              </span>
             </th>
           </tr>
         </thead>
