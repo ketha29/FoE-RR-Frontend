@@ -9,14 +9,6 @@ interface DayProps {
   rowIdx: number;
 }
 
-// interface Booking {
-//   startTime: string;
-//   endTime: string;
-//   details: string;
-//   recurrence: string;
-//   recurrencePeriod: number;
-// }
-
 const Day = ({ day, rowIdx }: DayProps) => {
   // const [dayBooking, setDayBooking] = useState<Booking[]>([]);
   const [dayBookingCount, setDayBookingCount] = useState(0);

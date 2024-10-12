@@ -11,37 +11,11 @@ import GlobalContext from '../../context/GlobalContext';
 import { useNavigate } from 'react-router-dom';
 import RenderBookings from './RenderBookings';
 import { getDay } from '../../util';
+import { Booking, Room } from '../Interfaces';
 
 interface DragAndAddBookingpRrops {
   bookings: Booking[];
   currentDay: dayjs.Dayjs;
-}
-
-type Room = {
-  roomId: number;
-  capacity: number;
-  roomName: string;
-  description: string;
-};
-
-interface Booking {
-  bookingId: number;
-  startTime: string;
-  endTime: string;
-  date: string;
-  startDate: string;
-  endDate: string;
-  details: string;
-  recurrence: string;
-  recurrencePeriod: number;
-  room: {
-    roomName: string;
-  };
-  user: {
-    firstName: string;
-    lastName: string;
-    userType: string;
-  };
 }
 
 const DragAndAddBooking = ({

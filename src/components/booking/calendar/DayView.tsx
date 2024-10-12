@@ -5,36 +5,10 @@ import GlobalContext from '../../../context/GlobalContext';
 import { getDayBookings } from '../../../services/BookingService';
 import TimeTable from './TimeTable';
 import DragAndAddBooking from '../DragAndAddBooking';
+import { Booking, Room } from '../../Interfaces';
 
 interface DayViewProps {
   day: dayjs.Dayjs[];
-}
-
-type Room = {
-  roomId: number;
-  capacity: number;
-  roomName: string;
-  description: string;
-};
-
-interface Booking {
-  bookingId: number;
-  startTime: string;
-  endTime: string;
-  date: string;
-  startDate: string;
-  endDate: string;
-  details: string;
-  recurrence: string;
-  recurrencePeriod: number;
-  room: {
-    roomName: string;
-  };
-  user: {
-    firstName: string;
-    lastName: string;
-    userType: string;
-  };
 }
 
 const DayView = ({ day }: DayViewProps) => {

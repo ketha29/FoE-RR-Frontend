@@ -5,13 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FieldValues, useForm } from 'react-hook-form';
 import { updateRoom } from '../../services/RoomService';
 import { AxiosError } from 'axios';
-
-type Room = {
-  roomId: number;
-  capacity: number;
-  roomName: string;
-  description: string;
-};
+import { Room } from '../Interfaces';
 
 interface UpdateRoomProps {
   room: Room | null;

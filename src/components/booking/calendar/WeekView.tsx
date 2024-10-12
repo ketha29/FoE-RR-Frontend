@@ -5,37 +5,11 @@ import { getWeekBookings } from '../../../services/BookingService';
 import { getAllRooms } from '../../../services/RoomService';
 import DragAndAddBooking from '../DragAndAddBooking';
 import TimeTable from './TimeTable';
+import { Booking, Room } from '../../Interfaces';
 
 interface WeekViewProps {
   week: dayjs.Dayjs[];
   day: dayjs.Dayjs[];
-}
-
-type Room = {
-  roomId: number;
-  capacity: number;
-  roomName: string;
-  description: string;
-};
-
-interface Booking {
-  bookingId: number;
-  startTime: string;
-  endTime: string;
-  date: string;
-  startDate: string;
-  endDate: string;
-  details: string;
-  recurrence: string;
-  recurrencePeriod: number;
-  room: {
-    roomName: string;
-  };
-  user: {
-    firstName: string;
-    lastName: string;
-    userType: string;
-  };
 }
 
 const WeekView = ({ day, week }: WeekViewProps) => {

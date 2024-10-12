@@ -7,13 +7,7 @@ import DeleteConformation from '../DeleteConfirmation';
 import AddRoomForm from './AddRoomForm';
 import GlobalContext from '../../context/GlobalContext';
 import UpdateRoom from './UpdateRoom';
-
-type Room = {
-  roomId: number;
-  capacity: number;
-  roomName: string;
-  description: string;
-};
+import { Room } from '../Interfaces';
 
 const ListRoom = () => {
   const [roomList, setRoomList] = useState<Room[]>([]);

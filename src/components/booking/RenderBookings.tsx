@@ -6,32 +6,13 @@ import { isAuthenticated } from '../../services/AuthService';
 import { useNavigate } from 'react-router-dom';
 import BookingXtaDetails from './BookingXtaDetails';
 import React from 'react';
+import { Booking } from '../Interfaces';
 
 dayjs.extend(isBetween);
 
 interface RenderBookingsProps {
   date: string;
   bookings: Booking[];
-}
-
-interface Booking {
-  bookingId: number;
-  startTime: string;
-  endTime: string;
-  date: string;
-  startDate: string;
-  endDate: string;
-  details: string;
-  recurrence: string;
-  recurrencePeriod: number;
-  room: {
-    roomName: string;
-  };
-  user: {
-    firstName: string;
-    lastName: string;
-    userType: string;
-  };
 }
 
 const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
