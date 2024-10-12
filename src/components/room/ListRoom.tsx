@@ -11,7 +11,7 @@ import { Room } from '../Interfaces';
 
 const ListRoom = () => {
   const [roomList, setRoomList] = useState<Room[]>([]);
-  const [error, setError] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [showDeleteConformation, setShowDeleteConformation] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
   const [filteredRooms, setFilteredRooms] = useState<Room[]>([]);
@@ -29,7 +29,7 @@ const ListRoom = () => {
       const response = await getAllRooms();
       setRoomList(response.data.roomList);
     } catch (error) {
-      setError((error as AxiosError).message);
+      setErrorMessage((error as AxiosError).message);
     }
   };
   // Render room details once when the page is loaded
@@ -43,8 +43,8 @@ const ListRoom = () => {
       await deleteRoom(room.roomId);
       fetchRooms();
     } catch (error) {
-      setError((error as AxiosError).message);
-      console.log('Error in deleting room:', error);
+      setErrorMessage((error as AxiosError).message);
+      console.log('Error in getting the rooms:', error);
     }
   };
 
@@ -80,8 +80,14 @@ const ListRoom = () => {
   };
 
   return (
-    <div className="">
-      <div className="relative overflow-x-auto sm:rounded-lg mt-20 px-10 py-6 bg-gray-100">
+    <div className="relative overflow-x-auto sm:rounded-lg mt-20 px-10 py-6 bg-gray-100">
+      {/* Error Display */}
+      {errorMessage && (
+        <div className="text-grey-700 h-full">Error: {errorMessage}</div>
+      )}
+
+      {/* Render the components if there are no errors */}
+      {!errorMessage && (
         <div className="flex flex-col">
           <div className="px-8 flex items-center justify-start mb-5 space-x-8">
             <div className="text-2xl font-semibold text-gray-800">
@@ -179,20 +185,20 @@ const ListRoom = () => {
             </div>
           </div>
         </div>
-        {showAddRoomForm && <AddRoomForm onRoomAddition={fetchRooms} />}
-        {showUpdateRoomForm && (
-          <UpdateRoom room={selectedRoom} onRoomUpdate={fetchRooms} />
-        )}
+      )}
+      {showAddRoomForm && <AddRoomForm onRoomAddition={fetchRooms} />}
+      {showUpdateRoomForm && (
+        <UpdateRoom room={selectedRoom} onRoomUpdate={fetchRooms} />
+      )}
 
-        {/* Show the deletion confiramation component */}
-        {showDeleteConformation && (
-          <DeleteConformation
-            deleteItem={`Room ${selectedRoom?.roomName}`}
-            onConfirm={proceedDelete}
-            onCancel={cancelDelete}
-          />
-        )}
-      </div>
+      {/* Show the deletion confiramation component */}
+      {showDeleteConformation && (
+        <DeleteConformation
+          deleteItem={`Room ${selectedRoom?.roomName}`}
+          onConfirm={proceedDelete}
+          onCancel={cancelDelete}
+        />
+      )}
     </div>
   );
 };
