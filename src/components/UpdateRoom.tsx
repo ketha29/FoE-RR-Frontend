@@ -38,7 +38,6 @@ const UpdateRoom = ({ room, onRoomUpdate }: UpdateRoomProps) => {
   // Handle form submission
   const onSubmit = async (data: FieldValues) => {
     try {
-      //   console.log('Submitting data:', data);
       const response = await updateRoom(room?.roomId || -1, data);
       console.log('Room Updates successfully:', response.data);
       onRoomUpdate();
@@ -46,17 +45,13 @@ const UpdateRoom = ({ room, onRoomUpdate }: UpdateRoomProps) => {
     } catch (error) {
       if (error instanceof AxiosError) {
         const message = error.response?.data?.message || error.message;
-        setErrorMessage(message); // Set the error message
-        console.error('Error adding room:', message);
+        setErrorMessage(message);
+        console.error('Error updating the room:', message);
       } else {
         // Handle other unexpected errors
         setErrorMessage('An unexpected error occurred.');
         console.error('Unexpected error:', error);
       }
-      //   console.error(
-      //     'Error Updating room:',
-      //     (error as AxiosError).response?.data || (error as AxiosError).message
-      //   );
     }
   };
   return (
@@ -75,13 +70,6 @@ const UpdateRoom = ({ room, onRoomUpdate }: UpdateRoomProps) => {
               <CloseIcon />
             </button>
           </header>
-
-          {/* Display error message if exists */}
-          {errorMessage && (
-            <div className="mt-4 p-2 bg-red-100 text-red-700 border border-red-300 rounded-md">
-              {errorMessage}
-            </div>
-          )}
 
           {/* Room Name Field */}
           <div className="mt-5">
@@ -111,6 +99,7 @@ const UpdateRoom = ({ room, onRoomUpdate }: UpdateRoomProps) => {
               type="number"
               className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500"
               defaultValue={room?.capacity}
+              onFocus={() => setErrorMessage(null)}
             />
             {errors.capacity?.type === 'required' && (
               <p className="text-red-600 mt-1">Room capacity is required</p>
@@ -129,6 +118,13 @@ const UpdateRoom = ({ room, onRoomUpdate }: UpdateRoomProps) => {
               defaultValue={room?.description}
             />
           </div>
+
+          {/* Display error message if exists */}
+          {errorMessage && (
+            <div className="mt-4 p-2 bg-red-100 text-red-700 border border-red-300 rounded-md">
+              {errorMessage}
+            </div>
+          )}
 
           {/* Submit and cancel Button */}
           <div className="mt-6 flex justify-end space-x-4">

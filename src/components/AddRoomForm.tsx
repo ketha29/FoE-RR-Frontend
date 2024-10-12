@@ -35,13 +35,9 @@ const AddRoomForm = ({ onRoomAddition }: AddRoomFromProps) => {
       onRoomAddition();
       closeRoomForm();
     } catch (error) {
-      //   console.error(
-      //     'Error adding room:',
-      //     (error as AxiosError).response?.data || (error as AxiosError).message
-      //   );
       if (error instanceof AxiosError) {
         const message = error.response?.data?.message || error.message;
-        setErrorMessage(message); // Set the error message
+        setErrorMessage(message);
         console.error('Error adding room:', message);
       } else {
         // Handle other unexpected errors
@@ -68,13 +64,6 @@ const AddRoomForm = ({ onRoomAddition }: AddRoomFromProps) => {
             </button>
           </header>
 
-          {/* Display error message if exists */}
-          {errorMessage && (
-            <div className="mt-4 p-2 bg-red-100 text-red-700 border border-red-300 rounded-md">
-              {errorMessage}
-            </div>
-          )}
-
           {/* Room Name Field */}
           <div className="mt-5">
             <label htmlFor="roomName" className="block text-lg font-medium">
@@ -86,6 +75,7 @@ const AddRoomForm = ({ onRoomAddition }: AddRoomFromProps) => {
               type="text"
               className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500"
               placeholder="Enter room name"
+              onFocus={() => setErrorMessage(null)}
             />
             {errors.roomName?.type === 'required' && (
               <p className="text-red-600 mt-1">Room name is required</p>
@@ -103,6 +93,7 @@ const AddRoomForm = ({ onRoomAddition }: AddRoomFromProps) => {
               type="number"
               className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500"
               placeholder="Enter room capacity"
+              onFocus={() => setErrorMessage(null)}
             />
             {errors.capacity?.type === 'required' && (
               <p className="text-red-600 mt-1">Room capacity is required</p>
@@ -121,6 +112,13 @@ const AddRoomForm = ({ onRoomAddition }: AddRoomFromProps) => {
               placeholder="Enter room description"
             />
           </div>
+
+          {/* Display error message if exists */}
+          {errorMessage && (
+            <div className="mt-4 p-2 bg-red-100 text-red-700 border border-red-300 rounded-md">
+              {errorMessage}
+            </div>
+          )}
 
           {/* Submit and cancel Button */}
           <div className="mt-6 flex justify-end space-x-4">
