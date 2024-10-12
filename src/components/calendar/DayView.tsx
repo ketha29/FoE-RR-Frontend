@@ -22,6 +22,8 @@ interface Booking {
   startTime: string;
   endTime: string;
   date: string;
+  startDate: string;
+  endDate: string;
   details: string;
   recurrence: string;
   recurrencePeriod: number;

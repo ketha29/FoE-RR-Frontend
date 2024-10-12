@@ -55,8 +55,8 @@ const NavBar = () => {
             </DisclosureButton>
           </div>
           <div className="flex flex-1 items-center justify-center md:items-stretch md:justify-start">
-            <div className="flex items-center ">
-              <img alt="FoE RR" src={logo} className="h-8 w-auto" />
+            <div className="flex items-center">
+              <img alt="FoE RR" src={logo} className="h-10 w-auto" />
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="hidden md:flex space-x-4">
