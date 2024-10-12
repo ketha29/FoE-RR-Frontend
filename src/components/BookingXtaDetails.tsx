@@ -96,8 +96,9 @@ const BookingXtaDetails = ({
           <p className="text-xs text-gray-500 mt-0.5">
             {dayjs(bookingStart).format('h:mm a')} -{' '}
             {dayjs(bookingEnd).format('h:mm a')} <br />
-            {dayjs(booking.startDate).format('DD MMM YYYY')} -{' '}
-            {dayjs(booking.endDate).format('DD MMM YYYY')} <br />
+            {dayjs(booking.startDate).format('DD MMM')} -{' '}
+            {dayjs(booking.endDate).format('DD MMM')} ({booking.recurrence}){' '}
+            <br />
             Booked by: {booking.user.firstName}{' '}
             {booking.user.lastName.charAt(0)}
           </p>
