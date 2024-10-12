@@ -13,6 +13,7 @@ import AddRoomForm from './components/AddRoomForm';
 import LoginIn from './components/LogIn';
 import UpdateBooking from './components/UpdateBooking';
 import WeekView from './components/calendar/WeekView';
+import UpdateRoom from './components/UpdateRoom';
 
 function App() {
   const { monthIndex, weekIndex, dayIndex, showBookingForm } =
@@ -44,7 +45,8 @@ function App() {
           <Route
             path="/booking/update-booking"
             element={<UpdateBooking />}></Route>
-          <Route path="/add-room" element={<AddRoomForm />}></Route>
+          {/* <Route path="/room/update-room" element={<UpdateRoom />}></Route> */}
+          {/* <Route path="room/add-room" element={<AddRoomForm />}></Route> */}
           <Route
             path="/booking/day"
             element={

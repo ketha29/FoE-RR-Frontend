@@ -10,11 +10,12 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
   const [weekIndex, setWeekIndex] = useState(dayjs().week());
   const [dayIndex, setDayIndex] = useState(dayjs().date());
-  const [view, setView] = useState("Month");
+  const [view, setView] = useState('Month');
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [showAddRoomForm, setShowAddRoomForm] = useState(false);
+  const [showUpdateRoomForm, setShowUpdateRoomForm] = useState(false);
   const [daySelected, setDaySelected] = useState(dayjs());
-  const [bookingSelection, setBookingSelection] = useState<{ 
+  const [bookingSelection, setBookingSelection] = useState<{
     roomName: string | null;
     startTime: dayjs.Dayjs | null;
     endTime: dayjs.Dayjs | null;
@@ -26,21 +27,23 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
   const [isCellSelected, setIsCellSelected] = useState(false);
 
   return (
-    <GlobalContext.Provider 
-      value={{ 
-        monthIndex, 
+    <GlobalContext.Provider
+      value={{
+        monthIndex,
         setMonthIndex,
         weekIndex,
         setWeekIndex,
-        dayIndex, 
+        dayIndex,
         setDayIndex,
         view,
         setView,
-        showBookingForm, 
-        setShowBookingForm, 
-        showAddRoomForm, 
-        setShowAddRoomForm, 
-        daySelected, 
+        showBookingForm,
+        setShowBookingForm,
+        showAddRoomForm,
+        setShowAddRoomForm,
+        showUpdateRoomForm,
+        setShowUpdateRoomForm,
+        daySelected,
         setDaySelected,
         bookingSelection,
         setBookingSelection,
