@@ -10,28 +10,29 @@ const DeleteConformation = ({
   onCancel,
 }: DeleteConfirmationProps) => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 z-40">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-70 backdrop-blur-sm z-40">
       <div
-        className="bg-white rounded-md shadow-xl"
-        style={{ minWidth: '500px', maxWidth: '500px' }}>
-        <h1 className="text-xl p-4">Delete Confirmation</h1>
-        <hr className="mb-1 border-gray-300" />
-        <div className="p-4">
-          <div className="bg-red-200 text-red-900 opacity-80 rounded-md p-2">
-            Are you sure want to delete the '{deleteItem}' ?
+        className="bg-white rounded-lg shadow-2xl transition-transform transform hover:scale-105 duration-300"
+        style={{ minWidth: '400px', maxWidth: '90%' }}>
+        <h1 className="text-2xl font-semibold text-gray-800 p-5 border-b border-gray-200">
+          Delete Confirmation
+        </h1>
+        <div className="p-6">
+          <div className="bg-red-100 text-red-700 font-medium rounded-lg p-3 text-center">
+            Are you sure you want to delete{' '}
+            <span className="font-bold">{deleteItem}</span>?
           </div>
         </div>
-        <hr className="mt-1 mb-3 border-gray-300" />
-        {/* Delete and cancel delete buttons */}
-        <div className="flex justify-end p-4 space-x-2">
+        {/* Delete and cancel buttons */}
+        <div className="flex justify-end px-6 pb-6 space-x-4">
           <button
             onClick={onCancel}
-            className="bg-red-white border border-gray-500 px-3 py-1 rounded-md text-gray-500 hover:bg-gray-500 hover:text-white">
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors duration-200">
             Cancel
           </button>
           <button
             onClick={onConfirm}
-            className="bg-red-white border border-red-500 px-3 py-1 rounded-md text-red-500 hover:bg-red-500 hover:text-white">
+            className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 transition-colors duration-200">
             Delete
           </button>
         </div>
