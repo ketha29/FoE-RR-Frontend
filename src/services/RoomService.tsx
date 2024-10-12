@@ -2,7 +2,7 @@ import axios from 'axios';
 import qs from 'qs';
 
 // Base URL for the API
-const BASE_URL = "http://localhost:8082/room";
+const BASE_URL = 'http://localhost:8082/room';
 
 // Endpoints
 const GET_ROOMS = `${BASE_URL}/all`;
@@ -26,6 +26,6 @@ export const updateRoom = (roomId: number, room: any) => {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   });
-}
+};
 
 export const deleteRoom = (roomId: number) => axios.delete(DELETE_ROOM(roomId));

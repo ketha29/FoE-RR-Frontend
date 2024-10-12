@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 import { useContext, useEffect, useState } from 'react';
-import { getAllRooms } from '../../services/RoomService';
-import GlobalContext from '../../context/GlobalContext';
-import { getDayBookings } from '../../services/BookingService';
+import { getAllRooms } from '../../../services/RoomService';
+import GlobalContext from '../../../context/GlobalContext';
+import { getDayBookings } from '../../../services/BookingService';
 import TimeTable from './TimeTable';
 import DragAndAddBooking from '../DragAndAddBooking';
 

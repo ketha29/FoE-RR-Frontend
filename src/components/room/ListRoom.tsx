@@ -1,13 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { deleteRoom, getAllRooms } from '../services/RoomService';
-import AddRoomButton from './AddRoomButton';
+import { useContext, useEffect, useState } from 'react';
+import { deleteRoom, getAllRooms } from '../../services/RoomService';
 import { AxiosError } from 'axios';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-import DeleteConformation from './DeleteConfirmation';
+import DeleteConformation from '../DeleteConfirmation';
 import AddRoomForm from './AddRoomForm';
-import GlobalContext from '../context/GlobalContext';
-import { useNavigate } from 'react-router-dom';
+import GlobalContext from '../../context/GlobalContext';
 import UpdateRoom from './UpdateRoom';
 
 type Room = {
@@ -18,7 +16,6 @@ type Room = {
 };
 
 const ListRoom = () => {
-  const navigate = useNavigate();
   const [roomList, setRoomList] = useState<Room[]>([]);
   const [error, setError] = useState('');
   const [showDeleteConformation, setShowDeleteConformation] = useState(false);
@@ -37,7 +34,6 @@ const ListRoom = () => {
     try {
       const response = await getAllRooms();
       setRoomList(response.data.roomList);
-      // console.log(response.data.roomList);
     } catch (error) {
       setError((error as AxiosError).message);
     }
@@ -61,7 +57,6 @@ const ListRoom = () => {
   const handleUpdate = (room: Room) => {
     setSelectedRoom(room);
     setShowUpdateRoomForm(true);
-    console.log(room.roomId);
   };
 
   // Filter rooom according to the search query
@@ -98,6 +93,7 @@ const ListRoom = () => {
             <div className="text-2xl font-semibold text-gray-800">
               Room details
             </div>
+
             {/* <AddRoomButton /> */}
             <div>
               <button
@@ -106,6 +102,7 @@ const ListRoom = () => {
                 Add Room
               </button>
             </div>
+
             {/* Get the search query */}
             <input
               type="text"
@@ -117,7 +114,6 @@ const ListRoom = () => {
             />
           </div>
 
-          {/* <div className="-m-1.5 overflow-x-auto"> */}
           <div className="min-w-full inline-block align-middle">
             <div className="overflow-hidden border border-gray-200 shadow-xl rounded-lg">
               <table className="min-w-full divide-y divide-gray-200">
@@ -188,12 +184,12 @@ const ListRoom = () => {
               </table>
             </div>
           </div>
-          {/* </div> */}
         </div>
         {showAddRoomForm && <AddRoomForm onRoomAddition={fetchRooms} />}
         {showUpdateRoomForm && (
           <UpdateRoom room={selectedRoom} onRoomUpdate={fetchRooms} />
         )}
+
         {/* Show the deletion confiramation component */}
         {showDeleteConformation && (
           <DeleteConformation

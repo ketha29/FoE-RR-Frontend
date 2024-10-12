@@ -23,6 +23,7 @@ const DeleteConformation = ({
             <span className="font-bold">{deleteItem}</span>?
           </div>
         </div>
+
         {/* Delete and cancel buttons */}
         <div className="flex justify-end px-6 pb-6 space-x-4">
           <button

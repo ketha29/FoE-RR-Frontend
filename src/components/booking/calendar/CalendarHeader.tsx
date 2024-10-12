@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
-import GlobalContext from '../../context/GlobalContext';
+import GlobalContext from '../../../context/GlobalContext';
 import dayjs from 'dayjs';
 import { Menu, MenuButton, MenuItems } from '@headlessui/react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
-import AddBookingButton from '../AddBookingButton';
-import { isAuthenticated, isRegularUser } from '../../services/AuthService';
+import { isAuthenticated, isRegularUser } from '../../../services/AuthService';
 import { MenuItem } from '@mui/material';
 import { useLocation } from 'react-router-dom';
+import AddBookingButton from '../AddBookingButton';
 
 const CalendarHeader = () => {
   const authenticated = isAuthenticated();

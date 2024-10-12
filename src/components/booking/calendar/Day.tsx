@@ -1,24 +1,24 @@
 import dayjs from 'dayjs';
 import { useContext, useEffect, useState } from 'react';
-import GlobalContext from '../../context/GlobalContext';
+import GlobalContext from '../../../context/GlobalContext';
 import { useNavigate } from 'react-router-dom';
-import { getAllBookings } from '../../services/BookingService';
+import { getAllBookings } from '../../../services/BookingService';
 
 interface DayProps {
   day: dayjs.Dayjs;
   rowIdx: number;
 }
 
-interface Booking {
-  startTime: string;
-  endTime: string;
-  details: string;
-  recurrence: string;
-  recurrencePeriod: number;
-}
+// interface Booking {
+//   startTime: string;
+//   endTime: string;
+//   details: string;
+//   recurrence: string;
+//   recurrencePeriod: number;
+// }
 
 const Day = ({ day, rowIdx }: DayProps) => {
-  const [dayBooking, setDayBooking] = useState<Booking[]>([]);
+  // const [dayBooking, setDayBooking] = useState<Booking[]>([]);
   const [dayBookingCount, setDayBookingCount] = useState(0);
   useEffect(() => {
     const fetchData = async () => {
@@ -28,7 +28,7 @@ const Day = ({ day, rowIdx }: DayProps) => {
         (booking: { date: dayjs.Dayjs }) =>
           dayjs(booking.date).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
       );
-      setDayBooking(currentDayBookings);
+      // setDayBooking(currentDayBookings);
       setDayBookingCount(currentDayBookings.length);
     };
     fetchData();
@@ -62,18 +62,6 @@ const Day = ({ day, rowIdx }: DayProps) => {
         <div className="bg-blue-200 p-1 mr-3 text-gray-500 text-sm rounded mb-1">
           Number of bookings: {dayBookingCount}
         </div>
-        {/* {dayBooking.map((booking, idx) => (
-          <div
-            className="bg-blue-200 p-1 mr-3 text-gray-500 text-sm rounded mb-1"
-            key={idx}>
-            <div className="truncate">{booking.details}</div>
-            <div className="absolute bottom-full mb-1 bg-sky-400 transform text-white px-2 py-1 rounded">
-              {booking.startTime} - {booking.endTime} <br />
-              Recurrence: {booking.recurrence} <br />
-              Period: {booking.recurrencePeriod}
-            </div>
-          </div>
-        ))} */}
       </div>
     </div>
   );

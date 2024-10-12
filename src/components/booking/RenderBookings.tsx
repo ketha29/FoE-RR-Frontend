@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { useEffect, useRef, useState } from 'react';
-import { deleteBooking } from '../services/BookingService';
-import { isAuthenticated } from '../services/AuthService';
+import { deleteBooking } from '../../services/BookingService';
+import { isAuthenticated } from '../../services/AuthService';
 import { useNavigate } from 'react-router-dom';
 import BookingXtaDetails from './BookingXtaDetails';
 import React from 'react';

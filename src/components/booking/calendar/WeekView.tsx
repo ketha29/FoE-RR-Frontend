@@ -1,10 +1,10 @@
 import dayjs from 'dayjs';
 import { useContext, useEffect, useState } from 'react';
-import GlobalContext from '../../context/GlobalContext';
-import TimeTable from './TimeTable';
-import { getAllRooms } from '../../services/RoomService';
+import GlobalContext from '../../../context/GlobalContext';
+import { getWeekBookings } from '../../../services/BookingService';
+import { getAllRooms } from '../../../services/RoomService';
 import DragAndAddBooking from '../DragAndAddBooking';
-import { getWeekBookings } from '../../services/BookingService';
+import TimeTable from './TimeTable';
 
 interface WeekViewProps {
   week: dayjs.Dayjs[];

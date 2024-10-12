@@ -1,8 +1,12 @@
 import { useLocation } from 'react-router-dom';
-import { isAdmin, isRegularUser, isSuperAdmin } from '../services/AuthService';
+import {
+  isAdmin,
+  isRegularUser,
+  isSuperAdmin,
+} from '../../services/AuthService';
 import { useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
-import { updateBooking } from '../services/BookingService';
+import { updateBooking } from '../../services/BookingService';
 import { AxiosError } from 'axios';
 
 const recurrenceTypes = ['none', 'daily', 'weekly'];

@@ -1,9 +1,9 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { useContext, useState } from 'react';
-import GlobalContext from '../context/GlobalContext';
-import { useLocation, useNavigate } from 'react-router-dom';
+import GlobalContext from '../../context/GlobalContext';
+import { useNavigate } from 'react-router-dom';
 import { FieldValues, useForm } from 'react-hook-form';
-import { addRoom, updateRoom } from '../services/RoomService';
+import { updateRoom } from '../../services/RoomService';
 import { AxiosError } from 'axios';
 
 type Room = {

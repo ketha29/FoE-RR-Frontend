@@ -1,11 +1,15 @@
 import { useContext, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
-import GlobalContext from '../context/GlobalContext';
+import GlobalContext from '../../context/GlobalContext';
 import { useNavigate } from 'react-router-dom';
 import CloseIcon from '@mui/icons-material/Close';
-import { addBooking } from '../services/BookingService';
+import { addBooking } from '../../services/BookingService';
 import { AxiosError } from 'axios';
-import { isAdmin, isRegularUser, isSuperAdmin } from '../services/AuthService';
+import {
+  isAdmin,
+  isRegularUser,
+  isSuperAdmin,
+} from '../../services/AuthService';
 
 const recurrenceTypes = ['none', 'daily', 'weekly'];
 

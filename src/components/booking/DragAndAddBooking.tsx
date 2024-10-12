@@ -1,16 +1,16 @@
 import dayjs from 'dayjs';
 import { useContext, useEffect, useState } from 'react';
-import { getAllRooms } from '../services/RoomService';
+import { getAllRooms } from '../../services/RoomService';
 import {
   isAdmin,
   isAuthenticated,
   isRegularUser,
   isSuperAdmin,
-} from '../services/AuthService';
-import GlobalContext from '../context/GlobalContext';
+} from '../../services/AuthService';
+import GlobalContext from '../../context/GlobalContext';
 import { useNavigate } from 'react-router-dom';
 import RenderBookings from './RenderBookings';
-import { getDay } from '../util';
+import { getDay } from '../../util';
 
 interface DragAndAddBookingpRrops {
   bookings: Booking[];
@@ -54,13 +54,8 @@ const DragAndAddBooking = ({
   const admin = isAdmin();
   const superAdmin = isSuperAdmin();
   const [roomNames, setRoomNames] = useState<string[]>([]);
-  const {
-    bookingSelection,
-    dayIndex,
-    setBookingSelection,
-    daySelected,
-    setDaySelected,
-  } = useContext(GlobalContext);
+  const { bookingSelection, setBookingSelection, daySelected, setDaySelected } =
+    useContext(GlobalContext);
   const [selecting, setSelecting] = useState(false);
 
   const hoursInDay = getDay(currentDay.date());

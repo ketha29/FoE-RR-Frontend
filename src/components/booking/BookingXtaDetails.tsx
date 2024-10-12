@@ -3,8 +3,12 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import dayjs from 'dayjs';
 import { useState } from 'react';
-import DeleteConformation from './DeleteConfirmation';
-import { isRegularUser, isAdmin, isSuperAdmin } from '../services/AuthService';
+import DeleteConformation from '../DeleteConfirmation';
+import {
+  isRegularUser,
+  isAdmin,
+  isSuperAdmin,
+} from '../../services/AuthService';
 
 interface BookingXtaDetailsProps {
   booking: any;

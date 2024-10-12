@@ -1,23 +1,20 @@
 import React, { useState, useContext, useEffect } from 'react';
 import './App.css';
 import getMonth, { getDay, getWeek } from './util';
-import Month from './components/calendar/MonthView';
-import GlobalContext from './context/GlobalContext';
-import DayView from './components/calendar/DayView';
-import CalendarHeader from './components/calendar/CalendarHeader';
-import BookingForm from './components/BookingForm';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import NavBar from './components/NavBar';
-import ListRoom from './components/ListRoom';
-import AddRoomForm from './components/AddRoomForm';
+import BookingForm from './components/booking/BookingForm';
+import CalendarHeader from './components/booking/calendar/CalendarHeader';
+import DayView from './components/booking/calendar/DayView';
+import Month from './components/booking/calendar/MonthView';
+import WeekView from './components/booking/calendar/WeekView';
+import UpdateBooking from './components/booking/UpdateBooking';
 import LoginIn from './components/LogIn';
-import UpdateBooking from './components/UpdateBooking';
-import WeekView from './components/calendar/WeekView';
-import UpdateRoom from './components/UpdateRoom';
+import ListRoom from './components/room/ListRoom';
+import GlobalContext from './context/GlobalContext';
+import NavBar from './components/NavBar';
 
 function App() {
-  const { monthIndex, weekIndex, dayIndex, showBookingForm } =
-    useContext(GlobalContext);
+  const { monthIndex, weekIndex, dayIndex } = useContext(GlobalContext);
   const [currentMonth, setCurrentMonth] = useState(getMonth());
   const [currentWeek, setCurrentWeek] = useState(getWeek());
   const [currentDay, setCurretDay] = useState(getDay());
@@ -45,8 +42,6 @@ function App() {
           <Route
             path="/booking/update-booking"
             element={<UpdateBooking />}></Route>
-          {/* <Route path="/room/update-room" element={<UpdateRoom />}></Route> */}
-          {/* <Route path="room/add-room" element={<AddRoomForm />}></Route> */}
           <Route
             path="/booking/day"
             element={
