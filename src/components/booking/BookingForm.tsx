@@ -10,11 +10,7 @@ import { Room } from '../Interfaces';
 
 const recurrenceTypes = ['none', 'daily', 'weekly'];
 
-interface BookingFromProps {
-  fetchBookings: () => void;
-}
-
-const BookingForm = ({ fetchBookings }: BookingFromProps) => {
+const BookingForm = () => {
   const admin = isAdmin();
   const superAdmin = isSuperAdmin();
   const {
@@ -29,6 +25,7 @@ const BookingForm = ({ fetchBookings }: BookingFromProps) => {
     daySelected,
     bookingSelection,
     setBookingSelection,
+    setFetch,
   } = useContext(GlobalContext);
 
   const closeBookingForm = () => {
@@ -61,16 +58,23 @@ const BookingForm = ({ fetchBookings }: BookingFromProps) => {
     fetchRooms();
   }, []);
 
+  // const formatTime = (time: string) => {
+  //   if (!time) return null; // Handle null or empty string
+  //   return `${time}:00`; // Append seconds
+  // };
+
   const onSubmit = async (data: FieldValues) => {
     try {
       const formattedBooking = {
         ...data,
+        // startTime: formatTime(data.startTime),
+        // endTime: formatTime(data.endTime),
         recurrence: admin || superAdmin ? data.recurrence : 'none',
         recurrencePeriod: admin || superAdmin ? data.recurrencePeriod : 0,
       };
       const userIdString = localStorage.getItem('userId');
       const userId = userIdString ? parseInt(userIdString) : -1;
-      // console.log(formattedBooking);
+      console.log(formattedBooking);
       const response = await addBooking(
         data.roomName,
         userId,
@@ -80,7 +84,7 @@ const BookingForm = ({ fetchBookings }: BookingFromProps) => {
       console.log('Booking added successfully: ', response.data);
       setBookingSelection({ roomName: null, startTime: null, endTime: null });
       setShowBookingForm(false);
-      fetchBookings();
+      setFetch(true);
     } catch (error) {
       console.error(
         'Error adding booking:',

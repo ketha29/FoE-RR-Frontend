@@ -1,12 +1,13 @@
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { deleteBooking } from '../../services/BookingService';
 import { isAuthenticated } from '../../services/AuthService';
 import { useNavigate } from 'react-router-dom';
 import BookingXtaDetails from './BookingXtaDetails';
 import React from 'react';
 import { Booking } from '../Interfaces';
+import GlobalContext from '../../context/GlobalContext';
 
 dayjs.extend(isBetween);
 
@@ -21,6 +22,7 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
   const [showXtraBookingDetails, setShowXtraBookingDetails] = useState(false);
   const [moveBlock, setMoveBlock] = useState(false);
   const bookingDetailsRef = useRef<HTMLDivElement>(null);
+  const { setFetch } = useContext(GlobalContext);
 
   // Close the extra details block if clicked outside
   useEffect(() => {
@@ -104,6 +106,7 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
         const handleDelete = async () => {
           try {
             await deleteBooking(booking.bookingId);
+            setFetch(true);
             handleCloseDetails();
             console.log('deleted');
           } catch (error) {

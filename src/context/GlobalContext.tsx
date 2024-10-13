@@ -28,6 +28,8 @@ interface GlobalContextType {
   setBookingSelection: Dispatch<BookingSelectionType>;
   isCellSelected: boolean;
   setIsCellSelected: Dispatch<SetStateAction<boolean>>;
+  fetch: boolean;
+  setFetch: Dispatch<SetStateAction<boolean>>;
 }
 
 const GlobalContext = React.createContext<GlobalContextType>({
@@ -55,6 +57,8 @@ const GlobalContext = React.createContext<GlobalContextType>({
   setBookingSelection: () => {},
   isCellSelected: false,
   setIsCellSelected: () => {},
+  fetch: false,
+  setFetch: () => {},
 });
 
 export default GlobalContext;

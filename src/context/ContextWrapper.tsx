@@ -25,6 +25,7 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
     endTime: null,
   });
   const [isCellSelected, setIsCellSelected] = useState(false);
+  const [fetch, setFetch] = useState(false);
 
   return (
     <GlobalContext.Provider
@@ -49,6 +50,8 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
         setBookingSelection,
         isCellSelected,
         setIsCellSelected,
+        fetch,
+        setFetch,
       }}>
       {children}
     </GlobalContext.Provider>

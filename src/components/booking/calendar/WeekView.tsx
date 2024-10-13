@@ -16,7 +16,8 @@ interface WeekViewProps {
 const WeekView = ({ day, week }: WeekViewProps) => {
   const [weekBookings, setWeekBookings] = useState<Booking[]>([]);
   const [roomNames, setRoomNames] = useState<string[]>([]);
-  const { weekIndex, showBookingForm } = useContext(GlobalContext);
+  const { weekIndex, showBookingForm, fetch, setFetch } =
+    useContext(GlobalContext);
 
   // Get start and end of the current week for that date
   const startOfWeek = dayjs()
@@ -52,7 +53,8 @@ const WeekView = ({ day, week }: WeekViewProps) => {
   // Render booking when date or time or room changes
   useEffect(() => {
     fetchWeekBookings();
-  }, [weekIndex]);
+    setFetch(false);
+  }, [weekIndex, fetch]);
 
   return (
     <div>
@@ -89,9 +91,7 @@ const WeekView = ({ day, week }: WeekViewProps) => {
           </div>
         );
       })}
-      <div>
-        {showBookingForm && <BookingForm fetchBookings={fetchWeekBookings} />}
-      </div>
+      <div>{showBookingForm && <BookingForm />}</div>
     </div>
   );
 };

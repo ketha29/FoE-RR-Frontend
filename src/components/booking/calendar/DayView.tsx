@@ -13,7 +13,8 @@ interface DayViewProps {
 }
 
 const DayView = ({ day }: DayViewProps) => {
-  const { dayIndex, showBookingForm } = useContext(GlobalContext);
+  const { dayIndex, showBookingForm, fetch, setFetch } =
+    useContext(GlobalContext);
   const [roomNames, setRoomNames] = useState<string[]>([]);
   const [dayBookings, setDayBookings] = useState<Booking[]>([]);
 
@@ -49,7 +50,8 @@ const DayView = ({ day }: DayViewProps) => {
   // Render booking when date or time or room changes
   useEffect(() => {
     fetchDayBookings();
-  }, [currentDate]);
+    setFetch(false);
+  }, [currentDate, fetch]);
 
   return (
     <div className="h-full w-full flex">
@@ -80,7 +82,7 @@ const DayView = ({ day }: DayViewProps) => {
           />
         </table>
       </div>
-      {showBookingForm && <BookingForm fetchBookings={fetchDayBookings} />}
+      {showBookingForm && <BookingForm />}
     </div>
   );
 };
