@@ -23,7 +23,7 @@ import GlobalContext from '../context/GlobalContext';
 const navigation = [
   { name: 'Home', href: '/home' },
   { name: 'Booking', href: '/booking/day' },
-  { name: 'Users', href: '/fds' },
+  { name: 'Users', href: '/user/all' },
   { name: 'Rooms', href: '/room/all' },
 ];
 
@@ -83,7 +83,7 @@ const NavBar = () => {
                 {admin ||
                   (superAdmin && (
                     <NavLink
-                      to="/user"
+                      to="/user/all"
                       className={({ isActive }) =>
                         'block rounded-md px-3 py-2 text-base font-medium ' +
                         (isActive
