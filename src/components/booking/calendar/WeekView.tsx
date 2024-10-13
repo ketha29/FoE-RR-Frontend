@@ -89,7 +89,9 @@ const WeekView = ({ day, week }: WeekViewProps) => {
           </div>
         );
       })}
-      <div>{showBookingForm && <BookingForm />}</div>
+      <div>
+        {showBookingForm && <BookingForm fetchBookings={fetchWeekBookings} />}
+      </div>
     </div>
   );
 };

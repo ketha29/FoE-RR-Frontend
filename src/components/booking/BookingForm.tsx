@@ -10,7 +10,11 @@ import { Room } from '../Interfaces';
 
 const recurrenceTypes = ['none', 'daily', 'weekly'];
 
-const BookingForm = () => {
+interface BookingFromProps {
+  fetchBookings: () => void;
+}
+
+const BookingForm = ({ fetchBookings }: BookingFromProps) => {
   const admin = isAdmin();
   const superAdmin = isSuperAdmin();
   const {
@@ -25,10 +29,9 @@ const BookingForm = () => {
     daySelected,
     bookingSelection,
     setBookingSelection,
-    setIsCellSelected,
   } = useContext(GlobalContext);
+
   const closeBookingForm = () => {
-    setIsCellSelected(false);
     setBookingSelection({ roomName: null, startTime: null, endTime: null });
     setShowBookingForm(false);
   };
@@ -75,7 +78,9 @@ const BookingForm = () => {
       );
       setErrorMessage(null);
       console.log('Booking added successfully: ', response.data);
-      closeBookingForm();
+      setBookingSelection({ roomName: null, startTime: null, endTime: null });
+      setShowBookingForm(false);
+      fetchBookings();
     } catch (error) {
       console.error(
         'Error adding booking:',

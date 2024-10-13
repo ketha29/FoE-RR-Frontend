@@ -1,5 +1,6 @@
-import { useForm } from 'react-hook-form';
+import { FieldValues, useForm } from 'react-hook-form';
 import logo from '../assets/logo.png';
+import { signin } from '../services/AuthService';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,8 +11,12 @@ const LoginIn = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSignIn = async () => {
+  const onSignIn = async (data: FieldValues) => {
     try {
+      const response = await signin({
+        userName: data.username,
+        password: data.password,
+      });
       console.log('User login successful');
       navigate('/home');
     } catch (error) {

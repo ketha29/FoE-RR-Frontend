@@ -138,7 +138,7 @@ const DragAndAddBooking = ({
     );
   };
 
-  const setIsCellSelected = (
+  const isCellSelected = (
     roomName: string,
     time: dayjs.Dayjs,
     currentDateObj: dayjs.Dayjs
@@ -187,7 +187,7 @@ const DragAndAddBooking = ({
                         }
                         ${
                           authenticated &&
-                          setIsCellSelected(roomName, time, currentDateObj)
+                          isCellSelected(roomName, time, currentDateObj)
                             ? 'bg-blue-300 border-none z-20'
                             : roomIndex % 2 === 0
                             ? 'bg-gray-100 border-b border-gray-200'

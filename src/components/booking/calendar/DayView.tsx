@@ -80,7 +80,7 @@ const DayView = ({ day }: DayViewProps) => {
           />
         </table>
       </div>
-      {showBookingForm && <BookingForm />}
+      {showBookingForm && <BookingForm fetchBookings={fetchDayBookings} />}
     </div>
   );
 };
