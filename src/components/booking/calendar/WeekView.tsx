@@ -6,6 +6,7 @@ import { getAllRooms } from '../../../services/RoomService';
 import DragAndAddBooking from '../DragAndAddBooking';
 import TimeTable from './TimeTable';
 import { Booking, Room } from '../../Interfaces';
+import BookingForm from '../BookingForm';
 
 interface WeekViewProps {
   week: dayjs.Dayjs[];
@@ -15,7 +16,7 @@ interface WeekViewProps {
 const WeekView = ({ day, week }: WeekViewProps) => {
   const [weekBookings, setWeekBookings] = useState<Booking[]>([]);
   const [roomNames, setRoomNames] = useState<string[]>([]);
-  const { weekIndex } = useContext(GlobalContext);
+  const { weekIndex, showBookingForm } = useContext(GlobalContext);
 
   // Get start and end of the current week for that date
   const startOfWeek = dayjs()
@@ -88,6 +89,7 @@ const WeekView = ({ day, week }: WeekViewProps) => {
           </div>
         );
       })}
+      <div>{showBookingForm && <BookingForm />}</div>
     </div>
   );
 };

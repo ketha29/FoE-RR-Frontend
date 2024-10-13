@@ -6,13 +6,14 @@ import { getDayBookings } from '../../../services/BookingService';
 import TimeTable from './TimeTable';
 import DragAndAddBooking from '../DragAndAddBooking';
 import { Booking, Room } from '../../Interfaces';
+import BookingForm from '../BookingForm';
 
 interface DayViewProps {
   day: dayjs.Dayjs[];
 }
 
 const DayView = ({ day }: DayViewProps) => {
-  const { dayIndex } = useContext(GlobalContext);
+  const { dayIndex, showBookingForm } = useContext(GlobalContext);
   const [roomNames, setRoomNames] = useState<string[]>([]);
   const [dayBookings, setDayBookings] = useState<Booking[]>([]);
 
@@ -79,6 +80,7 @@ const DayView = ({ day }: DayViewProps) => {
           />
         </table>
       </div>
+      {showBookingForm && <BookingForm />}
     </div>
   );
 };

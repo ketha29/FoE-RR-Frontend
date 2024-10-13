@@ -1,13 +1,9 @@
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import GlobalContext from '../../context/GlobalContext';
 
 const AddBookingButton = () => {
   const { setShowBookingForm } = useContext(GlobalContext);
-  const navigator = useNavigate();
-
   const addBooking = () => {
-    navigator('/booking/add-booking');
     setShowBookingForm(true);
   };
 

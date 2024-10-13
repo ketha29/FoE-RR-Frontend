@@ -8,7 +8,6 @@ import {
   isSuperAdmin,
 } from '../../services/AuthService';
 import GlobalContext from '../../context/GlobalContext';
-import { useNavigate } from 'react-router-dom';
 import RenderBookings from './RenderBookings';
 import { getDay } from '../../util';
 import { Booking, Room } from '../Interfaces';
@@ -22,14 +21,18 @@ const DragAndAddBooking = ({
   bookings,
   currentDay,
 }: DragAndAddBookingpRrops) => {
-  const navigator = useNavigate();
   const authenticated = isAuthenticated();
   const regularUser = isRegularUser();
   const admin = isAdmin();
   const superAdmin = isSuperAdmin();
   const [roomNames, setRoomNames] = useState<string[]>([]);
-  const { bookingSelection, setBookingSelection, daySelected, setDaySelected } =
-    useContext(GlobalContext);
+  const {
+    bookingSelection,
+    setBookingSelection,
+    daySelected,
+    setDaySelected,
+    setShowBookingForm,
+  } = useContext(GlobalContext);
   const [selecting, setSelecting] = useState(false);
 
   const hoursInDay = getDay(currentDay.date());
@@ -127,7 +130,7 @@ const DragAndAddBooking = ({
       ) &&
       authenticated
     ) {
-      navigator('/booking/add-booking');
+      setShowBookingForm(true);
     }
     console.log(
       bookingSelection.startTime?.format('HH:mm'),

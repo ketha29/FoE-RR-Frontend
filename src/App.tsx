@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react';
 import './App.css';
 import getMonth, { getDay, getWeek } from './util';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import BookingForm from './components/booking/BookingForm';
 import CalendarHeader from './components/booking/calendar/CalendarHeader';
 import DayView from './components/booking/calendar/DayView';
 import Month from './components/booking/calendar/MonthView';
@@ -38,7 +37,6 @@ function App() {
         <NavBar />
         <Routes>
           <Route path="/auth/login" element={<LoginIn />}></Route>
-          <Route path="/booking/add-booking" element={<BookingForm />}></Route>
           <Route
             path="/booking/update-booking"
             element={<UpdateBooking />}></Route>

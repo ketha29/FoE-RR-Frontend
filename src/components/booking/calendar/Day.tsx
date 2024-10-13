@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 import { useContext, useEffect, useState } from 'react';
 import GlobalContext from '../../../context/GlobalContext';
-import { useNavigate } from 'react-router-dom';
 import { getAllBookings } from '../../../services/BookingService';
 
 interface DayProps {
@@ -27,7 +26,6 @@ const Day = ({ day, rowIdx }: DayProps) => {
   }, [day]);
 
   const { setShowBookingForm, setDaySelected } = useContext(GlobalContext);
-  const navigator = useNavigate();
   // function to mark the current date background to blue
   const getCurrentDayClass = () => {
     return day.format('DD-MM-YY') === dayjs().format('DD-MM-YY')
@@ -49,7 +47,6 @@ const Day = ({ day, rowIdx }: DayProps) => {
         onClick={() => {
           setDaySelected(day);
           setShowBookingForm(true);
-          navigator('/booking/add-booking');
         }}>
         <div className="bg-blue-200 p-1 mr-3 text-gray-500 text-sm rounded mb-1">
           Number of bookings: {dayBookingCount}
