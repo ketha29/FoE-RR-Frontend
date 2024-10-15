@@ -7,6 +7,8 @@ import { Tooltip } from '@mui/material';
 
 const ListUser = () => {
   const [userList, setUserList] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Get all user details from backend
   const fetchUsers = async () => {
@@ -23,6 +25,17 @@ const ListUser = () => {
     fetchUsers();
   }, []);
 
+  // Filter users according to the search query
+  useEffect(() => {
+    const filtered = userList.filter((user) => {
+      const firstName = user.firstName ? user.firstName.toLowerCase() : '';
+      const lastName = user.lastName ? user.lastName.toLowerCase() : '';
+      const query = searchQuery.toLowerCase();
+      return firstName.includes(query) || lastName.includes(query);
+    });
+    setFilteredUsers(filtered);
+  }, [searchQuery, userList]);
+
   return (
     <div className="relative overflow-x-auto sm:rounded-lg mt-20 px-10 py-6 bg-gray-100">
       <div className="flex flex-col">
@@ -37,6 +50,16 @@ const ListUser = () => {
               Add User
             </button>
           </div>
+
+          {/* Get the search query */}
+          <input
+            type="text"
+            value={searchQuery}
+            // Update search query
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search by user name..."
+            className="border border-gray-300 rounded-md w-72 h-9 shadow-lg"
+          />
         </div>
 
         <div className="min-w-full inline-block align-middle">
@@ -75,7 +98,7 @@ const ListUser = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {userList.map((user) => (
+                {filteredUsers.map((user) => (
                   <tr
                     key={user.userId}
                     className="hover:bg-blue-50 transition duration-200 ease-in-out">
