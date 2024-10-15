@@ -13,6 +13,7 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
   const [view, setView] = useState('Month');
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [showAddRoomForm, setShowAddRoomForm] = useState(false);
+  const [showAddUserForm, setShowAddUserForm] = useState(false);
   const [showUpdateRoomForm, setShowUpdateRoomForm] = useState(false);
   const [daySelected, setDaySelected] = useState(dayjs());
   const [bookingSelection, setBookingSelection] = useState<{
@@ -42,6 +43,8 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
         setShowBookingForm,
         showAddRoomForm,
         setShowAddRoomForm,
+        showAddUserForm,
+        setShowAddUserForm,
         showUpdateRoomForm,
         setShowUpdateRoomForm,
         daySelected,

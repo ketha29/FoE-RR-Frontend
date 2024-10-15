@@ -96,7 +96,7 @@ const BookingForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-70 backdrop-blur-sm z-40">
+      <div className="fixed inset-0 mt-12 flex justify-center items-center bg-gray-900 bg-opacity-70 backdrop-blur-sm z-40">
         <div className="sm:w-1/2 w-full max-w-2xl p-7 shadow-xl rounded-lg bg-white transition-transform transform hover:scale-105 duration-300">
           {/* Header section of the booking form */}
           <header className="flex justify-between items-center border-b pb-3">

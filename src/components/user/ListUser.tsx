@@ -1,14 +1,17 @@
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { User } from '../Interfaces';
 import { getAllUsers } from '../../services/UserService';
 import { Tooltip } from '@mui/material';
+import GlobalContext from '../../context/GlobalContext';
+import AddUserForm from './AddUserForm';
 
 const ListUser = () => {
   const [userList, setUserList] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const { showAddUserForm, setShowAddUserForm } = useContext(GlobalContext);
 
   // Get all user details from backend
   const fetchUsers = async () => {
@@ -46,7 +49,9 @@ const ListUser = () => {
 
           {/* <Add user button /> */}
           <div>
-            <button className="ml-10 rounded-md bg-indigo-600 px-3 py-1 h-9 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+            <button
+              className="ml-10 rounded-md bg-indigo-600 px-3 py-1 h-9 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+              onClick={() => setShowAddUserForm(true)}>
               Add User
             </button>
           </div>
@@ -137,6 +142,7 @@ const ListUser = () => {
           </div>
         </div>
       </div>
+      {showAddUserForm && <AddUserForm />}
     </div>
   );
 };

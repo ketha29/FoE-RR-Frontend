@@ -20,6 +20,8 @@ interface GlobalContextType {
   setShowBookingForm: Dispatch<SetStateAction<boolean>>;
   showAddRoomForm: boolean;
   setShowAddRoomForm: Dispatch<SetStateAction<boolean>>;
+  showAddUserForm: boolean;
+  setShowAddUserForm: Dispatch<SetStateAction<boolean>>;
   showUpdateRoomForm: boolean;
   setShowUpdateRoomForm: Dispatch<SetStateAction<boolean>>;
   daySelected: dayjs.Dayjs;
@@ -45,6 +47,8 @@ const GlobalContext = React.createContext<GlobalContextType>({
   setShowBookingForm: () => {},
   showAddRoomForm: false,
   setShowAddRoomForm: () => {},
+  showAddUserForm: false,
+  setShowAddUserForm: () => {},
   showUpdateRoomForm: false,
   setShowUpdateRoomForm: () => {},
   daySelected: dayjs(),
