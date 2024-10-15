@@ -5,6 +5,16 @@ export interface Room {
   description: string;
 }
 
+export interface User {
+  userId: number;
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  phoneNo: string;
+  userType: string;
+}
+
 export interface Booking {
   bookingId: number;
   startTime: string;

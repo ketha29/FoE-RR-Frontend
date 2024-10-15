@@ -1,7 +1,28 @@
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+import { useEffect, useState } from 'react';
+import { User } from '../Interfaces';
+import { getAllUsers } from '../../services/UserService';
+import { Tooltip } from '@mui/material';
 
 const ListUser = () => {
+  const [userList, setUserList] = useState<User[]>([]);
+
+  // Get all user details from backend
+  const fetchUsers = async () => {
+    try {
+      const response = await getAllUsers();
+      setUserList(response.data.userList);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Render user details once when the page is loaded
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   return (
     <div className="relative overflow-x-auto sm:rounded-lg mt-20 px-10 py-6 bg-gray-100">
       <div className="flex flex-col">
@@ -25,63 +46,69 @@ const ListUser = () => {
                 <tr>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                    className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                     First name
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                    className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                     Last name
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                    className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                     Username
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                    className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                     Contact info
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                    className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                     User type
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wider"></th>
+                    className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider"></th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                <tr>
-                  <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-600">
-                    first name
-                  </td>
-                  <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-600">
-                    last name
-                  </td>
-                  <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-600">
-                    username
-                  </td>
-                  <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-600">
-                    contact info
-                  </td>
-                  <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-600">
-                    user type
-                  </td>
-                  <td>
-                    <button className="text-indigo-600 hover:bg-indigo-500 hover:text-white p-0.5 w-8 h-8 rounded-full">
-                      <EditOutlinedIcon fontSize="small" />
-                    </button>
-                    <button className="ml-4 text-red-600 hover:bg-red-500 hover:text-white p-0.5 w-8 h-8 rounded-full">
-                      <DeleteOutlinedIcon
-                        className="font-bold"
-                        fontSize="small"
-                      />
-                    </button>
-                  </td>
-                </tr>
+                {userList.map((user) => (
+                  <tr
+                    key={user.userId}
+                    className="hover:bg-blue-50 transition duration-200 ease-in-out">
+                    <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-600">
+                      {user.firstName}
+                    </td>
+                    <td className="whitespace-nowrap text-sm text-gray-600">
+                      {user.lastName}
+                    </td>
+                    <td className="whitespace-nowrap text-sm text-gray-600">
+                      {user.userName}
+                    </td>
+                    <td className="whitespace-nowrap text-sm text-gray-600">
+                      {user.email} <br />
+                      {/* {user.phoneNo} */}
+                    </td>
+                    <td className="whitespace-nowrap text-sm text-gray-600">
+                      {user.userType}
+                    </td>
+                    <td className="px-6 py-2 whitespace-nowrap text-right text-sm font-medium">
+                      <Tooltip title="Edit" arrow>
+                        <button className="text-indigo-600 hover:bg-indigo-500 hover:text-white p-0.5 w-8 h-8 rounded-full">
+                          <EditOutlinedIcon fontSize="small" />
+                        </button>
+                      </Tooltip>
+                      <Tooltip title="Delete" arrow>
+                        <button className="ml-4 text-red-600 hover:bg-red-500 hover:text-white p-0.5 w-8 h-8 rounded-full">
+                          <DeleteOutlinedIcon fontSize="small" />
+                        </button>
+                      </Tooltip>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
