@@ -31,7 +31,6 @@ const NavBar = () => {
   const authenticated = isAuthenticated();
   const admin = isSuperAdmin();
   const superAdmin = isAdmin();
-  const regularUser = isRegularUser();
   const navigate = useNavigate();
   const { view } = useContext(GlobalContext);
 
@@ -80,19 +79,18 @@ const NavBar = () => {
                   }>
                   Booking
                 </NavLink>
-                {admin ||
-                  (superAdmin && (
-                    <NavLink
-                      to="/user/all"
-                      className={({ isActive }) =>
-                        'block rounded-md px-3 py-2 text-base font-medium ' +
-                        (isActive
-                          ? 'bg-white text-slate-700'
-                          : 'text-gray-300 hover:bg-gray-800 hover:text-white')
-                      }>
-                      User
-                    </NavLink>
-                  ))}
+                {authenticated && (
+                  <NavLink
+                    to="/user/all"
+                    className={({ isActive }) =>
+                      'block rounded-md px-3 py-2 text-base font-medium ' +
+                      (isActive
+                        ? 'bg-white text-slate-700'
+                        : 'text-gray-300 hover:bg-gray-800 hover:text-white')
+                    }>
+                    User
+                  </NavLink>
+                )}
                 <NavLink
                   to="/room/all"
                   className={({ isActive }) =>

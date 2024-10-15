@@ -7,8 +7,11 @@ import { Tooltip } from '@mui/material';
 import GlobalContext from '../../context/GlobalContext';
 import AddUserForm from './AddUserForm';
 import DeleteConformation from '../DeleteConfirmation';
+import { isAdmin, isSuperAdmin } from '../../services/AuthService';
 
 const ListUser = () => {
+  const admin = isAdmin();
+  const superAdmin = isSuperAdmin();
   const [userList, setUserList] = useState<User[]>([]);
   const [showDeleteConformation, setShowDeleteConformation] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -79,13 +82,15 @@ const ListUser = () => {
           </div>
 
           {/* <Add user button /> */}
-          <div>
-            <button
-              className="ml-10 rounded-md bg-indigo-600 px-3 py-1 h-9 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-              onClick={() => setShowAddUserForm(true)}>
-              Add User
-            </button>
-          </div>
+          {(admin || superAdmin) && (
+            <div>
+              <button
+                className="ml-10 rounded-md bg-indigo-600 px-3 py-1 h-9 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                onClick={() => setShowAddUserForm(true)}>
+                Add User
+              </button>
+            </div>
+          )}
 
           {/* Get the search query */}
           <input
@@ -93,7 +98,7 @@ const ListUser = () => {
             value={searchQuery}
             // Update search query
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by user name..."
+            placeholder="Search user..."
             className="border border-gray-300 rounded-md w-72 h-9 shadow-lg"
           />
         </div>
@@ -156,19 +161,24 @@ const ListUser = () => {
                         {user.userType}
                       </td>
 
-                      <td className="px-6 py-2 whitespace-nowrap text-right text-sm font-medium">
-                        <Tooltip title="Edit" arrow>
-                          <button className="text-indigo-600 hover:bg-indigo-500 hover:text-white p-0.5 w-8 h-8 rounded-full">
-                            <EditOutlinedIcon fontSize="small" />
-                          </button>
-                        </Tooltip>
-                        <Tooltip title="Delete" arrow>
-                          <button
-                            className="ml-4 text-red-600 hover:bg-red-500 hover:text-white p-0.5 w-8 h-8 rounded-full"
-                            onClick={() => confirmDelete(user)}>
-                            <DeleteOutlinedIcon fontSize="small" />
-                          </button>
-                        </Tooltip>
+                      <td className="whitespace-nowrap text-right text-sm font-medium">
+                        {((admin && user.userType === 'regularUser') ||
+                          superAdmin) && (
+                          <span className="px-6">
+                            <Tooltip title="Edit" arrow>
+                              <button className="text-indigo-600 hover:bg-indigo-500 hover:text-white p-0.5 w-8 h-8 rounded-full">
+                                <EditOutlinedIcon fontSize="small" />
+                              </button>
+                            </Tooltip>
+                            <Tooltip title="Delete" arrow>
+                              <button
+                                className="ml-4 text-red-600 hover:bg-red-500 hover:text-white p-0.5 w-8 h-8 rounded-full"
+                                onClick={() => confirmDelete(user)}>
+                                <DeleteOutlinedIcon fontSize="small" />
+                              </button>
+                            </Tooltip>
+                          </span>
+                        )}
                       </td>
                     </tr>
                   ))
