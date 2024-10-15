@@ -6,7 +6,11 @@ import { AxiosError } from 'axios';
 import { useContext, useState } from 'react';
 import GlobalContext from '../../context/GlobalContext';
 
-const AddUserForm = () => {
+interface AddUserFormProps {
+  onUserAddition: () => void;
+}
+
+const AddUserForm = ({ onUserAddition }: AddUserFormProps) => {
   const admin = isAdmin();
   const superAdmin = isSuperAdmin();
   const {
@@ -26,6 +30,8 @@ const AddUserForm = () => {
   const onSubmit = async (data: FieldValues) => {
     try {
       await addUser(data);
+      onUserAddition();
+      closeUserForm();
     } catch (error) {
       if (error instanceof AxiosError) {
         const message = error.response?.data?.message || error.message;

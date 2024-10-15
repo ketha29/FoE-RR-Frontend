@@ -2,13 +2,16 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { useContext, useEffect, useState } from 'react';
 import { User } from '../Interfaces';
-import { getAllUsers } from '../../services/UserService';
+import { deleteUser, getAllUsers } from '../../services/UserService';
 import { Tooltip } from '@mui/material';
 import GlobalContext from '../../context/GlobalContext';
 import AddUserForm from './AddUserForm';
+import DeleteConformation from '../DeleteConfirmation';
 
 const ListUser = () => {
   const [userList, setUserList] = useState<User[]>([]);
+  const [showDeleteConformation, setShowDeleteConformation] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const { showAddUserForm, setShowAddUserForm } = useContext(GlobalContext);
@@ -38,6 +41,34 @@ const ListUser = () => {
     });
     setFilteredUsers(filtered);
   }, [searchQuery, userList]);
+
+  // Delete the selected room details
+  const handleDelete = async (user: User) => {
+    try {
+      await deleteUser(user.userId);
+      fetchUsers();
+    } catch (error) {
+      //   setErrorMessage((error as AxiosError).message);
+      console.log('Error in getting the users:', error);
+    }
+  };
+
+  // Show the conformation dialog box
+  const confirmDelete = (user: User) => {
+    setShowDeleteConformation(true);
+    setSelectedUser(user);
+  };
+
+  // Cancel deletion action
+  const cancelDelete = () => {
+    setShowDeleteConformation(false);
+  };
+
+  // Proceed with deletion
+  const proceedDelete = () => {
+    setShowDeleteConformation(false);
+    selectedUser && handleDelete(selectedUser);
+  };
 
   return (
     <div className="relative overflow-x-auto sm:rounded-lg mt-20 px-10 py-6 bg-gray-100">
@@ -103,46 +134,70 @@ const ListUser = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredUsers.map((user) => (
-                  <tr
-                    key={user.userId}
-                    className="hover:bg-blue-50 transition duration-200 ease-in-out">
-                    <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-600">
-                      {user.firstName}
-                    </td>
-                    <td className="whitespace-nowrap text-sm text-gray-600">
-                      {user.lastName}
-                    </td>
-                    <td className="whitespace-nowrap text-sm text-gray-600">
-                      {user.userName}
-                    </td>
-                    <td className="whitespace-nowrap text-sm text-gray-600">
-                      {user.email} <br />
-                      {/* {user.phoneNo} */}
-                    </td>
-                    <td className="whitespace-nowrap text-sm text-gray-600">
-                      {user.userType}
-                    </td>
-                    <td className="px-6 py-2 whitespace-nowrap text-right text-sm font-medium">
-                      <Tooltip title="Edit" arrow>
-                        <button className="text-indigo-600 hover:bg-indigo-500 hover:text-white p-0.5 w-8 h-8 rounded-full">
-                          <EditOutlinedIcon fontSize="small" />
-                        </button>
-                      </Tooltip>
-                      <Tooltip title="Delete" arrow>
-                        <button className="ml-4 text-red-600 hover:bg-red-500 hover:text-white p-0.5 w-8 h-8 rounded-full">
-                          <DeleteOutlinedIcon fontSize="small" />
-                        </button>
-                      </Tooltip>
+                {filteredUsers.length > 0 ? (
+                  filteredUsers.map((user) => (
+                    <tr
+                      key={user.userId}
+                      className="hover:bg-blue-50 transition duration-200 ease-in-out">
+                      <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-600">
+                        {user.firstName}
+                      </td>
+                      <td className="whitespace-nowrap text-sm text-gray-600">
+                        {user.lastName}
+                      </td>
+                      <td className="whitespace-nowrap text-sm text-gray-600">
+                        {user.userName}
+                      </td>
+                      <td className="whitespace-nowrap text-sm text-gray-600">
+                        {user.email} <br />
+                        {/* {user.phoneNo} */}
+                      </td>
+                      <td className="whitespace-nowrap text-sm text-gray-600">
+                        {user.userType}
+                      </td>
+
+                      <td className="px-6 py-2 whitespace-nowrap text-right text-sm font-medium">
+                        <Tooltip title="Edit" arrow>
+                          <button className="text-indigo-600 hover:bg-indigo-500 hover:text-white p-0.5 w-8 h-8 rounded-full">
+                            <EditOutlinedIcon fontSize="small" />
+                          </button>
+                        </Tooltip>
+                        <Tooltip title="Delete" arrow>
+                          <button
+                            className="ml-4 text-red-600 hover:bg-red-500 hover:text-white p-0.5 w-8 h-8 rounded-full"
+                            onClick={() => confirmDelete(user)}>
+                            <DeleteOutlinedIcon fontSize="small" />
+                          </button>
+                        </Tooltip>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={4}
+                      className="px-6 py-4 text-start text-sm text-red-500">
+                      User found
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
         </div>
       </div>
-      {showAddUserForm && <AddUserForm />}
+      {showAddUserForm && <AddUserForm onUserAddition={fetchUsers} />}
+
+      {/* Show the deletion confiramation component */}
+      {showDeleteConformation && (
+        <DeleteConformation
+          deleteItem={`User ${
+            selectedUser?.firstName
+          } ${selectedUser?.lastName.charAt(0)} (${selectedUser?.userName})`}
+          onConfirm={proceedDelete}
+          onCancel={cancelDelete}
+        />
+      )}
     </div>
   );
 };
