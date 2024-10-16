@@ -16,6 +16,13 @@ export default {
     extend: {
       colors: {
         'red-80': '#ffdcdc',
+        'border-1': '#B0EBB4',
+        'border-2': '#E4B1F0',
+        'border-3': '#ECCDFF',
+        'color-1': '#BFF6C3',
+        'color-2': '#F0D9FF',
+        'color-3': '#ECF2FF',
+        // 'color-3': '#F875AA',
       },
     },
   },

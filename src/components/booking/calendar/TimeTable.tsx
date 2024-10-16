@@ -9,11 +9,11 @@ const TimeTable = ({ day, currentDay }: TimeTableProps) => {
   const today = dayjs();
   return (
     // Fixed Time column
-    <div className="w-32 sticky left-0 bg-white z-30">
+    <div className="w-32 sticky left-0 bg-color-2 border-l border-t border-b border-border-2 z-30 h-fit shadow-lg rounded-l-xl">
       <table className="border-r border-gray-200">
         <thead>
           <tr>
-            <th className="border-b border-t text-sm text-gray-700 items-center justify-center border-gray-200 p-1 w-32 h-12">
+            <th className="border-b text-sm text-gray-700 items-center justify-center border-border-2 p-1 w-32 h-12">
               <span
                 className={`px-2 py-1 rounded-full ${
                   currentDay.isSame(today, 'day')
@@ -29,7 +29,7 @@ const TimeTable = ({ day, currentDay }: TimeTableProps) => {
         <tbody>
           {day.map((time, i) => (
             <tr key={i}>
-              <td className="select-none h-11 border border-gray-200 ">
+              <td className="select-none h-11 border-t border-border-3">
                 <div className="text-xs justify-center p-2 ml-1">
                   {time.format('hh A')} - {time.add(1, 'hour').format('hh A')}
                 </div>

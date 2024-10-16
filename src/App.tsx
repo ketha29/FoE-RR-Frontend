@@ -44,7 +44,7 @@ function App() {
           <Route
             path="/booking/day"
             element={
-              <div className="h-screen flex flex-col mt-36">
+              <div className="h-screen flex flex-col mt-0">
                 <CalendarHeader />
                 <div className="flex flex-1">
                   <DayView day={currentDay} />

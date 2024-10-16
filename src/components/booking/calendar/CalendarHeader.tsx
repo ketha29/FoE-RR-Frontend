@@ -94,10 +94,10 @@ const CalendarHeader = () => {
 
   return (
     <>
-      <header className="flex px-6 py-3 items-center justify-between bg-gradient-to-r from-blue-200 to-purple-200 border-b border-blue-200 shadow-lg fixed top-14 left-0 right-0 z-40">
+      <header className="flex px-6 py-3 items-center justify-between bg-gradient-to-r from-blue-500 to-purple-400 border-b border-blue-200 shadow-lg fixed top-14 left-0 right-0 z-40">
         <div className="flex items-center space-x-12">
           <h2
-            className={`text-2xl text-gray-800 font-bold transition-transform duration-150 ${transitionClass}`}
+            className={`text-2xl text-white font-bold transition-transform duration-150 ${transitionClass}`}
             style={{ minWidth: '250px' }}>
             {view === 'Day' &&
               dayjs(new Date(dayjs().year(), dayjs().month(), dayIndex)).format(

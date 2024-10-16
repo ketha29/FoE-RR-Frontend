@@ -54,19 +54,19 @@ const DayView = ({ day }: DayViewProps) => {
   }, [currentDate, fetch]);
 
   return (
-    <div className="h-full w-full flex">
+    <div className="h-fit w-full flex bg-color-3 p-10 mt-28">
       {/* Fixed Time column */}
       <TimeTable day={day} currentDay={currentDateObj} />
 
       {/* Scrollable Room Columns */}
-      <div className="flex-1 overflow-x-auto">
-        <table className="w-max bg-green-200">
+      <div className="flex-1 overflow-x-auto rounded-r-xl border-r border-gray-300 ">
+        <table className="w-max border-collapse">
           <thead>
-            <tr>
+            <tr className="bg-color-1">
               {roomNames.map((roomName, idx) => (
                 <th
                   key={idx}
-                  className="border-b border-t border-r border-white select-none p-1 h-12 w-28">
+                  className="border-r border-b border-border-1 text-center select-none p-3 h-12 w-28">
                   <div className="text-gray-700 text-sm text-center">
                     {roomName}
                   </div>
