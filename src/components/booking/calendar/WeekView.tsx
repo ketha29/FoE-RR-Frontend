@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import GlobalContext from '../../../context/GlobalContext';
 import { getWeekBookings } from '../../../services/BookingService';
 import { getAllRooms } from '../../../services/RoomService';
@@ -18,6 +18,9 @@ const WeekView = ({ day, week }: WeekViewProps) => {
   const [roomNames, setRoomNames] = useState<string[]>([]);
   const { weekIndex, showBookingForm, fetch, setFetch } =
     useContext(GlobalContext);
+
+  // Track room colum scrrolling for each day in the week
+  const roomColumnRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // Get start and end of the current week for that date
   const startOfWeek = dayjs()
@@ -56,42 +59,57 @@ const WeekView = ({ day, week }: WeekViewProps) => {
     setFetch(false);
   }, [weekIndex, fetch]);
 
+  // Sync scroll positions for room columns across all days of the week
+  const handleScroll = (index: number) => {
+    const currentScrollLeft = roomColumnRefs.current[index]?.scrollLeft;
+    roomColumnRefs.current.forEach((col, i) => {
+      if (col && i !== index) {
+        col.scrollLeft = currentScrollLeft || 0;
+      }
+    });
+  };
+
   return (
-    <div>
-      {week.map((currentDay, dayIndex) => {
-        return (
-          <div className="w-full flex" key={dayIndex}>
-            {/* Fixed Time column */}
-            <TimeTable day={day} currentDay={currentDay} />
+    <div className="h-fit w-full bg-color-3 mt-28">
+      <div className="p-10">
+        {week.map((currentDay, dayIndex) => {
+          return (
+            <div className="w-full flex mb-2" key={dayIndex}>
+              {/* Fixed Time column */}
+              <TimeTable day={day} currentDay={currentDay} />
 
-            {/* Scrollable Room Columns */}
-            <div key={dayIndex} className="flex-1 overflow-x-auto">
-              <table className="w-max bg-green-200">
-                <thead>
-                  <tr>
-                    {roomNames.map((roomName, roomIndex) => (
-                      <th
-                        key={roomIndex}
-                        className="border-t border-b border-r border-white select-none p-1 w-28 h-12">
-                        <div className="text-gray-600 text-sm text-center">
-                          {roomName}
-                        </div>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
+              {/* Scrollable Room Columns */}
+              <div
+                ref={(e) => (roomColumnRefs.current[dayIndex] = e)}
+                onScroll={() => handleScroll(dayIndex)}
+                className="flex-1 overflow-x-auto rounded-r-xl border-r border-gray-300">
+                <table className="w-max border-collapse">
+                  <thead>
+                    <tr className="bg-color-1">
+                      {roomNames.map((roomName, roomIndex) => (
+                        <th
+                          key={roomIndex}
+                          className="border-b border-r border-border-1 text-center select-none p-3 w-28 h-12">
+                          <div className="text-gray-700 text-sm text-center">
+                            {roomName}
+                          </div>
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
 
-                {/* Table Body */}
-                <DragAndAddBooking
-                  bookings={weekBookings}
-                  currentDay={currentDay}
-                />
-              </table>
+                  {/* Table Body */}
+                  <DragAndAddBooking
+                    bookings={weekBookings}
+                    currentDay={currentDay}
+                  />
+                </table>
+              </div>
             </div>
-          </div>
-        );
-      })}
-      <div>{showBookingForm && <BookingForm />}</div>
+          );
+        })}
+        <div>{showBookingForm && <BookingForm />}</div>
+      </div>
     </div>
   );
 };

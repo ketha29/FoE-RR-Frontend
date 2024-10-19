@@ -61,7 +61,7 @@ const DayView = ({ day }: DayViewProps) => {
       {/* Scrollable Room Columns */}
       <div
         onMouseLeave={() => setSelectingBooking(false)}
-        className="flex-1 overflow-x-auto rounded-r-xl border-r border-gray-300 ">
+        className="flex-1 overflow-x-auto rounded-r-xl border-r border-gray-300">
         <table className="w-max border-collapse">
           <thead>
             <tr className="bg-color-1">
