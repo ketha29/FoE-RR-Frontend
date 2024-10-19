@@ -16,6 +16,7 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
   const [showAddUserForm, setShowAddUserForm] = useState(false);
   const [showUpdateRoomForm, setShowUpdateRoomForm] = useState(false);
   const [daySelected, setDaySelected] = useState(dayjs());
+  const [selectingBooking, setSelectingBooking] = useState(false);
   const [bookingSelection, setBookingSelection] = useState<{
     roomName: string | null;
     startTime: dayjs.Dayjs | null;
@@ -49,6 +50,8 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
         setShowUpdateRoomForm,
         daySelected,
         setDaySelected,
+        selectingBooking,
+        setSelectingBooking,
         bookingSelection,
         setBookingSelection,
         isCellSelected,

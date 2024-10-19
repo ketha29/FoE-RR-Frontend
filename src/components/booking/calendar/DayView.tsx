@@ -13,7 +13,7 @@ interface DayViewProps {
 }
 
 const DayView = ({ day }: DayViewProps) => {
-  const { dayIndex, showBookingForm, fetch, setFetch } =
+  const { dayIndex, showBookingForm, fetch, setFetch, setSelectingBooking } =
     useContext(GlobalContext);
   const [roomNames, setRoomNames] = useState<string[]>([]);
   const [dayBookings, setDayBookings] = useState<Booking[]>([]);
@@ -59,7 +59,9 @@ const DayView = ({ day }: DayViewProps) => {
       <TimeTable day={day} currentDay={currentDateObj} />
 
       {/* Scrollable Room Columns */}
-      <div className="flex-1 overflow-x-auto rounded-r-xl border-r border-gray-300 ">
+      <div
+        onMouseLeave={() => setSelectingBooking(false)}
+        className="flex-1 overflow-x-auto rounded-r-xl border-r border-gray-300 ">
         <table className="w-max border-collapse">
           <thead>
             <tr className="bg-color-1">

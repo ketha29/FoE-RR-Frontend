@@ -26,6 +26,8 @@ interface GlobalContextType {
   setShowUpdateRoomForm: Dispatch<SetStateAction<boolean>>;
   daySelected: dayjs.Dayjs;
   setDaySelected: Dispatch<SetStateAction<dayjs.Dayjs>>;
+  selectingBooking: boolean;
+  setSelectingBooking: Dispatch<SetStateAction<boolean>>;
   bookingSelection: BookingSelectionType;
   setBookingSelection: Dispatch<BookingSelectionType>;
   isCellSelected: boolean;
@@ -53,6 +55,8 @@ const GlobalContext = React.createContext<GlobalContextType>({
   setShowUpdateRoomForm: () => {},
   daySelected: dayjs(),
   setDaySelected: (day) => {},
+  selectingBooking: false,
+  setSelectingBooking: () => {},
   bookingSelection: {
     roomName: null,
     startTime: null,

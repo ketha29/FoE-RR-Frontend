@@ -32,8 +32,10 @@ const DragAndAddBooking = ({
     daySelected,
     setDaySelected,
     setShowBookingForm,
+    selectingBooking,
+    setSelectingBooking,
   } = useContext(GlobalContext);
-  const [selecting, setSelecting] = useState(false);
+  // const [selecting, setSelecting] = useState(false);
 
   const hoursInDay = getDay(currentDay.date());
   const currentDateObj = currentDay;
@@ -76,11 +78,10 @@ const DragAndAddBooking = ({
   // Triggers the start of the selection process. Sets the initial time for booking
   const handleMouseDown = (roomName: string, time: dayjs.Dayjs) => {
     console.log('Current date: ', currentDate);
-
     if (isTimeBooked(roomName, time)) {
       return;
     }
-    setSelecting(true);
+    setSelectingBooking(true);
     if (!isWeekend && isAcademicHour(time) && regularUser) {
       setBookingSelection({ roomName, startTime: time, endTime: time });
     } else if (admin || superAdmin) {
@@ -95,13 +96,29 @@ const DragAndAddBooking = ({
 
   // When dragging the mouse, function updates the booking's end time
   const handleMouseMove = (roomName: string, time: dayjs.Dayjs) => {
-    if (selecting && isTimeBooked(roomName, time)) {
-      setSelecting(false);
+    if (selectingBooking && isTimeBooked(roomName, time)) {
+      setSelectingBooking(false);
+      setBookingSelection({
+        ...bookingSelection,
+        endTime: null,
+      });
       return;
     }
-    if (selecting && roomName === bookingSelection.roomName) {
+    if (roomName !== bookingSelection.roomName) {
+      setBookingSelection({
+        ...bookingSelection,
+        roomName: null,
+      });
+      setSelectingBooking(false);
+      return;
+    }
+    if (selectingBooking && roomName === bookingSelection.roomName) {
+      console.log('end time', bookingSelection.endTime?.format('HH:mm'));
       if (time.isAfter(bookingSelection.startTime)) {
-        setBookingSelection({ ...bookingSelection, endTime: time });
+        setBookingSelection({
+          ...bookingSelection,
+          endTime: time.add(1, 'hour'),
+        });
       } else {
         setBookingSelection({ ...bookingSelection, startTime: time });
       }
@@ -111,7 +128,7 @@ const DragAndAddBooking = ({
   // End the booking selection
   // If the start time and end time are valid, user is redricted to the booking page
   const handleMouseUp = () => {
-    setSelecting(false);
+    setSelectingBooking(false);
     if (
       !(
         bookingSelection.endTime &&
@@ -120,13 +137,17 @@ const DragAndAddBooking = ({
       ) &&
       regularUser
     ) {
-      setBookingSelection({ ...bookingSelection, endTime: endTimeDay });
+      setBookingSelection({
+        ...bookingSelection,
+        endTime: endTimeDay.add(1, 'hour'),
+      });
     }
     if (
       !(
         bookingSelection.startTime === bookingSelection.endTime ||
         bookingSelection.startTime === null ||
-        bookingSelection.endTime === null
+        bookingSelection.endTime === null ||
+        bookingSelection.roomName === null
       ) &&
       authenticated
     ) {
@@ -146,10 +167,12 @@ const DragAndAddBooking = ({
     const { roomName: selectedRoom, startTime, endTime } = bookingSelection;
     // Check if selected room, time, and date match
     const isSameDate = currentDateObj.isSame(daySelected, 'day');
+
     return (
       selectedRoom === roomName &&
       startTime &&
       endTime &&
+      selectingBooking &&
       time.isBetween(startTime, endTime, null, '[)') &&
       isSameDate
     );

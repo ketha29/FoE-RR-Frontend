@@ -1,4 +1,4 @@
-import dayjs from "dayjs"
+import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 
 dayjs.extend(weekOfYear);
@@ -18,7 +18,7 @@ const getMonth = (month = dayjs().month()) => {
     });
   });
   return daysMatrix;
-}
+};
 
 export const getDay = (day = dayjs().date()) => {
   let startHour = 5;
@@ -26,20 +26,23 @@ export const getDay = (day = dayjs().date()) => {
     startHour++;
     return dayjs(new Date(year, month, day)).hour(startHour).minute(0);
   });
-  return hourArray
-}
+  return hourArray;
+};
 
 export const getWeek = (week = dayjs().week()) => {
   const startOfWeek = dayjs().year(year).week(week).startOf('week');
   const endOfWeek = startOfWeek.add(6, 'day');
-  const weekArray =[];
+  const weekArray = [];
   let currentDay = startOfWeek;
 
-  while (currentDay.isBefore(endOfWeek) || currentDay.isSame(endOfWeek, 'day')) {
+  while (
+    currentDay.isBefore(endOfWeek) ||
+    currentDay.isSame(endOfWeek, 'day')
+  ) {
     weekArray.push(currentDay);
     currentDay = currentDay.add(1, 'day');
   }
   return weekArray;
-}
+};
 
 export default getMonth;
