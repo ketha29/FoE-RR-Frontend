@@ -21,7 +21,7 @@ import { useContext } from 'react';
 import GlobalContext from '../context/GlobalContext';
 
 const navigation = [
-  { name: 'Home', href: '/home' },
+  { name: 'Info', href: '/info' },
   { name: 'Booking', href: '/booking/day' },
   { name: 'Users', href: '/user/all' },
   { name: 'Rooms', href: '/room/all' },
@@ -36,7 +36,7 @@ const NavBar = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/home');
+    navigate('/booking/month');
   };
 
   return (
@@ -60,14 +60,14 @@ const NavBar = () => {
             <div className="hidden sm:ml-6 sm:block">
               <div className="hidden md:flex space-x-4">
                 <NavLink
-                  to="/home"
+                  to="/info"
                   className={({ isActive }) =>
                     'block rounded-md px-3 py-2 text-base font-medium ' +
                     (isActive
                       ? 'bg-white text-slate-700'
                       : 'text-gray-300 hover:bg-gray-800 hover:text-white')
                   }>
-                  Home
+                  Info
                 </NavLink>
                 <NavLink
                   to={`/booking/${view.toLowerCase()}`}

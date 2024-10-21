@@ -23,7 +23,7 @@ const LoginIn = () => {
         password: data.password,
       });
       console.log('User login successful');
-      navigate('/home');
+      navigate('/booking/month');
     } catch (error) {
       if (error instanceof AxiosError) {
         if (!error.response) {

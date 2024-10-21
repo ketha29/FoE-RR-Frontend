@@ -12,6 +12,7 @@ import ListRoom from './components/room/ListRoom';
 import GlobalContext from './context/GlobalContext';
 import NavBar from './components/NavBar';
 import ListUser from './components/user/ListUser';
+import InfoPage from './components/InfoPage';
 
 function App() {
   const { monthIndex, weekIndex, dayIndex } = useContext(GlobalContext);
@@ -73,6 +74,7 @@ function App() {
             }></Route>
           <Route path="/room/all" element={<ListRoom />} />
           <Route path="/user/all" element={<ListUser />} />
+          <Route path="/info" element={<InfoPage />} />
         </Routes>
       </BrowserRouter>
     </React.Fragment>
