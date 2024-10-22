@@ -8,8 +8,12 @@ import AddRoomForm from './AddRoomForm';
 import GlobalContext from '../../context/GlobalContext';
 import UpdateRoom from './UpdateRoom';
 import { Room } from '../Interfaces';
+import { isAdmin, isSuperAdmin } from '../../services/AuthService';
+import { Tooltip } from '@mui/material';
 
 const ListRoom = () => {
+  const admin = isAdmin();
+  const superAdmin = isSuperAdmin();
   const [roomList, setRoomList] = useState<Room[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [showDeleteConformation, setShowDeleteConformation] = useState(false);
@@ -95,13 +99,15 @@ const ListRoom = () => {
             </div>
 
             {/* <AddRoomButton /> */}
-            <div>
-              <button
-                className="ml-10 rounded-md bg-indigo-600 px-3 py-1 h-9 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-                onClick={() => setShowAddRoomForm(true)}>
-                Add Room
-              </button>
-            </div>
+            {(admin || superAdmin) && (
+              <div>
+                <button
+                  className="ml-10 rounded-md bg-indigo-600 px-3 py-1 h-9 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                  onClick={() => setShowAddRoomForm(true)}>
+                  Add Room
+                </button>
+              </div>
+            )}
 
             {/* Get the search query */}
             <input
@@ -121,53 +127,60 @@ const ListRoom = () => {
                   <tr>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                      className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                       Room Name
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                      className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                       Capacity
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                      className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                       Description
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wider"></th>
+                      className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider"></th>
                   </tr>
                 </thead>
+
                 <tbody className="bg-white divide-y divide-gray-200">
                   {filteredRooms.length > 0 ? (
                     filteredRooms.map((room) => (
                       <tr
                         key={room.roomId}
                         className="hover:bg-blue-50 transition duration-200 ease-in-out">
-                        <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-600">
+                        <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-600">
                           {room.roomName}
                         </td>
-                        <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-600">
+                        <td className="whitespace-nowrap text-sm text-gray-600">
                           {room.capacity}
                         </td>
-                        <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-600">
+                        <td className="whitespace-nowrap text-sm text-gray-600">
                           {room.description}
                         </td>
-                        <td className="px-6 py-2 whitespace-nowrap text-right text-sm font-medium">
-                          <button
-                            className="text-indigo-600 hover:bg-indigo-500 hover:text-white p-0.5 w-8 h-8 rounded-full"
-                            onClick={() => handleUpdate(room)}>
-                            <EditOutlinedIcon fontSize="small" />
-                          </button>
-                          <button
-                            onClick={() => confirmDelete(room)}
-                            className="ml-4 text-red-600 hover:bg-red-500 hover:text-white p-0.5 w-8 h-8 rounded-full">
-                            <DeleteOutlinedIcon
-                              className="font-bold"
-                              fontSize="small"
-                            />
-                          </button>
+
+                        <td className="whitespace-nowrap text-right text-sm font-medium">
+                          {(admin || superAdmin) && (
+                            <span className="px-6">
+                              <Tooltip title="Edit" arrow>
+                                <button
+                                  className="text-indigo-600 hover:bg-indigo-500 hover:text-white p-0.5 w-8 h-8 rounded-full"
+                                  onClick={() => handleUpdate(room)}>
+                                  <EditOutlinedIcon fontSize="small" />
+                                </button>
+                              </Tooltip>
+                              <Tooltip title="Delete" arrow>
+                                <button
+                                  className="ml-4 text-red-600 hover:bg-red-500 hover:text-white p-0.5 w-8 h-8 rounded-full"
+                                  onClick={() => confirmDelete(room)}>
+                                  <DeleteOutlinedIcon fontSize="small" />
+                                </button>
+                              </Tooltip>
+                            </span>
+                          )}
                         </td>
                       </tr>
                     ))
