@@ -24,6 +24,11 @@ export const isAuthenticated = () => {
     return !!token;
 }
 
+export const getToken = () => {
+    const token = isAuthenticated()?localStorage.getItem('token'):null;
+    return token;
+}
+
 export const isSuperAdmin = () => {
     const role = localStorage.getItem('userType');
     return role === 'superAdmin';

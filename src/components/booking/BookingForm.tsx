@@ -1,12 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
-import { FieldValues, useForm } from 'react-hook-form';
+import {Controller, FieldValues, useForm } from 'react-hook-form';
 import GlobalContext from '../../context/GlobalContext';
 import CloseIcon from '@mui/icons-material/Close';
 import { addBooking } from '../../services/BookingService';
 import { AxiosError } from 'axios';
 import { isAdmin, isSuperAdmin } from '../../services/AuthService';
 import { getAllRooms } from '../../services/RoomService';
-import { Room } from '../Interfaces';
+import { Room, User} from '../Interfaces';
+import { Autocomplete, TextField } from '@mui/material';
+import { getUserByName } from '../../services/UserService';
 
 const recurrenceTypes = ['none', 'daily', 'weekly'];
 
@@ -17,9 +19,12 @@ const BookingForm = () => {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [roomNames, setRoomNames] = useState<string[]>([]);
+  const [userSuggestions, setUserSuggestions] = useState<User[]>([]);
+
   const {
     setShowBookingForm,
     daySelected,
@@ -34,6 +39,7 @@ const BookingForm = () => {
   };
 
   const [booking, setBooking] = useState({
+    bookedForUser:null,
     roomName: '',
     details: '',
     startTime: '',
@@ -57,6 +63,13 @@ const BookingForm = () => {
     };
     fetchRooms();
   }, []);
+
+  const fetchUserSuggestions = async (name:string) => {
+    const response = await getUserByName(name);
+    console.log(response.data.userList)
+    const userSuggestions: User[] = response.data.userList
+    setUserSuggestions(userSuggestions);
+  };
 
   // const formatTime = (time: string) => {
   //   if (!time) return null; // Handle null or empty string
@@ -137,7 +150,39 @@ const BookingForm = () => {
                 <p className="text-red-600">Room field is required</p>
               )}
             </div>
-
+            
+            {(admin||superAdmin) &&(
+            <div className="mt-4">
+              {/* Book for User */}
+              <label htmlFor= 'bookedForUser' className="text-lg font-medium">
+                Book for User
+              </label>
+              <Controller
+              name='bookedForUser'
+              control={control}
+              rules={{required: true}}
+              render={({field:{onBlur,onChange,value,ref}})=>(<Autocomplete
+              size='small'
+              options={userSuggestions}
+              getOptionLabel={(userSuggestion)=>(`${userSuggestion.firstName} ${userSuggestion.lastName}`)}
+              onBlur={onBlur}
+              value={userSuggestions.find((user)=>{
+                return user.userId == value;
+              })}
+              onChange={(e:any,newValue)=>{
+                onChange(newValue?newValue:null)
+              }}
+              onInputChange={(e:any,newInputValue)=>{
+                newInputValue?fetchUserSuggestions(newInputValue):null;
+              }}
+              isOptionEqualToValue={(userSuggestion,value)=>userSuggestion.userId == value?.userId}
+              renderInput={(params)=>(<TextField{...params}
+                inputRef={ref}
+                id='bookedForUser'
+                className="w-full border-2 border-gray-100 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400"/>)}/>)}
+              />
+            </div>)}
+            
             {/* Booking Purpose */}
             <div className="mt-4">
               <label htmlFor="details" className="text-lg font-medium">
