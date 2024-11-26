@@ -22,6 +22,8 @@ export default {
         'color-1': '#BFF6C3',
         'color-2': '#F0D9FF',
         'color-3': '#ECF2FF',
+        'color-maroon': '#973131',
+        'color-maroon-1': '#810000',
         // 'color-3': '#F875AA',
       },
     },

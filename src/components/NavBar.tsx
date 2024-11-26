@@ -10,13 +10,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { NavLink, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import user from '../assets/user.jpg';
-import {
-  isAdmin,
-  isAuthenticated,
-  isRegularUser,
-  isSuperAdmin,
-  logout,
-} from '../services/AuthService';
+import { isAuthenticated, logout } from '../services/AuthService';
 import { useContext } from 'react';
 import GlobalContext from '../context/GlobalContext';
 
@@ -29,8 +23,6 @@ const navigation = [
 
 const NavBar = () => {
   const authenticated = isAuthenticated();
-  const admin = isSuperAdmin();
-  const superAdmin = isAdmin();
   const navigate = useNavigate();
   const { view } = useContext(GlobalContext);
 
@@ -42,8 +34,8 @@ const NavBar = () => {
   return (
     <Disclosure
       as="nav"
-      className="bg-slate-700 fixed top-0 left-0 right-0 z-50">
-      <div className="mx-auto max-w-7xl px-2 sm:px-6">
+      className="bg-color-maroon fixed top-0 left-0 right-0 z-50">
+      <div className="mx-auto sm:px-6">
         <div className="relative flex h-14 items-center justify-between mb-0">
           <div className="absolute insert-y-0 left-0 flex items-center sm-hidden">
             {/* Mobile menu button*/}
@@ -53,31 +45,26 @@ const NavBar = () => {
               <XMarkIcon className="hidden h-6 w-6 group-data-[open]:block" />
             </DisclosureButton>
           </div>
-          <div className="flex flex-1 items-center justify-center md:items-stretch md:justify-start">
+          <div className="flex items-center justify-center md:items-stretch md:justify-start">
             <div className="flex items-center">
               <img alt="FoE RR" src={logo} className="h-10 w-auto" />
             </div>
-            <div className="hidden sm:ml-6 sm:block">
-              <div className="hidden md:flex space-x-4">
-                <NavLink
-                  to="/info"
-                  className={({ isActive }) =>
-                    'block rounded-md px-3 py-2 text-base font-medium ' +
-                    (isActive
-                      ? 'bg-white text-slate-700'
-                      : 'text-gray-300 hover:bg-gray-800 hover:text-white')
-                  }>
-                  Info
-                </NavLink>
+            <div className="flex items-center text-amber-400 font-semibold text-l pl-5 pr-10">
+              <p className="uppercase transform scale-y-150">
+                Engineering Education Unit
+              </p>
+            </div>
+            <div className="flex sm:ml-6 sm:block">
+              <div className="hidden md:flex space-x-2">
                 <NavLink
                   to={`/booking/${view.toLowerCase()}`}
                   className={({ isActive }) =>
                     'block rounded-md px-3 py-2 text-base font-medium ' +
                     (isActive
                       ? 'bg-white text-slate-700'
-                      : 'text-gray-300 hover:bg-gray-800 hover:text-white')
+                      : 'text-gray-300 hover:bg-color-maroon-1 hover:text-white')
                   }>
-                  Booking
+                  Bookings
                 </NavLink>
                 {authenticated && (
                   <NavLink
@@ -86,9 +73,9 @@ const NavBar = () => {
                       'block rounded-md px-3 py-2 text-base font-medium ' +
                       (isActive
                         ? 'bg-white text-slate-700'
-                        : 'text-gray-300 hover:bg-gray-800 hover:text-white')
+                        : 'text-gray-300 hover:bg-color-maroon-1 hover:text-white')
                     }>
-                    User
+                    Users
                   </NavLink>
                 )}
                 <NavLink
@@ -97,9 +84,19 @@ const NavBar = () => {
                     'block rounded-md px-3 py-2 text-base font-medium ' +
                     (isActive
                       ? 'bg-white text-slate-700'
-                      : 'text-gray-300 hover:bg-gray-800 hover:text-white')
+                      : 'text-gray-300 hover:bg-color-maroon-1 hover:text-white')
                   }>
-                  Room
+                  Rooms
+                </NavLink>
+                <NavLink
+                  to="/info"
+                  className={({ isActive }) =>
+                    'block rounded-md px-3 py-2 text-base font-medium ' +
+                    (isActive
+                      ? 'bg-white text-slate-700'
+                      : 'text-gray-300 hover:bg-color-maroon-1 hover:text-white')
+                  }>
+                  Info
                 </NavLink>
               </div>
             </div>
@@ -124,15 +121,6 @@ const NavBar = () => {
                       href="/auth/login"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
                       login
-                    </a>
-                  </MenuItem>
-                )}
-                {authenticated && (
-                  <MenuItem>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                      Profile
                     </a>
                   </MenuItem>
                 )}
