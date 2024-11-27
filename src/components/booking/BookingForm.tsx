@@ -58,17 +58,18 @@ const BookingForm = () => {
     fetchRooms();
   }, []);
 
-  // const formatTime = (time: string) => {
-  //   if (!time) return null; // Handle null or empty string
-  //   return `${time}:00`; // Append seconds
-  // };
+  // Add the seconds to the time as the time is stored in hh:mm:ss format
+  const formatTime = (time: string) => {
+    if (!time) return null;
+    return `${time}:00`;
+  };
 
   const onSubmit = async (data: FieldValues) => {
     try {
       const formattedBooking = {
         ...data,
-        // startTime: formatTime(data.startTime),
-        // endTime: formatTime(data.endTime),
+        startTime: formatTime(data.startTime),
+        endTime: formatTime(data.endTime),
         recurrence: admin || superAdmin ? data.recurrence : 'none',
         recurrencePeriod: admin || superAdmin ? data.recurrencePeriod : 0,
       };
@@ -172,7 +173,7 @@ const BookingForm = () => {
                   className="w-full border-2 border-gray-100 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400"
                   defaultValue={
                     bookingSelection.startTime
-                      ? bookingSelection.startTime.format('HH:mm:ss')
+                      ? bookingSelection.startTime.format('HH:mm')
                       : ''
                   }
                 />
@@ -193,7 +194,7 @@ const BookingForm = () => {
                   className="w-full border-2 border-gray-100 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400"
                   defaultValue={
                     bookingSelection.endTime
-                      ? bookingSelection.endTime?.format('HH:mm:ss')
+                      ? bookingSelection.endTime?.format('HH:mm')
                       : ''
                   }
                 />

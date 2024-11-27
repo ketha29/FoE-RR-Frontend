@@ -98,7 +98,7 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
           'minute'
         );
         const spanMinutes = bookingEnd.diff(bookingStart, 'minute');
-        const leftPercentage =
+        const topPercentage =
           (startOffsetMinutes / 60 - bookingStart.hour()) * 100;
         const heightPercentage = (spanMinutes / 60) * 102;
 
@@ -123,8 +123,7 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
                 onClick={() => handleClick()}
                 className="absolute group z-10 bg-white shadow-lg shadow-gray-300 rounded-md h-full flex justify-start items-center"
                 style={{
-                  top: 0,
-                  left: `${leftPercentage}%`,
+                  top: `${topPercentage}%`,
                   height: `${heightPercentage}%`,
                   width: '85%',
                 }}>

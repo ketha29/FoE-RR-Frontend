@@ -65,9 +65,14 @@ const DragAndAddBooking = ({
   // Checks if the room is booked for the specific time
   const isTimeBooked = (roomName: string, time: dayjs.Dayjs): boolean => {
     // Return true, if any booking that is selected is already booked else return false
+    // Only getting the hours for the time
     return bookings.some((booking) => {
-      const bookingStart = dayjs(`${booking.date} ${booking.startTime}`);
-      const bookingEnd = dayjs(`${booking.date} ${booking.endTime}`);
+      const bookingStart = dayjs(
+        `${booking.date} ${booking.startTime.split(':')[0]}:00:00`
+      );
+      const bookingEnd = dayjs(
+        `${booking.date} ${booking.endTime.split(':')[0]}:00:00`
+      );
       return (
         booking.room.roomName === roomName &&
         time.isBetween(bookingStart, bookingEnd, null, '[)')
