@@ -2,7 +2,6 @@ import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { deleteBooking } from '../../services/BookingService';
-import { isAuthenticated } from '../../services/AuthService';
 import { useNavigate } from 'react-router-dom';
 import BookingXtaDetails from './BookingXtaDetails';
 import React from 'react';
@@ -18,7 +17,6 @@ interface RenderBookingsProps {
 
 const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
   const navigator = useNavigate();
-  const authenticated = isAuthenticated();
   const [showXtraBookingDetails, setShowXtraBookingDetails] = useState(false);
   const [moveBlock, setMoveBlock] = useState(false);
   const bookingDetailsRef = useRef<HTMLDivElement>(null);
@@ -115,8 +113,7 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
         };
 
         return (
-          startOffsetMinutes >= 0 &&
-          authenticated && (
+          startOffsetMinutes >= 0 && (
             // Display booking according to the start time and time duration
             <React.Fragment key={booking.bookingId}>
               <div
