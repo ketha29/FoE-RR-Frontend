@@ -20,7 +20,8 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
   const [showXtraBookingDetails, setShowXtraBookingDetails] = useState(false);
   const [moveBlock, setMoveBlock] = useState(false);
   const bookingDetailsRef = useRef<HTMLDivElement>(null);
-  const { setFetch } = useContext(GlobalContext);
+  const { setFetch, setShowBookingForm, setBookingSelection } =
+    useContext(GlobalContext);
 
   // Close the extra details block if clicked outside
   useEffect(() => {
@@ -55,7 +56,14 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
   };
   // Render update booking form when clicking the edit button
   const handleClickEdit = (booking: Booking) => {
-    navigator('/booking/update-booking', { state: { booking } });
+    setBookingSelection({
+      roomName: booking.room.roomName,
+      startTime: dayjs(`${booking.startDate} ${booking.startTime}`),
+      endTime: dayjs(`${booking.startDate} ${booking.endTime}`),
+      details: booking.details,
+    });
+    setShowBookingForm(true);
+    // navigator('/booking/update-booking', { state: { booking } });
   };
 
   // Get a speciic color for the booking strip

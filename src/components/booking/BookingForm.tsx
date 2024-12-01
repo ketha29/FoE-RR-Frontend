@@ -29,7 +29,12 @@ const BookingForm = () => {
   } = useContext(GlobalContext);
 
   const closeBookingForm = () => {
-    setBookingSelection({ roomName: null, startTime: null, endTime: null });
+    setBookingSelection({
+      roomName: null,
+      startTime: null,
+      endTime: null,
+      details: null,
+    });
     setShowBookingForm(false);
   };
 
@@ -83,7 +88,12 @@ const BookingForm = () => {
       );
       setErrorMessage(null);
       console.log('Booking added successfully: ', response.data);
-      setBookingSelection({ roomName: null, startTime: null, endTime: null });
+      setBookingSelection({
+        roomName: null,
+        startTime: null,
+        endTime: null,
+        details: null,
+      });
       setShowBookingForm(false);
       setFetch(true);
     } catch (error) {
@@ -150,6 +160,9 @@ const BookingForm = () => {
                 type="string"
                 className="w-full border-2 border-gray-100 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter the purpose or subject of booking"
+                defaultValue={
+                  bookingSelection.details ? bookingSelection.details : ''
+                }
               />
               {errors.details?.type === 'required' && (
                 <p className="text-red-600">

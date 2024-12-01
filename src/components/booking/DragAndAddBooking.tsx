@@ -92,12 +92,14 @@ const DragAndAddBooking = ({
         roomName,
         startTime: time,
         endTime: time.add(1, 'hour'),
+        details: null,
       });
     } else if (admin || superAdmin) {
       setBookingSelection({
         roomName,
         startTime: time,
         endTime: time.add(1, 'hour'),
+        details: null,
       });
     }
     setDaySelected(currentDateObj);
