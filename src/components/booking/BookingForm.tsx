@@ -160,7 +160,7 @@ const BookingForm = () => {
               <Controller
               name='bookedForUser'
               control={control}
-              rules={{required: true}}
+              rules={{required: false}}
               render={({field:{onBlur,onChange,value,ref}})=>(<Autocomplete
               size='small'
               options={userSuggestions}
