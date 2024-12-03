@@ -34,4 +34,8 @@ export const getUserByName = (name:string) => axios.get(GET_USERS_BY_NAME(name),
   }
 });
 
-export const deleteUser = (userId: number) => axios.delete(DELETE_USER(userId));
+export const deleteUser = (userId: number) => axios.delete(DELETE_USER(userId),{
+  headers: {
+    'Authorization': token? `Bearer ${token}`:null
+  }
+});
