@@ -118,11 +118,13 @@ const ListUser = () => {
                     className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                     Last name
                   </th>
-                  <th
-                    scope="col"
-                    className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
-                    Username
-                  </th>
+                  {superAdmin && admin && (
+                    <th
+                      scope="col"
+                      className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                      Username
+                    </th>
+                  )}
                   <th
                     scope="col"
                     className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
@@ -150,9 +152,11 @@ const ListUser = () => {
                       <td className="whitespace-nowrap text-sm text-gray-600">
                         {user.lastName}
                       </td>
-                      <td className="whitespace-nowrap text-sm text-gray-600">
-                        {user.userName}
-                      </td>
+                      {superAdmin && admin && (
+                        <td className="whitespace-nowrap text-sm text-gray-600">
+                          {user.userName}
+                        </td>
+                      )}
                       <td className="whitespace-nowrap text-sm text-gray-600">
                         {user.email} <br />
                         {/* {user.phoneNo} */}

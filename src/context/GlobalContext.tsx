@@ -5,6 +5,7 @@ interface BookingSelectionType {
   roomName: string | null;
   startTime: dayjs.Dayjs | null;
   endTime: dayjs.Dayjs | null;
+  details: string | null;
 }
 
 interface GlobalContextType {
@@ -61,6 +62,7 @@ const GlobalContext = React.createContext<GlobalContextType>({
     roomName: null,
     startTime: null,
     endTime: null,
+    details: null,
   },
   setBookingSelection: () => {},
   isCellSelected: false,

@@ -18,7 +18,23 @@ const bookingColors: BookingType[] = [
 
 const InfoPage = () => {
   return (
-    <div className="max-w-md mx-auto mt-16">
+    <div className="max-w-full mx-auto mt-16">
+      <h1>
+        Faculty of Engineering, University of Peradeniya room booking system
+      </h1>
+      <h2>Procedure to place the booking</h2>
+      {/* Regular user */}
+      <h3>Check the room availablity</h3>
+      <p>
+        With the day view and week view you can check the availablity of rooms
+        for the specific date and time
+      </p>
+      <h3>Place a booking</h3>
+      <p>
+        Restricted to book only for one day. If you want to place a racurrence
+        booking or if you want to place the booking in a restricted time (Shown
+        in red){' '}
+      </p>
       <h2 className="text-xl font-bold mb-4">
         Different colors for diferent type of bookings
       </h2>

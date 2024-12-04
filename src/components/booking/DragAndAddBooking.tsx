@@ -65,9 +65,14 @@ const DragAndAddBooking = ({
   // Checks if the room is booked for the specific time
   const isTimeBooked = (roomName: string, time: dayjs.Dayjs): boolean => {
     // Return true, if any booking that is selected is already booked else return false
+    // Only getting the hours for the time
     return bookings.some((booking) => {
-      const bookingStart = dayjs(`${booking.date} ${booking.startTime}`);
-      const bookingEnd = dayjs(`${booking.date} ${booking.endTime}`);
+      const bookingStart = dayjs(
+        `${booking.date} ${booking.startTime.split(':')[0]}:00:00`
+      );
+      const bookingEnd = dayjs(
+        `${booking.date} ${booking.endTime.split(':')[0]}:00:00`
+      );
       return (
         booking.room.roomName === roomName &&
         time.isBetween(bookingStart, bookingEnd, null, '[)')
@@ -83,12 +88,18 @@ const DragAndAddBooking = ({
     }
     setSelectingBooking(true);
     if (!isWeekend && isAcademicHour(time) && regularUser) {
-      setBookingSelection({ roomName, startTime: time, endTime: time });
+      setBookingSelection({
+        roomName,
+        startTime: time,
+        endTime: time.add(1, 'hour'),
+        details: null,
+      });
     } else if (admin || superAdmin) {
       setBookingSelection({
         roomName,
         startTime: time,
         endTime: time.add(1, 'hour'),
+        details: null,
       });
     }
     setDaySelected(currentDateObj);
@@ -96,23 +107,35 @@ const DragAndAddBooking = ({
 
   // When dragging the mouse, function updates the booking's end time
   const handleMouseMove = (roomName: string, time: dayjs.Dayjs) => {
-    if (selectingBooking && isTimeBooked(roomName, time)) {
-      setSelectingBooking(false);
+    // End the dragging if selecting through already booked slots
+    if (isTimeBooked(roomName, time)) {
+      setTimeout(() => {
+        setSelectingBooking(false);
+        setBookingSelection({
+          ...bookingSelection,
+          endTime: null,
+        });
+      }, 100);
+      return;
+    }
+    if (
+      !(
+        bookingSelection.endTime &&
+        bookingSelection.startTime &&
+        !isWeekend &&
+        isAcademicHour(bookingSelection.endTime.subtract(1, 'hour')) &&
+        isAcademicHour(bookingSelection.startTime)
+      ) &&
+      regularUser
+    ) {
       setBookingSelection({
         ...bookingSelection,
-        endTime: null,
+        startTime: bookingSelection.startTime,
+        endTime: bookingSelection.endTime,
       });
       return;
     }
-    if (roomName !== bookingSelection.roomName) {
-      setBookingSelection({
-        ...bookingSelection,
-        roomName: null,
-      });
-      setSelectingBooking(false);
-      return;
-    }
-    if (selectingBooking && roomName === bookingSelection.roomName) {
+    if (roomName === bookingSelection.roomName) {
       console.log('end time', bookingSelection.endTime?.format('HH:mm'));
       if (time.isAfter(bookingSelection.startTime)) {
         setBookingSelection({
@@ -123,6 +146,22 @@ const DragAndAddBooking = ({
         setBookingSelection({ ...bookingSelection, startTime: time });
       }
     }
+    // End booking if selecting through different rooms
+    else {
+      setSelectingBooking(false);
+      setBookingSelection({
+        ...bookingSelection,
+        roomName: null,
+      });
+      // setTimeout(() => {
+      //   setSelectingBooking(false);
+      //   setBookingSelection({
+      //     ...bookingSelection,
+      //     roomName: null,
+      //   });
+      // }, 100);
+      return;
+    }
   };
 
   // End the booking selection
@@ -132,14 +171,17 @@ const DragAndAddBooking = ({
     if (
       !(
         bookingSelection.endTime &&
+        bookingSelection.startTime &&
         !isWeekend &&
-        isAcademicHour(bookingSelection.endTime)
+        isAcademicHour(bookingSelection.endTime) &&
+        isAcademicHour(bookingSelection.startTime)
       ) &&
       regularUser
     ) {
       setBookingSelection({
         ...bookingSelection,
-        endTime: endTimeDay.add(1, 'hour'),
+        startTime: startTimeDay,
+        endTime: endTimeDay,
       });
     }
     if (

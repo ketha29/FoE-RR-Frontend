@@ -34,7 +34,12 @@ const BookingForm = () => {
   } = useContext(GlobalContext);
 
   const closeBookingForm = () => {
-    setBookingSelection({ roomName: null, startTime: null, endTime: null });
+    setBookingSelection({
+      roomName: null,
+      startTime: null,
+      endTime: null,
+      details: null,
+    });
     setShowBookingForm(false);
   };
 
@@ -71,17 +76,18 @@ const BookingForm = () => {
     setUserSuggestions(userSuggestions);
   };
 
-  // const formatTime = (time: string) => {
-  //   if (!time) return null; // Handle null or empty string
-  //   return `${time}:00`; // Append seconds
-  // };
+  // Add the seconds to the time as the time is stored in hh:mm:ss format
+  const formatTime = (time: string) => {
+    if (!time) return null;
+    return `${time}:00`;
+  };
 
   const onSubmit = async (data: FieldValues) => {
     try {
       const formattedBooking = {
         ...data,
-        // startTime: formatTime(data.startTime),
-        // endTime: formatTime(data.endTime),
+        startTime: formatTime(data.startTime),
+        endTime: formatTime(data.endTime),
         recurrence: admin || superAdmin ? data.recurrence : 'none',
         recurrencePeriod: admin || superAdmin ? data.recurrencePeriod : 0,
       };
@@ -95,7 +101,12 @@ const BookingForm = () => {
       );
       setErrorMessage(null);
       console.log('Booking added successfully: ', response.data);
-      setBookingSelection({ roomName: null, startTime: null, endTime: null });
+      setBookingSelection({
+        roomName: null,
+        startTime: null,
+        endTime: null,
+        details: null,
+      });
       setShowBookingForm(false);
       setFetch(true);
     } catch (error) {
@@ -194,6 +205,9 @@ const BookingForm = () => {
                 type="string"
                 className="w-full border-2 border-gray-100 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter the purpose or subject of booking"
+                defaultValue={
+                  bookingSelection.details ? bookingSelection.details : ''
+                }
               />
               {errors.details?.type === 'required' && (
                 <p className="text-red-600">
@@ -217,7 +231,7 @@ const BookingForm = () => {
                   className="w-full border-2 border-gray-100 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400"
                   defaultValue={
                     bookingSelection.startTime
-                      ? bookingSelection.startTime.format('HH:mm:ss')
+                      ? bookingSelection.startTime.format('HH:mm')
                       : ''
                   }
                 />
@@ -238,7 +252,7 @@ const BookingForm = () => {
                   className="w-full border-2 border-gray-100 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400"
                   defaultValue={
                     bookingSelection.endTime
-                      ? bookingSelection.endTime?.format('HH:mm:ss')
+                      ? bookingSelection.endTime?.format('HH:mm')
                       : ''
                   }
                 />

@@ -5,14 +5,13 @@ import { Menu, MenuButton, MenuItems } from '@headlessui/react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
-import { isAuthenticated, isRegularUser } from '../../../services/AuthService';
+import { isAuthenticated } from '../../../services/AuthService';
 import { MenuItem } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import AddBookingButton from '../AddBookingButton';
 
 const CalendarHeader = () => {
   const authenticated = isAuthenticated();
-  const regularUser = isRegularUser();
   const location = useLocation();
   const {
     dayIndex,
@@ -26,7 +25,6 @@ const CalendarHeader = () => {
   } = useContext(GlobalContext);
   // Throttle state is to prevent rapid clicks
   const [isThrottled, setIsThrottled] = useState(false);
-  const todayIndex = dayjs().date();
   const [animationDirection, setAnimationDirection] = useState<
     'next' | 'prev' | null
   >(null);
@@ -109,12 +107,8 @@ const CalendarHeader = () => {
 
           <div className="relative flex items-center rounded-lg bg-white shadow-lg md:items-stretch">
             <button
-              className={`right-arrow text-blue-600 hover:bg-blue-50 ${
-                regularUser &&
-                (dayIndex <= todayIndex ? 'opacity-50 cursor-not-allowed' : '')
-              }`}
-              onClick={handlePrevDay}
-              disabled={dayIndex <= todayIndex && regularUser}>
+              className="right-arrow text-blue-600 hover:bg-blue-50"
+              onClick={handlePrevDay}>
               <ChevronLeftIcon />
             </button>
             <button

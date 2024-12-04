@@ -2,7 +2,6 @@ import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { deleteBooking } from '../../services/BookingService';
-import { isAuthenticated } from '../../services/AuthService';
 import { useNavigate } from 'react-router-dom';
 import BookingXtaDetails from './BookingXtaDetails';
 import React from 'react';
@@ -18,11 +17,11 @@ interface RenderBookingsProps {
 
 const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
   const navigator = useNavigate();
-  const authenticated = isAuthenticated();
   const [showXtraBookingDetails, setShowXtraBookingDetails] = useState(false);
   const [moveBlock, setMoveBlock] = useState(false);
   const bookingDetailsRef = useRef<HTMLDivElement>(null);
-  const { setFetch } = useContext(GlobalContext);
+  const { setFetch, setShowBookingForm, setBookingSelection } =
+    useContext(GlobalContext);
 
   // Close the extra details block if clicked outside
   useEffect(() => {
@@ -57,7 +56,14 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
   };
   // Render update booking form when clicking the edit button
   const handleClickEdit = (booking: Booking) => {
-    navigator('/booking/update-booking', { state: { booking } });
+    setBookingSelection({
+      roomName: booking.room.roomName,
+      startTime: dayjs(`${booking.startDate} ${booking.startTime}`),
+      endTime: dayjs(`${booking.startDate} ${booking.endTime}`),
+      details: booking.details,
+    });
+    setShowBookingForm(true);
+    // navigator('/booking/update-booking', { state: { booking } });
   };
 
   // Get a speciic color for the booking strip
@@ -98,7 +104,7 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
           'minute'
         );
         const spanMinutes = bookingEnd.diff(bookingStart, 'minute');
-        const leftPercentage =
+        const topPercentage =
           (startOffsetMinutes / 60 - bookingStart.hour()) * 100;
         const heightPercentage = (spanMinutes / 60) * 102;
 
@@ -117,16 +123,14 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
         };
 
         return (
-          startOffsetMinutes >= 0 &&
-          authenticated && (
+          startOffsetMinutes >= 0 && (
             // Display booking according to the start time and time duration
             <React.Fragment key={booking.bookingId}>
               <div
                 onClick={() => handleClick()}
                 className="absolute group z-10 bg-white shadow-lg shadow-gray-300 rounded-md h-full flex justify-start items-center"
                 style={{
-                  top: 0,
-                  left: `${leftPercentage}%`,
+                  top: `${topPercentage}%`,
                   height: `${heightPercentage}%`,
                   width: '85%',
                 }}>

@@ -21,10 +21,12 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
     roomName: string | null;
     startTime: dayjs.Dayjs | null;
     endTime: dayjs.Dayjs | null;
+    details: string | null;
   }>({
     roomName: null,
     startTime: null,
     endTime: null,
+    details: null,
   });
   const [isCellSelected, setIsCellSelected] = useState(false);
   const [fetch, setFetch] = useState(false);

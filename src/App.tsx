@@ -6,7 +6,6 @@ import CalendarHeader from './components/booking/calendar/CalendarHeader';
 import DayView from './components/booking/calendar/DayView';
 import Month from './components/booking/calendar/MonthView';
 import WeekView from './components/booking/calendar/WeekView';
-import UpdateBooking from './components/booking/UpdateBooking';
 import LoginIn from './components/LogIn';
 import ListRoom from './components/room/ListRoom';
 import GlobalContext from './context/GlobalContext';
@@ -39,9 +38,6 @@ function App() {
         <NavBar />
         <Routes>
           <Route path="/auth/login" element={<LoginIn />}></Route>
-          <Route
-            path="/booking/update-booking"
-            element={<UpdateBooking />}></Route>
           <Route
             path="/booking/day"
             element={
