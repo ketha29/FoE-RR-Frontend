@@ -14,7 +14,7 @@ interface BookingXtaDetailsProps {
   booking: any;
   closeBookingDetails: () => void;
   editBookingDetails: () => void;
-  deleteBookingDetails: () => void;
+  deleteBookingDetails: (isDeleteOne: boolean) => void;
 }
 
 const BookingXtaDetails = ({
@@ -28,6 +28,7 @@ const BookingXtaDetails = ({
   const superAdmin = isSuperAdmin();
   const bookingStart = dayjs(`${booking.date} ${booking.startTime}`);
   const bookingEnd = dayjs(`${booking.date} ${booking.endTime}`);
+  const reccurrenceTypeBooking = (booking.recurrence === 'none')? false:true;
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     // Prevent the click event from reaching the parent component
@@ -42,10 +43,16 @@ const BookingXtaDetails = ({
   const cancelDelete = () => {
     setShowDeleteConformation(false);
   };
-  // Proceed with deletion
-  const proceedDelete = () => {
+  // Proceed with deletion 
+  const proceedDeleteAll = () => {
     setShowDeleteConformation(false);
-    deleteBookingDetails();
+    deleteBookingDetails(false);
+  };
+
+  // Proceed with deletion of one booking in recurrence
+  const proceedDeleteOne = () => {
+    setShowDeleteConformation(false);
+    deleteBookingDetails(true);
   };
   // Edit and delete booking access
   const accessible =
@@ -112,8 +119,10 @@ const BookingXtaDetails = ({
           {showDeleteConformation && (
             <DeleteConformation
               deleteItem={`Booking`}
-              onConfirm={proceedDelete}
+              onDeleteAll={proceedDeleteAll}
+              onDeleteOne={proceedDeleteOne}
               onCancel={cancelDelete}
+              isBookingReccurrenceType = {reccurrenceTypeBooking}
             />
           )}
         </div>

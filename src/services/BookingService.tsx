@@ -11,8 +11,8 @@ const ADD_BOOKING = (roomName: string, userId: number) =>
   `${BASE_URL}/add-booking/${roomName}/${userId}`;
 const UPDATE_BOOKING = (bookingId: number, userId: number) =>
   `${BASE_URL}/update-booking/${bookingId}/${userId}`;
-const DELETE_BOOKING = (bookingId: number, userId: number) =>
-  `${BASE_URL}/delete-booking/${bookingId}/${userId}`;
+const DELETE_BOOKING = (bookingId: number, userId: number, isDeleteOne: boolean) =>
+  `${BASE_URL}/delete-booking/${bookingId}/${userId}/${isDeleteOne}`;
 const CHECK_ROOM_AVAILABILITY = (date: string, roomName: string) =>
   `${BASE_URL}/is-room-available/${date}/${roomName}`;
 
@@ -49,8 +49,8 @@ export const updateBooking = (
   });
 };
 
-export const deleteBooking = (bookingId: number, userId: number) => {
-  return axios.delete(DELETE_BOOKING(bookingId, userId));
+export const deleteBooking = (bookingId: number, userId: number, isDeleteOne: boolean) => {
+  return axios.delete(DELETE_BOOKING(bookingId, userId, isDeleteOne));
 };
 
 export const isRoomAvailable = async (date: string, roomName: string) => {

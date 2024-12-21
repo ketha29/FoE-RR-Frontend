@@ -1,12 +1,20 @@
+import { Tooltip } from "@mui/material";
+
 interface DeleteConfirmationProps {
   deleteItem: string;
-  onConfirm: () => void;
+  onDeleteOne: () => void;
   onCancel: () => void;
+  
+  // Use to handle deletion of reccurrence booking
+  isBookingReccurrenceType?: boolean;
+  onDeleteAll?: () => void;
 }
 
 const DeleteConformation = ({
   deleteItem,
-  onConfirm,
+  isBookingReccurrenceType,
+  onDeleteAll,
+  onDeleteOne,
   onCancel,
 }: DeleteConfirmationProps) => {
   return (
@@ -26,16 +34,26 @@ const DeleteConformation = ({
 
         {/* Delete and cancel buttons */}
         <div className="flex justify-end px-6 pb-6 space-x-4">
-          <button
+          <Tooltip title="Cancel"><button
             onClick={onCancel}
             className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors duration-200">
             Cancel
           </button>
+          </Tooltip>
+          
+          {isBookingReccurrenceType && (<Tooltip title="Delete all recurring bookings"><button
+            onClick={onDeleteAll}
+            className="px-4 py-2 rounded-md bg-gray-300 text-gray-700 hover:bg-gray-400 transition-colors duration-200">
+            Delete All
+          </button></Tooltip>)}
+          <Tooltip title="Delete current Booking">
+
           <button
-            onClick={onConfirm}
+            onClick={onDeleteOne}
             className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 transition-colors duration-200">
             Delete
           </button>
+          </Tooltip>
         </div>
       </div>
     </div>

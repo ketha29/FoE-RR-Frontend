@@ -109,11 +109,11 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
         const heightPercentage = (spanMinutes / 60) * 102;
 
         // Delete selected booking and re-render bookings
-        const handleDelete = async () => {
+        const handleDelete = async (isDeleteOne: boolean) => {
           try {
             const userIdString = localStorage.getItem('userId');
             const userId = userIdString ? parseInt(userIdString) : -1;
-            await deleteBooking(booking.bookingId,userId);
+            await deleteBooking(booking.bookingId,userId,isDeleteOne);
             setFetch(true);
             handleCloseDetails();
             console.log('deleted');

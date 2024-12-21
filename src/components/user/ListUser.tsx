@@ -208,7 +208,7 @@ const ListUser = () => {
           deleteItem={`User ${
             selectedUser?.firstName
           } ${selectedUser?.lastName.charAt(0)} (${selectedUser?.userName})`}
-          onConfirm={proceedDelete}
+          onDeleteOne={proceedDelete}
           onCancel={cancelDelete}
         />
       )}

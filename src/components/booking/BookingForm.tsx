@@ -271,6 +271,7 @@ const BookingForm = () => {
                 {...register('date', { required: true })}
                 id="date"
                 type="date"
+                min={new Date().toISOString().split('T')[0]} // Disable past dates
                 className="w-full border-2 border-gray-100 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400"
                 placeholder="Select the room to make booking"
                 defaultValue={booking.date}

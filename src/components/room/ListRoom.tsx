@@ -208,7 +208,7 @@ const ListRoom = () => {
       {showDeleteConformation && (
         <DeleteConformation
           deleteItem={`Room ${selectedRoom?.roomName}`}
-          onConfirm={proceedDelete}
+          onDeleteOne={proceedDelete}
           onCancel={cancelDelete}
         />
       )}
