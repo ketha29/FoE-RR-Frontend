@@ -118,7 +118,7 @@ const NavBar = () => {
                 {!authenticated && (
                   <MenuItem>
                     <a
-                      href="/auth/login"
+                      href = "http://localhost:8082/oauth2/authorization/google"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
                       login
                     </a>

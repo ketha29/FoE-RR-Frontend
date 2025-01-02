@@ -1,6 +1,5 @@
 import { FieldValues, useForm } from 'react-hook-form';
 import logo from '../assets/logo.png';
-import { signin } from '../services/AuthService';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { HiUser, HiLockClosed } from 'react-icons/hi';

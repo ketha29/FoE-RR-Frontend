@@ -1,31 +1,27 @@
 import axios from "axios";
 
 const SIGNIN_URL = "http://localhost:8082/auth/login";
+const LOGOUT_URL = "http://localhost:8082/logout";
 
-interface LoginDetails {
-    userName: string;
-    password: string;
-}
 
-export async function signin(loginDetails :LoginDetails) {
-    const response = await axios.post(SIGNIN_URL, loginDetails, {
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
+export const login = async () => {
+    const response = await axios.get(SIGNIN_URL, { withCredentials: true })
     localStorage.setItem("userType", response.data.userType);
     localStorage.setItem("token", response.data.token);
-    localStorage.setItem("userId", response.data.userId);    
-    return response.data;
+}
+
+export const isLoggedIn = () => {
+    const loggedUser = !!localStorage.getItem('token') ? true : login();
+    return !!loggedUser;
 }
 
 export const isAuthenticated = () => {
-    const token = localStorage.getItem('token');
+    const token = isLoggedIn() ? localStorage.getItem('token') : null;
     return !!token;
 }
 
 export const getToken = () => {
-    const token = isAuthenticated()?localStorage.getItem('token'):null;
+    const token = isAuthenticated() ? localStorage.getItem('token') : null;
     return token;
 }
 
@@ -45,6 +41,12 @@ export const isRegularUser = () => {
 }
 
 export const logout = () => {
+    axios.get(LOGOUT_URL, {
+        withCredentials: true,
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
     localStorage.removeItem('token');
     localStorage.removeItem('userType');
 }

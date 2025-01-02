@@ -91,12 +91,9 @@ const BookingForm = () => {
         recurrence: admin || superAdmin ? data.recurrence : 'none',
         recurrencePeriod: admin || superAdmin ? data.recurrencePeriod : 0,
       };
-      const userIdString = localStorage.getItem('userId');
-      const userId = userIdString ? parseInt(userIdString) : -1;
       console.log(formattedBooking);
       const response = await addBooking(
         data.roomName,
-        userId,
         formattedBooking
       );
       setErrorMessage(null);
