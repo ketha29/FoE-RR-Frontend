@@ -1,12 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import './App.css';
 import getMonth, { getDay, getWeek } from './util';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import CalendarHeader from './components/booking/calendar/CalendarHeader';
 import DayView from './components/booking/calendar/DayView';
 import Month from './components/booking/calendar/MonthView';
 import WeekView from './components/booking/calendar/WeekView';
-import LoginIn from './components/LogIn';
+import LoginUser from './services/AuthService';
 import ListRoom from './components/room/ListRoom';
 import GlobalContext from './context/GlobalContext';
 import NavBar from './components/NavBar';
@@ -37,7 +37,7 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Routes>
-          <Route path="/auth/login" element={<LoginIn />}></Route>
+          <Route path="/auth/login" element={<LoginUser/>}></Route>
           <Route
             path="/booking/day"
             element={

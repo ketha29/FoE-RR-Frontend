@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
-import {Controller, FieldValues, useForm } from 'react-hook-form';
+import { Controller, FieldValues, useForm } from 'react-hook-form';
 import GlobalContext from '../../context/GlobalContext';
 import CloseIcon from '@mui/icons-material/Close';
 import { addBooking } from '../../services/BookingService';
 import { AxiosError } from 'axios';
 import { isAdmin, isSuperAdmin } from '../../services/AuthService';
 import { getAllRooms } from '../../services/RoomService';
-import { Room, User} from '../Interfaces';
+import { Room, User } from '../Interfaces';
 import { Autocomplete, TextField } from '@mui/material';
 import { getUserByName } from '../../services/UserService';
 
@@ -44,7 +44,7 @@ const BookingForm = () => {
   };
 
   const [booking, setBooking] = useState({
-    bookedForUser:null,
+    bookedForUser: null,
     roomName: '',
     details: '',
     startTime: '',
@@ -69,7 +69,7 @@ const BookingForm = () => {
     fetchRooms();
   }, []);
 
-  const fetchUserSuggestions = async (name:string) => {
+  const fetchUserSuggestions = async (name: string) => {
     const response = await getUserByName(name);
     console.log(response.data.userList)
     const userSuggestions: User[] = response.data.userList
@@ -117,8 +117,8 @@ const BookingForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="fixed inset-0 mt-12 flex justify-center items-center bg-gray-900 bg-opacity-70 backdrop-blur-sm z-40">
-        <div className="sm:w-1/2 w-full max-w-2xl p-7 shadow-xl rounded-lg bg-white transition-transform transform hover:scale-105 duration-300">
+      <div className="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-70 backdrop-blur-sm z-40">
+        <div className="sm:w-1/2 w-full max-w-2xl overflow-y-auto p-7 shadow-xl rounded-lg bg-white transition-transform transform hover:scale-105 duration-300">
           {/* Header section of the booking form */}
           <header className="flex justify-between items-center border-b pb-3">
             <h1 className="text-xl font-semibold text-gray-800">Add Booking</h1>
@@ -131,65 +131,68 @@ const BookingForm = () => {
           </header>
 
           <div className="mt-5">
-            {/* Room name dropdown */}
-            <div className="mt-4">
-              <label htmlFor="roomName" className="text-lg font-medium">
-                Room
-              </label>
-              <div className="relative">
-                <select
-                  {...register('roomName', { required: true })}
-                  id="roomName"
-                  defaultValue={bookingSelection.roomName || ''}
-                  className="w-full border-2 border-gray-100 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400">
-                  <option>
-                    {bookingSelection.roomName
-                      ? bookingSelection.roomName
-                      : 'Select a room'}
-                  </option>
-                  {roomNames.map((roomName) => (
-                    <option key={roomName} value={roomName}>
-                      {roomName}
+            <div className='mt-4 flex gap-x-4'>
+              {/* Room name dropdown */}
+              <div className="flex-1">
+                <label htmlFor="roomName" className="text-lg font-medium">
+                  Room
+                </label>
+                <div className="relative">
+                  <select
+                    {...register('roomName', { required: true })}
+                    id="roomName"
+                    defaultValue={bookingSelection.roomName || ''}
+                    className="w-full border-2 border-gray-100 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400">
+                    <option>
+                      {bookingSelection.roomName
+                        ? bookingSelection.roomName
+                        : 'Select a room'}
                     </option>
-                  ))}
-                </select>
+                    {roomNames.map((roomName) => (
+                      <option key={roomName} value={roomName}>
+                        {roomName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {errors.roomName?.type === 'required' && (
+                  <p className="text-red-600">Room field is required</p>
+                )}
               </div>
-              {errors.roomName?.type === 'required' && (
-                <p className="text-red-600">Room field is required</p>
-              )}
-            </div>
             
-            {(admin||superAdmin) &&(
-            <div className="mt-4">
-              {/* Book for User */}
-              <label htmlFor= 'bookedForUser' className="text-lg font-medium">
-                Book for User
-              </label>
-              <Controller
-              name='bookedForUser'
-              control={control}
-              rules={{required: false}}
-              render={({field:{onBlur,onChange,value,ref}})=>(<Autocomplete
-              size='small'
-              options={userSuggestions}
-              getOptionLabel={(userSuggestion)=>(`${userSuggestion.firstName} ${userSuggestion.lastName}`)}
-              onBlur={onBlur}
-              value={userSuggestions.find((user)=>{
-                return user.userId == value;
-              })}
-              onChange={(e:any,newValue)=>{
-                onChange(newValue?newValue:null)
-              }}
-              onInputChange={(e:any,newInputValue)=>{
-                newInputValue?fetchUserSuggestions(newInputValue):null;
-              }}
-              isOptionEqualToValue={(userSuggestion,value)=>userSuggestion.userId == value?.userId}
-              renderInput={(params)=>(<TextField{...params}
-                inputRef={ref}
-                id='bookedForUser'
-                className="w-full border-2 border-gray-100 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400"/>)}/>)}
-              />
-            </div>)}
+              {(admin || superAdmin) && (
+              <div className="flex-1">
+                    {/* Book for User */}
+                    <label htmlFor='bookedForUser' className="text-lg font-medium">
+                      Book for User
+                    </label>
+                    <div className='relative mt-1'>
+                    <Controller
+                      name='bookedForUser'
+                      control={control}
+                      rules={{ required: false }}
+                      render={({ field: { onBlur, onChange, value, ref } }) => (<Autocomplete
+                        size='small'
+                        options={userSuggestions}
+                        getOptionLabel={(userSuggestion) => (`${userSuggestion.firstName} ${userSuggestion.lastName}`)}
+                        onBlur={onBlur}
+                        value={userSuggestions.find((user) => {
+                          return user.userId == value;
+                        })}
+                        onChange={(e: any, newValue) => {
+                          onChange(newValue ? newValue : null)
+                        }}
+                        onInputChange={(e: any, newInputValue) => {
+                          newInputValue ? fetchUserSuggestions(newInputValue) : null;
+                        }}
+                        isOptionEqualToValue={(userSuggestion, value) => userSuggestion.userId == value?.userId}
+                        renderInput={(params) => (<TextField{...params}
+                          inputRef={ref}
+                          id='bookedForUser'
+                          className="w-full border-2 border-gray-100 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400" />)} />)}
+                    /></div>
+              </div>)}
+            </div>
             
             {/* Booking Purpose */}
             <div className="mt-4">

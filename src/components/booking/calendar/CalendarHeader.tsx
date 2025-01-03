@@ -107,7 +107,7 @@ const CalendarHeader = () => {
 
           <div className="relative flex items-center rounded-lg bg-white shadow-lg md:items-stretch">
             <button
-              className="right-arrow text-blue-600 hover:bg-blue-50"
+              className="right-arrow text-blue-600 hover:bg-blue-50 p-3 border-r border-gray-300"
               onClick={handlePrevDay}>
               <ChevronLeftIcon />
             </button>
@@ -117,7 +117,7 @@ const CalendarHeader = () => {
               Today
             </button>
             <button
-              className="left-arrow text-blue-600 hover:bg-blue-50"
+              className="left-arrow text-blue-600 hover:bg-blue-50 p-3 border-l border-gray-300"
               onClick={handleNextDay}>
               <ChevronRightIcon />
             </button>
