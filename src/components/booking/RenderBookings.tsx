@@ -111,9 +111,7 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
         // Delete selected booking and re-render bookings
         const handleDelete = async (isDeleteOne: boolean) => {
           try {
-            const userIdString = localStorage.getItem('userId');
-            const userId = userIdString ? parseInt(userIdString) : -1;
-            await deleteBooking(booking.bookingId,userId,isDeleteOne);
+            await deleteBooking(booking.bookingId,isDeleteOne);
             setFetch(true);
             handleCloseDetails();
             console.log('deleted');

@@ -48,7 +48,7 @@ const AddUserForm = ({ onUserAddition }: AddUserFormProps) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {/* Background Blur and Centering */}
-      <div className="fixed inset-0 mt-12 flex items-center justify-center bg-gray-900 bg-opacity-70 backdrop-blur-sm z-40">
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-70 backdrop-blur-sm z-40">
         <div className="sm:w-1/2 w-full max-w-2xl p-7 shadow-2xl rounded-lg bg-white transition-transform transform hover:scale-105 duration-300">
           {/* Header Section */}
           <header className="flex justify-between items-center border-b pb-3">

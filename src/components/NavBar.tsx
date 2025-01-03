@@ -10,7 +10,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { NavLink, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import user from '../assets/user.jpg';
-import { isAuthenticated, logout } from '../services/AuthService';
+import {logout, startOAuth2Flow, isAuthenticated } from '../services/AuthService';
 import { useContext } from 'react';
 import GlobalContext from '../context/GlobalContext';
 
@@ -25,11 +25,15 @@ const NavBar = () => {
   const authenticated = isAuthenticated();
   const navigate = useNavigate();
   const { view } = useContext(GlobalContext);
-
+  
   const handleLogout = () => {
     logout();
     navigate('/booking/month');
   };
+
+  const handleLogin = () => {
+    startOAuth2Flow();
+  }
 
   return (
     <Disclosure
@@ -117,9 +121,8 @@ const NavBar = () => {
                 className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in">
                 {!authenticated && (
                   <MenuItem>
-                    <a
-                      href="/auth/login"
-                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                    <a className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                    onClick={handleLogin}>
                       login
                     </a>
                   </MenuItem>
