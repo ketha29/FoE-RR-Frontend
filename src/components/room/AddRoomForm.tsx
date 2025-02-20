@@ -113,6 +113,23 @@ const AddRoomForm = ({ onRoomAddition }: AddRoomFromProps) => {
             />
           </div>
 
+          {/* Only admin booking checkbox */}
+          <div className='mt-5 flex gap-x-4'>
+            <div>
+              <label htmlFor="onlyAdminCheckBox" className="block text-lg font-medium">
+                Only admin is allowed to book
+              </label>
+            </div>
+            <div className='flex-1'>
+              <input
+                className="gap-x-5"
+                id="onlyAdminCheckBox"
+                type="checkbox"
+                {...register("isOnlyAdminBooking")}
+              />
+            </div>
+          </div>
+
           {/* Display error message if exists */}
           {errorMessage && (
             <div className="mt-4 p-2 bg-red-100 text-red-700 border border-red-300 rounded-md">
