@@ -6,6 +6,7 @@ const BASE_URL = 'http://localhost:8082/room';
 
 // Endpoints
 const GET_ROOMS = `${BASE_URL}/all`;
+const ADMIN_ONLY_ROOMS = `${BASE_URL}/only-admin-booking`;
 const ADD_ROOM = `${BASE_URL}/add-room`;
 const UPDATE_ROOM = (roomId: number) => `${BASE_URL}/update-room/${roomId}`;
 const DELETE_ROOM = (roomId: number) => `${BASE_URL}/delete-room/${roomId}`;
@@ -13,6 +14,8 @@ const AVAILABLE_ROOMS = (date: string) =>
   `${BASE_URL}/available-rooms-by-date/${date}`;
 
 export const getAllRooms = () => axios.get(GET_ROOMS);
+
+export const getAdminOnlyBookingRooms = () => axios.get(ADMIN_ONLY_ROOMS);
 
 export const addRoom = (room: any) => {
   return axios.post(ADD_ROOM, qs.stringify(room), {
