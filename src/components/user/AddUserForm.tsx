@@ -118,43 +118,6 @@ const AddUserForm = ({ onUserAddition }: AddUserFormProps) => {
             </div>
           )}
 
-          <div className="flex space-x-4 mt-5">
-            {/* Username Field */}
-            <div className="w-1/2">
-              <label htmlFor="userName" className="block text-lg font-medium">
-                Username
-              </label>
-              <input
-                {...register('userName', { required: true })}
-                id="userName"
-                type="text"
-                className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter user name"
-                onFocus={() => setErrorMessage(null)}
-              />
-              {errors.userName?.type === 'required' && (
-                <p className="text-red-600 mt-1">Username is required</p>
-              )}
-            </div>
-
-            {/* Password Field */}
-            <div className="w-1/2">
-              <label htmlFor="password" className="block text-lg font-medium">
-                Password
-              </label>
-              <input
-                {...register('password', { required: true })}
-                id="password"
-                type="text"
-                className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter password"
-              />
-              {errors.password?.type === 'required' && (
-                <p className="text-red-600 mt-1">Password is required</p>
-              )}
-            </div>
-          </div>
-
           {/* Email Field */}
           <div className="mt-5">
             <label htmlFor="email" className="block text-lg font-medium">
@@ -165,9 +128,9 @@ const AddUserForm = ({ onUserAddition }: AddUserFormProps) => {
                 // Message for the required field
                 required: 'Email is required',
                 pattern: {
-                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                  value: /^[a-zA-Z0-9._%+-]+@eng\.pdn\.ac\.lk$/,
                   // Message for valid email pattern
-                  message: 'Please enter a valid email address',
+                  message: 'Please enter a valid @eng.pdn.ac.lk email address',
                 },
               })}
               id="email"

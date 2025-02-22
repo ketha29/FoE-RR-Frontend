@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { deleteRoom, getAllRooms } from '../../services/RoomService';
+import { deleteRoom, getAllRooms, getAdminOnlyBookingRooms } from '../../services/RoomService';
 import { AxiosError } from 'axios';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
@@ -15,6 +15,7 @@ const ListRoom = () => {
   const admin = isAdmin();
   const superAdmin = isSuperAdmin();
   const [roomList, setRoomList] = useState<Room[]>([]);
+  const [adminOnlyRoomList, setAdminOnlyRoomList] = useState<Room[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [showDeleteConformation, setShowDeleteConformation] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
@@ -39,6 +40,20 @@ const ListRoom = () => {
   // Render room details once when the page is loaded
   useEffect(() => {
     fetchRooms();
+  }, []);
+
+  // Get all the admin booking room details from backend
+  const fetchAdminOnlyBookingRooms = async () => {
+    try {
+      const response = await getAdminOnlyBookingRooms();
+      setAdminOnlyRoomList(response.data.roomList);
+    } catch (error) {
+      setErrorMessage((error as AxiosError).message);
+    }
+  };
+  // Render room details once when the page is loaded
+  useEffect(() => {
+    fetchAdminOnlyBookingRooms();
   }, []);
 
   // Delete the selected room details

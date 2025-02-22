@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { useContext, useEffect, useState } from 'react';
 import GlobalContext from '../../../context/GlobalContext';
-import { availableRooms } from '../../../services/RoomService';
+import { availableRooms, getAdminOnlyBookingRooms } from '../../../services/RoomService';
 import { Room } from '../../Interfaces';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,6 +13,7 @@ interface DayProps {
 const Day = ({ day, rowIdx }: DayProps) => {
   const navigator = useNavigate();
   const [availableRoomNames, setAvailableRoomNames] = useState<string[]>([]);
+  const [adminOnlyRoomList, setAdminOnlyRoomList] = useState<Room[]>([]);
   const { setDayIndex } = useContext(GlobalContext);
 
   useEffect(() => {
@@ -38,6 +39,20 @@ const Day = ({ day, rowIdx }: DayProps) => {
       ? 'bg-blue-600 text-white rounded-full w-7'
       : '';
   };
+
+   // Get all the admin booking room details from backend
+   useEffect(() => {
+    async function fetchAdminOnlyRoom() {
+      const response = await getAdminOnlyBookingRooms();
+      const roomNames = response.data.roomList.map(
+        (room: Room) => room.roomName
+      );
+      setAdminOnlyRoomList(roomNames);
+    }
+    fetchAdminOnlyRoom();
+  }, []);
+
+  console.log(adminOnlyRoomList)
 
   // List of all room names to display
   const importantRooms = ['EoE', 'SR1', 'SR2', 'SR3'];
