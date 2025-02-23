@@ -75,7 +75,7 @@ const DragAndAddBooking = ({
       );
       return (
         booking.room.roomName === roomName &&
-        time.isBetween(bookingStart, bookingEnd, null, '[)')
+        time.isBetween(bookingStart, bookingEnd, null, '[]')
       );
     });
   };
