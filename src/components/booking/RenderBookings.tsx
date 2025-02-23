@@ -69,26 +69,26 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
   // Get a speciic color for the booking strip
   const getColor = (booking: Booking) => {
     if (booking.user.userType === 'regularUser') {
-      return 'bg-yellow-500';
+      return 'bg-yellow-300';
     }
     if (booking.user.userType === 'admin') {
       switch (booking.recurrence) {
         case 'none':
-          return 'bg-purple-500';
+          return 'bg-amber-400';
         case 'daily':
-          return 'bg-violet-500';
+          return 'bg-blue-400';
         case 'weekly':
-          return 'bg-blue-500';
+          return 'bg-red-400';
       }
     }
     if (booking.user.userType === 'superAdmin') {
       switch (booking.recurrence) {
         case 'none':
-          return 'bg-purple-500';
+          return 'bg-orange-400';
         case 'daily':
-          return 'bg-violet-500';
+          return 'bg-blue-600';
         case 'weekly':
-          return 'bg-blue-500';
+          return 'bg-red-600';
       }
     }
   };
@@ -111,7 +111,7 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
         // Delete selected booking and re-render bookings
         const handleDelete = async (isDeleteOne: boolean) => {
           try {
-            await deleteBooking(booking.bookingId,isDeleteOne);
+            await deleteBooking(booking.bookingId, isDeleteOne);
             setFetch(true);
             handleCloseDetails();
             console.log('deleted');
