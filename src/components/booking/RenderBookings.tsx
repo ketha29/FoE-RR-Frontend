@@ -13,15 +13,25 @@ dayjs.extend(isBetween);
 interface RenderBookingsProps {
   date: string;
   bookings: Booking[];
+  selectedDelete: number;
 }
 
-const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
+const RenderBookings = ({
+  date,
+  bookings,
+  selectedDelete,
+}: RenderBookingsProps) => {
   const navigator = useNavigate();
   const [showXtraBookingDetails, setShowXtraBookingDetails] = useState(false);
   const [moveBlock, setMoveBlock] = useState(false);
   const bookingDetailsRef = useRef<HTMLDivElement>(null);
-  const { setFetch, setShowBookingForm, setBookingSelection } =
-    useContext(GlobalContext);
+  const {
+    setFetch,
+    setShowBookingForm,
+    setBookingSelection,
+    setSelectedDeleteBooking,
+    showDeleteConformation,
+  } = useContext(GlobalContext);
 
   // Close the extra details block if clicked outside
   useEffect(() => {
@@ -64,6 +74,13 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
     });
     setShowBookingForm(true);
     // navigator('/booking/update-booking', { state: { booking } });
+  };
+
+  const handleDelete = (booking: Booking) => {
+    setSelectedDeleteBooking({
+      bookingId: booking.bookingId,
+      isRecurrence: booking.recurrence === 'none' ? false : true,
+    });
   };
 
   // Get a speciic color for the booking strip
@@ -109,16 +126,16 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
         const heightPercentage = (spanMinutes / 60) * 102;
 
         // Delete selected booking and re-render bookings
-        const handleDelete = async (isDeleteOne: boolean) => {
-          try {
-            await deleteBooking(booking.bookingId, isDeleteOne);
-            setFetch(true);
-            handleCloseDetails();
-            console.log('deleted');
-          } catch (error) {
-            console.error('Error deleting booking:', error);
-          }
-        };
+        // const handleDelete = async (isDeleteOne: boolean) => {
+        //   try {
+        //     await deleteBooking(booking.bookingId, isDeleteOne);
+        //     setFetch(true);
+        //     handleCloseDetails();
+        //     console.log('deleted');
+        //   } catch (error) {
+        //     console.error('Error deleting booking:', error);
+        //   }
+        // };
 
         return (
           startOffsetMinutes >= 0 && (
@@ -164,7 +181,7 @@ const RenderBookings = ({ date, bookings }: RenderBookingsProps) => {
                   <BookingXtaDetails
                     closeBookingDetails={handleCloseDetails}
                     editBookingDetails={() => handleClickEdit(booking)}
-                    deleteBookingDetails={handleDelete}
+                    deleteBookingDetails={() => handleDelete(booking)}
                     booking={booking}
                   />
                 )}

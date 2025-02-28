@@ -15,11 +15,13 @@ import { Booking, Room } from '../Interfaces';
 interface DragAndAddBookingpRrops {
   bookings: Booking[];
   currentDay: dayjs.Dayjs;
+  selectedDelete: number;
 }
 
 const DragAndAddBooking = ({
   bookings,
   currentDay,
+  selectedDelete,
 }: DragAndAddBookingpRrops) => {
   const authenticated = isAuthenticated();
   const regularUser = isRegularUser();
@@ -273,6 +275,7 @@ const DragAndAddBooking = ({
               onMouseMove={() => handleMouseMove(roomName, time)}>
               <RenderBookings
                 date={currentDateObj.format('YYYY-MM-DD')}
+                selectedDelete={selectedDelete}
                 bookings={bookings.filter((booking) => {
                   const bookingStart = dayjs(
                     `${booking.date} ${booking.startTime}`

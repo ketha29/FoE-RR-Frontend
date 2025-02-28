@@ -2,26 +2,68 @@ import dayjs from 'dayjs';
 import { useContext, useEffect, useState } from 'react';
 import { getAllRooms } from '../../../services/RoomService';
 import GlobalContext from '../../../context/GlobalContext';
-import { getDayBookings } from '../../../services/BookingService';
+import {
+  deleteBooking,
+  getDayBookings,
+} from '../../../services/BookingService';
 import TimeTable from './TimeTable';
 import DragAndAddBooking from '../DragAndAddBooking';
 import { Booking, Room } from '../../Interfaces';
 import BookingForm from '../BookingForm';
+import DeleteConformation from '../../DeleteConfirmation';
 
 interface DayViewProps {
   day: dayjs.Dayjs[];
 }
 
 const DayView = ({ day }: DayViewProps) => {
-  const { dayIndex, showBookingForm, fetch, setFetch, setSelectingBooking } =
-    useContext(GlobalContext);
+  const {
+    dayIndex,
+    showBookingForm,
+    fetch,
+    setFetch,
+    setSelectingBooking,
+    showDeleteConformation,
+    setShowDeleteConformation,
+    selectedDeleteBooking,
+    bookingSelection,
+  } = useContext(GlobalContext);
   const [roomNames, setRoomNames] = useState<string[]>([]);
   const [dayBookings, setDayBookings] = useState<Booking[]>([]);
+
+  console.log('booking details: ', selectedDeleteBooking);
 
   const currentDateObj = dayjs(
     new Date(dayjs().year(), dayjs().month(), dayIndex)
   );
   const currentDate = currentDateObj.format('YYYY-MM-DD');
+
+  // Delete selected booking and re-render bookings
+  const handleDelete = async (isDeleteOne: boolean) => {
+    try {
+      await deleteBooking(selectedDeleteBooking.bookingId, isDeleteOne);
+      setFetch(true);
+      console.log('deleted');
+    } catch (error) {
+      console.error('Error deleting booking:', error);
+    }
+  };
+
+  // Cancel deletion action
+  const cancelDelete = () => {
+    setShowDeleteConformation(false);
+  };
+  // Proceed with deletion
+  const proceedDeleteAll = () => {
+    setShowDeleteConformation(false);
+    handleDelete(false);
+  };
+
+  // Proceed with deletion of one booking in recurrence
+  const proceedDeleteOne = () => {
+    setShowDeleteConformation(false);
+    handleDelete(true);
+  };
 
   // Fetch room details
   useEffect(() => {
@@ -53,6 +95,8 @@ const DayView = ({ day }: DayViewProps) => {
     setFetch(false);
   }, [currentDate, fetch]);
 
+  let currentSelectedBooking = 0;
+
   return (
     <div className="h-fit w-full flex bg-color-3 p-10 mt-28">
       {/* Fixed Time column */}
@@ -81,10 +125,19 @@ const DayView = ({ day }: DayViewProps) => {
           <DragAndAddBooking
             bookings={dayBookings}
             currentDay={currentDateObj}
+            selectedDelete={currentSelectedBooking}
           />
         </table>
       </div>
       {showBookingForm && <BookingForm />}
+      {showDeleteConformation && (
+        <DeleteConformation
+          deleteItem={`Booking`}
+          onDeleteAll={proceedDeleteAll}
+          onDeleteOne={proceedDeleteOne}
+          onCancel={cancelDelete}
+        />
+      )}
     </div>
   );
 };

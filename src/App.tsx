@@ -37,7 +37,7 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Routes>
-          <Route path="/auth/login" element={<LoginUser/>}></Route>
+          <Route path="/auth/login" element={<LoginUser />}></Route>
           <Route
             path="/booking/day"
             element={

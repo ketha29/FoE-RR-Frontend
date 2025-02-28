@@ -2,19 +2,20 @@ import CloseIcon from '@mui/icons-material/Close';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import DeleteConformation from '../DeleteConfirmation';
 import {
   isRegularUser,
   isAdmin,
   isSuperAdmin,
 } from '../../services/AuthService';
+import GlobalContext from '../../context/GlobalContext';
 
 interface BookingXtaDetailsProps {
   booking: any;
   closeBookingDetails: () => void;
   editBookingDetails: () => void;
-  deleteBookingDetails: (isDeleteOne: boolean) => void;
+  deleteBookingDetails: () => void;
 }
 
 const BookingXtaDetails = ({
@@ -23,37 +24,42 @@ const BookingXtaDetails = ({
   editBookingDetails,
   deleteBookingDetails,
 }: BookingXtaDetailsProps) => {
+  const { setShowDeleteConformation, setIsBookingRecurrenceType } =
+    useContext(GlobalContext);
+
   const regularUser = isRegularUser();
   const admin = isAdmin();
   const superAdmin = isSuperAdmin();
   const bookingStart = dayjs(`${booking.date} ${booking.startTime}`);
   const bookingEnd = dayjs(`${booking.date} ${booking.endTime}`);
-  const reccurrenceTypeBooking = (booking.recurrence === 'none')? false:true;
+  setIsBookingRecurrenceType(booking.recurrence === 'none' ? false : true);
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     // Prevent the click event from reaching the parent component
     event.stopPropagation();
   };
-  const [showDeleteConformation, setShowDeleteConformation] = useState(false);
+  // const [showDeleteConformation, setShowDeleteConformation] = useState(false);
   // Show the conformation dialog box
   const showConformation = () => {
+    deleteBookingDetails();
     setShowDeleteConformation(true);
   };
   // Cancel deletion action
   const cancelDelete = () => {
     setShowDeleteConformation(false);
   };
-  // Proceed with deletion 
-  const proceedDeleteAll = () => {
-    setShowDeleteConformation(false);
-    deleteBookingDetails(false);
-  };
+  // Proceed with deletion
+  // const proceedDeleteAll = () => {
+  //   setShowDeleteConformation(false);
+  //   deleteBookingDetails(false);
+  // };
 
-  // Proceed with deletion of one booking in recurrence
-  const proceedDeleteOne = () => {
-    setShowDeleteConformation(false);
-    deleteBookingDetails(true);
-  };
+  // // Proceed with deletion of one booking in recurrence
+  // const proceedDeleteOne = () => {
+  //   setShowDeleteConformation(false);
+  //   deleteBookingDetails(true);
+  // };
+
   // Edit and delete booking access
   const accessible =
     superAdmin ||
@@ -115,17 +121,17 @@ const BookingXtaDetails = ({
           </p>
         </div>
 
-        <div className="">
+        {/* <div className="">
           {showDeleteConformation && (
             <DeleteConformation
               deleteItem={`Booking`}
               onDeleteAll={proceedDeleteAll}
               onDeleteOne={proceedDeleteOne}
               onCancel={cancelDelete}
-              isBookingReccurrenceType = {reccurrenceTypeBooking}
+              isBookingReccurrenceType={reccurrenceTypeBooking}
             />
           )}
-        </div>
+        </div> */}
       </div>
     </>
   );

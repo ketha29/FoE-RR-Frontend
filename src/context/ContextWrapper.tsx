@@ -12,6 +12,7 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
   const [dayIndex, setDayIndex] = useState(dayjs().date());
   const [view, setView] = useState('Month');
   const [showBookingForm, setShowBookingForm] = useState(false);
+  const [showDeleteConformation, setShowDeleteConformation] = useState(false);
   const [showAddRoomForm, setShowAddRoomForm] = useState(false);
   const [showAddUserForm, setShowAddUserForm] = useState(false);
   const [showUpdateRoomForm, setShowUpdateRoomForm] = useState(false);
@@ -30,6 +31,14 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
   });
   const [isCellSelected, setIsCellSelected] = useState(false);
   const [fetch, setFetch] = useState(false);
+  const [isBookingRecurrenceType, setIsBookingRecurrenceType] = useState(false);
+  const [selectedDeleteBooking, setSelectedDeleteBooking] = useState<{
+    bookingId: number;
+    isRecurrence: boolean;
+  }>({
+    bookingId: -1,
+    isRecurrence: false,
+  });
 
   return (
     <GlobalContext.Provider
@@ -44,6 +53,8 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
         setView,
         showBookingForm,
         setShowBookingForm,
+        showDeleteConformation,
+        setShowDeleteConformation,
         showAddRoomForm,
         setShowAddRoomForm,
         showAddUserForm,
@@ -60,6 +71,10 @@ const ContextWrapper = ({ children }: ContextWrapperProps) => {
         setIsCellSelected,
         fetch,
         setFetch,
+        isBookingRecurrenceType,
+        setIsBookingRecurrenceType,
+        selectedDeleteBooking,
+        setSelectedDeleteBooking,
       }}>
       {children}
     </GlobalContext.Provider>

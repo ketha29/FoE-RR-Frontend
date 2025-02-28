@@ -71,8 +71,8 @@ const BookingForm = () => {
 
   const fetchUserSuggestions = async (name: string) => {
     const response = await getUserByName(name);
-    console.log(response.data.userList)
-    const userSuggestions: User[] = response.data.userList
+    console.log(response.data.userList);
+    const userSuggestions: User[] = response.data.userList;
     setUserSuggestions(userSuggestions);
   };
 
@@ -92,10 +92,7 @@ const BookingForm = () => {
         recurrencePeriod: admin || superAdmin ? data.recurrencePeriod : 0,
       };
       console.log(formattedBooking);
-      const response = await addBooking(
-        data.roomName,
-        formattedBooking
-      );
+      const response = await addBooking(data.roomName, formattedBooking);
       setErrorMessage(null);
       console.log('Booking added successfully: ', response.data);
       setBookingSelection({
@@ -131,7 +128,7 @@ const BookingForm = () => {
           </header>
 
           <div className="mt-5">
-            <div className='mt-4 flex gap-x-4'>
+            <div className="mt-4 flex gap-x-4">
               {/* Room name dropdown */}
               <div className="flex-1">
                 <label htmlFor="roomName" className="text-lg font-medium">
@@ -159,41 +156,58 @@ const BookingForm = () => {
                   <p className="text-red-600">Room field is required</p>
                 )}
               </div>
-            
+
               {(admin || superAdmin) && (
-              <div className="flex-1">
-                    {/* Book for User */}
-                    <label htmlFor='bookedForUser' className="text-lg font-medium">
-                      Book for User
-                    </label>
-                    <div className='relative mt-1'>
+                <div className="flex-1">
+                  {/* Book for User */}
+                  <label
+                    htmlFor="bookedForUser"
+                    className="text-lg font-medium">
+                    Book for User
+                  </label>
+                  <div className="relative mt-1">
                     <Controller
-                      name='bookedForUser'
+                      name="bookedForUser"
                       control={control}
                       rules={{ required: false }}
-                      render={({ field: { onBlur, onChange, value, ref } }) => (<Autocomplete
-                        size='small'
-                        options={userSuggestions}
-                        getOptionLabel={(userSuggestion) => (`${userSuggestion.firstName} ${userSuggestion.lastName}`)}
-                        onBlur={onBlur}
-                        value={userSuggestions.find((user) => {
-                          return user.userId == value;
-                        })}
-                        onChange={(e: any, newValue) => {
-                          onChange(newValue ? newValue : null)
-                        }}
-                        onInputChange={(e: any, newInputValue) => {
-                          newInputValue ? fetchUserSuggestions(newInputValue) : null;
-                        }}
-                        isOptionEqualToValue={(userSuggestion, value) => userSuggestion.userId == value?.userId}
-                        renderInput={(params) => (<TextField{...params}
-                          inputRef={ref}
-                          id='bookedForUser'
-                          className="w-full border-2 border-gray-100 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400" />)} />)}
-                    /></div>
-              </div>)}
+                      render={({ field: { onBlur, onChange, value, ref } }) => (
+                        <Autocomplete
+                          size="small"
+                          options={userSuggestions}
+                          getOptionLabel={(userSuggestion) =>
+                            `${userSuggestion.firstName} ${userSuggestion.lastName}`
+                          }
+                          onBlur={onBlur}
+                          value={userSuggestions.find((user) => {
+                            return user.userId == value;
+                          })}
+                          onChange={(e: any, newValue) => {
+                            onChange(newValue ? newValue : null);
+                          }}
+                          onInputChange={(e: any, newInputValue) => {
+                            newInputValue
+                              ? fetchUserSuggestions(newInputValue)
+                              : null;
+                          }}
+                          isOptionEqualToValue={(userSuggestion, value) =>
+                            userSuggestion.userId == value?.userId
+                          }
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              inputRef={ref}
+                              id="bookedForUser"
+                              className="w-full border-2 border-gray-100 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400"
+                            />
+                          )}
+                        />
+                      )}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
-            
+
             {/* Booking Purpose */}
             <div className="mt-4">
               <label htmlFor="details" className="text-lg font-medium">
