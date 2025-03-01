@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { deleteBooking } from '../../services/BookingService';
 import { useNavigate } from 'react-router-dom';
 import BookingXtaDetails from './BookingXtaDetails';
 import React from 'react';
@@ -13,13 +12,11 @@ dayjs.extend(isBetween);
 interface RenderBookingsProps {
   date: string;
   bookings: Booking[];
-  selectedDelete: number;
 }
 
 const RenderBookings = ({
   date,
   bookings,
-  selectedDelete,
 }: RenderBookingsProps) => {
   const navigator = useNavigate();
   const [showXtraBookingDetails, setShowXtraBookingDetails] = useState(false);
@@ -30,7 +27,6 @@ const RenderBookings = ({
     setShowBookingForm,
     setBookingSelection,
     setSelectedDeleteBooking,
-    showDeleteConformation,
   } = useContext(GlobalContext);
 
   // Close the extra details block if clicked outside
@@ -54,7 +50,6 @@ const RenderBookings = ({
   const handleClick = () => {
     setMoveBlock(!moveBlock);
     setShowXtraBookingDetails(!showXtraBookingDetails);
-    console.log(showXtraBookingDetails);
   };
   // Hide the extra details and set the transition of details block to false when clicking the close button
   const handleCloseDetails = () => {
@@ -124,18 +119,6 @@ const RenderBookings = ({
         const topPercentage =
           (startOffsetMinutes / 60 - bookingStart.hour()) * 100;
         const heightPercentage = (spanMinutes / 60) * 102;
-
-        // Delete selected booking and re-render bookings
-        // const handleDelete = async (isDeleteOne: boolean) => {
-        //   try {
-        //     await deleteBooking(booking.bookingId, isDeleteOne);
-        //     setFetch(true);
-        //     handleCloseDetails();
-        //     console.log('deleted');
-        //   } catch (error) {
-        //     console.error('Error deleting booking:', error);
-        //   }
-        // };
 
         return (
           startOffsetMinutes >= 0 && (

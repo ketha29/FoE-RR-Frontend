@@ -1,12 +1,13 @@
 import dayjs from 'dayjs';
 import { useContext, useEffect, useRef, useState } from 'react';
 import GlobalContext from '../../../context/GlobalContext';
-import { getWeekBookings } from '../../../services/BookingService';
+import { deleteBooking, getWeekBookings } from '../../../services/BookingService';
 import { getAllRooms } from '../../../services/RoomService';
 import DragAndAddBooking from '../DragAndAddBooking';
 import TimeTable from './TimeTable';
 import { Booking, Room } from '../../Interfaces';
 import BookingForm from '../BookingForm';
+import DeleteConformation from '../../DeleteConfirmation';
 
 interface WeekViewProps {
   week: dayjs.Dayjs[];
@@ -16,7 +17,8 @@ interface WeekViewProps {
 const WeekView = ({ day, week }: WeekViewProps) => {
   const [weekBookings, setWeekBookings] = useState<Booking[]>([]);
   const [roomNames, setRoomNames] = useState<string[]>([]);
-  const { weekIndex, showBookingForm, fetch, setFetch } =
+  const { weekIndex, showBookingForm, fetch, setFetch, showDeleteConfirmation,
+    setShowDeleteConfirmation, selectedDeleteBooking } =
     useContext(GlobalContext);
 
   // Track room colum scrrolling for each day in the week
@@ -69,6 +71,32 @@ const WeekView = ({ day, week }: WeekViewProps) => {
     });
   };
 
+  // Delete selected booking and re-render bookings
+    const handleDelete = async (isDeleteOne: boolean) => {
+      try {
+        await deleteBooking(selectedDeleteBooking.bookingId, isDeleteOne);
+        setFetch(true);
+      } catch (error) {
+        console.error('Error deleting booking:', error);
+      }
+    };
+  
+    // Cancel deletion action
+    const cancelDelete = () => {
+      setShowDeleteConfirmation(false);
+    };
+    // Proceed with deletion
+    const proceedDeleteAll = () => {
+      setShowDeleteConfirmation(false);
+      handleDelete(false);
+    };
+  
+    // Proceed with deletion of one booking in recurrence
+    const proceedDeleteOne = () => {
+      setShowDeleteConfirmation(false);
+      handleDelete(true);
+    };
+
   return (
     <div className="h-fit w-full bg-color-3 mt-28">
       <div className="p-10">
@@ -108,7 +136,15 @@ const WeekView = ({ day, week }: WeekViewProps) => {
             </div>
           );
         })}
-        <div>{showBookingForm && <BookingForm />}</div>
+        <div>{showBookingForm && <BookingForm />}
+          {showDeleteConfirmation && (
+            <DeleteConformation
+              deleteItem={`Booking`}
+              onDeleteAll={proceedDeleteAll}
+              onDeleteOne={proceedDeleteOne}
+              onCancel={cancelDelete}
+            />
+          )}</div>
       </div>
     </div>
   );

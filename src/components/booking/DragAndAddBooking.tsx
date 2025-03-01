@@ -15,13 +15,11 @@ import { Booking, Room } from '../Interfaces';
 interface DragAndAddBookingpRrops {
   bookings: Booking[];
   currentDay: dayjs.Dayjs;
-  selectedDelete: number;
 }
 
 const DragAndAddBooking = ({
   bookings,
   currentDay,
-  selectedDelete,
 }: DragAndAddBookingpRrops) => {
   const authenticated = isAuthenticated();
   const regularUser = isRegularUser();
@@ -38,8 +36,7 @@ const DragAndAddBooking = ({
     setSelectingBooking,
   } = useContext(GlobalContext);
   // const [selecting, setSelecting] = useState(false);
-
-  const hoursInDay = getDay(currentDay.date());
+  const hoursInDay = getDay(currentDay);
   const currentDateObj = currentDay;
   const currentDate = currentDateObj.format('YYYY-MM-DD');
   const startTimeDay = dayjs(
@@ -84,7 +81,6 @@ const DragAndAddBooking = ({
 
   // Triggers the start of the selection process. Sets the initial time for booking
   const handleMouseDown = (roomName: string, time: dayjs.Dayjs) => {
-    console.log('Current date: ', currentDate);
     if (isTimeBooked(roomName, time)) {
       return;
     }
@@ -197,10 +193,6 @@ const DragAndAddBooking = ({
     ) {
       setShowBookingForm(true);
     }
-    console.log(
-      bookingSelection.startTime?.format('HH:mm'),
-      bookingSelection.endTime?.format('HH:mm')
-    );
   };
 
   const isCellSelected = (
@@ -275,15 +267,14 @@ const DragAndAddBooking = ({
               onMouseMove={() => handleMouseMove(roomName, time)}>
               <RenderBookings
                 date={currentDateObj.format('YYYY-MM-DD')}
-                selectedDelete={selectedDelete}
                 bookings={bookings.filter((booking) => {
                   const bookingStart = dayjs(
                     `${booking.date} ${booking.startTime}`
                   );
+                  // console.log(time)
                   return (
                     booking.room.roomName === roomName &&
-                    bookingStart.isSame(time, 'hour') &&
-                    dayjs(booking.date).isSame(currentDateObj, 'day')
+                    bookingStart.isSame(time, 'hour')
                   );
                 })}
               />

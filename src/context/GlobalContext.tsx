@@ -22,8 +22,8 @@ interface GlobalContextType {
   setDayIndex: Dispatch<SetStateAction<number>>;
   showBookingForm: boolean;
   view: string;
-  showDeleteConformation: boolean;
-  setShowDeleteConformation: Dispatch<SetStateAction<boolean>>;
+  showDeleteConfirmation: boolean;
+  setShowDeleteConfirmation: Dispatch<SetStateAction<boolean>>;
   setView: Dispatch<SetStateAction<string>>;
   setShowBookingForm: Dispatch<SetStateAction<boolean>>;
   showAddRoomForm: boolean;
@@ -42,8 +42,6 @@ interface GlobalContextType {
   setIsCellSelected: Dispatch<SetStateAction<boolean>>;
   fetch: boolean;
   setFetch: Dispatch<SetStateAction<boolean>>;
-  isBookingRecurrenceType: boolean;
-  setIsBookingRecurrenceType: Dispatch<SetStateAction<boolean>>;
   selectedDeleteBooking: DeleteBooking;
   setSelectedDeleteBooking: Dispatch<SetStateAction<DeleteBooking>>;
 }
@@ -59,8 +57,8 @@ const GlobalContext = React.createContext<GlobalContextType>({
   setView: () => {},
   showBookingForm: false,
   setShowBookingForm: () => {},
-  showDeleteConformation: false,
-  setShowDeleteConformation: () => {},
+  showDeleteConfirmation: false,
+  setShowDeleteConfirmation: () => {},
   showAddRoomForm: false,
   setShowAddRoomForm: () => {},
   showAddUserForm: false,
@@ -82,8 +80,6 @@ const GlobalContext = React.createContext<GlobalContextType>({
   setIsCellSelected: () => {},
   fetch: false,
   setFetch: () => {},
-  isBookingRecurrenceType: false,
-  setIsBookingRecurrenceType: () => {},
   selectedDeleteBooking: {
     bookingId: -1,
     isRecurrence: false,

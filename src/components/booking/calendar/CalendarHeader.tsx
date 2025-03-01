@@ -73,7 +73,6 @@ const CalendarHeader = () => {
         setAnimationDirection(null);
       }, 300);
     }
-    console.log(dayIndex, weekIndex);
   };
 
   const handleToday = () => {

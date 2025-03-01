@@ -3,7 +3,6 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import dayjs from 'dayjs';
 import { useContext, useState } from 'react';
-import DeleteConformation from '../DeleteConfirmation';
 import {
   isRegularUser,
   isAdmin,
@@ -24,7 +23,7 @@ const BookingXtaDetails = ({
   editBookingDetails,
   deleteBookingDetails,
 }: BookingXtaDetailsProps) => {
-  const { setShowDeleteConformation, setIsBookingRecurrenceType } =
+  const { setShowDeleteConfirmation} =
     useContext(GlobalContext);
 
   const regularUser = isRegularUser();
@@ -32,33 +31,17 @@ const BookingXtaDetails = ({
   const superAdmin = isSuperAdmin();
   const bookingStart = dayjs(`${booking.date} ${booking.startTime}`);
   const bookingEnd = dayjs(`${booking.date} ${booking.endTime}`);
-  setIsBookingRecurrenceType(booking.recurrence === 'none' ? false : true);
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     // Prevent the click event from reaching the parent component
     event.stopPropagation();
   };
-  // const [showDeleteConformation, setShowDeleteConformation] = useState(false);
+  // const [showDeleteConfirmation, setShowDeleteConformation] = useState(false);
   // Show the conformation dialog box
   const showConformation = () => {
     deleteBookingDetails();
-    setShowDeleteConformation(true);
+    setShowDeleteConfirmation(true);
   };
-  // Cancel deletion action
-  const cancelDelete = () => {
-    setShowDeleteConformation(false);
-  };
-  // Proceed with deletion
-  // const proceedDeleteAll = () => {
-  //   setShowDeleteConformation(false);
-  //   deleteBookingDetails(false);
-  // };
-
-  // // Proceed with deletion of one booking in recurrence
-  // const proceedDeleteOne = () => {
-  //   setShowDeleteConformation(false);
-  //   deleteBookingDetails(true);
-  // };
 
   // Edit and delete booking access
   const accessible =
@@ -69,8 +52,6 @@ const BookingXtaDetails = ({
           booking.user.userId === Number(localStorage.getItem('userId'))))) ||
     (regularUser &&
       booking.user.userId === Number(localStorage.getItem('userId')));
-
-  console.log('Access', accessible);
 
   return (
     <>
@@ -122,7 +103,7 @@ const BookingXtaDetails = ({
         </div>
 
         {/* <div className="">
-          {showDeleteConformation && (
+          {showDeleteConfirmation && (
             <DeleteConformation
               deleteItem={`Booking`}
               onDeleteAll={proceedDeleteAll}

@@ -1,7 +1,6 @@
 import { Tooltip } from '@mui/material';
 import GlobalContext from '../context/GlobalContext';
 import { useContext } from 'react';
-import { set } from 'react-hook-form';
 
 interface DeleteConfirmationProps {
   deleteItem: string;
@@ -10,23 +9,15 @@ interface DeleteConfirmationProps {
   onDeleteAll?: () => void;
 }
 
-const DeleteConformation = ({
+const DeleteConfirmation = ({
   deleteItem,
   onDeleteAll,
   onDeleteOne,
   onCancel,
 }: DeleteConfirmationProps) => {
-  const { isBookingRecurrenceType, setShowDeleteConformation } =
+  const { selectedDeleteBooking } =
     useContext(GlobalContext);
-  // Delete one booking
-  const deleteOne = () => {
-    setShowDeleteConformation(true);
-  };
-  //Delete all booking
-  const deleteAll = () => {
-    setShowDeleteConformation(false);
-  };
-
+  
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-70 backdrop-blur-sm z-40">
       <div
@@ -52,7 +43,7 @@ const DeleteConformation = ({
             </button>
           </Tooltip>
 
-          {isBookingRecurrenceType && (
+          {selectedDeleteBooking.isRecurrence && (
             <Tooltip title="Delete all recurring bookings">
               <button
                 onClick={onDeleteAll}
@@ -63,7 +54,7 @@ const DeleteConformation = ({
           )}
           <Tooltip title="Delete current Booking">
             <button
-              onClick={deleteOne}
+              onClick={onDeleteOne}
               className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 transition-colors duration-200">
               Delete
             </button>
@@ -74,4 +65,4 @@ const DeleteConformation = ({
   );
 };
 
-export default DeleteConformation;
+export default DeleteConfirmation;

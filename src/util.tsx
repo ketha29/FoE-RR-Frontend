@@ -20,11 +20,11 @@ const getMonth = (month = dayjs().month()) => {
   return daysMatrix;
 };
 
-export const getDay = (day = dayjs().date()) => {
+export const getDay = (day = dayjs()) => {
   let startHour = 5;
   const hourArray = new Array(16).fill([]).map(() => {
     startHour++;
-    return dayjs(new Date(year, month, day)).hour(startHour).minute(0);
+    return dayjs(day).hour(startHour).minute(0);
   });
   return hourArray;
 };
