@@ -167,13 +167,18 @@ const DragAndAddBooking = ({
   // If the start time and end time are valid, user is redricted to the booking page
   const handleMouseUp = () => {
     setSelectingBooking(false);
+
+    // If the selected time is beyond allowed time. Set the allowed time as selected time
+    bookingSelection.endTime = (bookingSelection.endTime?.isAfter(endTimeDay))?endTimeDay:bookingSelection.endTime;
+    bookingSelection.startTime = (bookingSelection.startTime?.isBefore(startTimeDay))?startTimeDay:bookingSelection.startTime;
+
     if (
       !(
         bookingSelection.endTime &&
         bookingSelection.startTime &&
-        !isWeekend &&
-        isAcademicHour(bookingSelection.endTime) &&
-        isAcademicHour(bookingSelection.startTime)
+        !isWeekend
+        // isAcademicHour(bookingSelection.endTime) &&
+        // isAcademicHour(bookingSelection.startTime)
       ) &&
       regularUser
     ) {
