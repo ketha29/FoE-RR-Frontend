@@ -49,6 +49,7 @@ const DragAndAddBooking = ({
   const isAcademicHour = (hour: dayjs.Dayjs) =>
     hour.isBetween(startTimeDay, endTimeDay, null, '[)');
 
+  const isFuture = currentDateObj.isAfter(dayjs(new Date()))
   // Fetch room details
   useEffect(() => {
     const fetchRooms = async () => {
@@ -189,7 +190,7 @@ const DragAndAddBooking = ({
         bookingSelection.endTime === null ||
         bookingSelection.roomName === null
       ) &&
-      authenticated
+      authenticated && isFuture
     ) {
       setShowBookingForm(true);
     }

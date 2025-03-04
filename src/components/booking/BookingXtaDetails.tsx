@@ -23,7 +23,7 @@ const BookingXtaDetails = ({
   editBookingDetails,
   deleteBookingDetails,
 }: BookingXtaDetailsProps) => {
-  const { setShowDeleteConfirmation} =
+  const { setShowDeleteConfirmation } =
     useContext(GlobalContext);
 
   const regularUser = isRegularUser();
@@ -45,13 +45,13 @@ const BookingXtaDetails = ({
 
   // Edit and delete booking access
   const accessible =
-    superAdmin ||
-    (admin &&
-      (booking.user.userType === 'regularUser' ||
-        (booking.user.userType === 'admin' &&
-          booking.user.userId === Number(localStorage.getItem('userId'))))) ||
-    (regularUser &&
-      booking.user.userId === Number(localStorage.getItem('userId')));
+    (dayjs(new Date(booking.date)).isAfter(dayjs(new Date()))) && (superAdmin ||
+      (admin &&
+        (booking.user.userType === 'regularUser' ||
+          (booking.user.userType === 'admin' &&
+            booking.user.userId === Number(localStorage.getItem('userId'))))) ||
+      (regularUser &&
+        booking.user.userId === Number(localStorage.getItem('userId'))));
 
   return (
     <>
