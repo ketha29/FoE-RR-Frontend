@@ -130,11 +130,12 @@ const ListUser = () => {
                     className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                     Contact info
                   </th>
-                  <th
+                  {(superAdmin || admin) &&(
+                    <th
                     scope="col"
                     className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                     User type
-                  </th>
+                  </th>)}
                   <th
                     scope="col"
                     className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider"></th>
@@ -161,9 +162,9 @@ const ListUser = () => {
                         {user.email} <br />
                         {/* {user.phoneNo} */}
                       </td>
-                      <td className="whitespace-nowrap text-sm text-gray-600">
+                      {(admin || superAdmin) && (<td className="whitespace-nowrap text-sm text-gray-600">
                         {user.userType}
-                      </td>
+                      </td>)}
 
                       <td className="whitespace-nowrap text-right text-sm font-medium">
                         {((admin && user.userType === 'regularUser') ||
