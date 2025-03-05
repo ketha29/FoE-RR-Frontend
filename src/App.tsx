@@ -12,6 +12,7 @@ import GlobalContext from './context/GlobalContext';
 import NavBar from './components/NavBar';
 import ListUser from './components/user/ListUser';
 import InfoPage from './components/InfoPage';
+import LoginErrorPage from './components/LoginErrorPage';
 
 function App() {
   const { monthIndex, weekIndex, dayIndex } = useContext(GlobalContext);
@@ -38,6 +39,7 @@ function App() {
         <NavBar />
         <Routes>
           <Route path="/auth/login" element={<LoginUser />}></Route>
+          <Route path="/login-error" element={<LoginErrorPage />}></Route>
           <Route
             path="/booking/day"
             element={
