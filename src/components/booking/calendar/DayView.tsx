@@ -11,6 +11,7 @@ import DragAndAddBooking from '../DragAndAddBooking';
 import { Booking, Room } from '../../Interfaces';
 import BookingForm from '../BookingForm';
 import DeleteConformation from '../../DeleteConfirmation';
+import { Bounce, ToastContainer } from 'react-toastify';
 
 interface DayViewProps {
   day: dayjs.Dayjs[];
@@ -29,12 +30,12 @@ const DayView = ({ day }: DayViewProps) => {
   } = useContext(GlobalContext);
   const [roomNames, setRoomNames] = useState<string[]>([]);
   const [dayBookings, setDayBookings] = useState<Booking[]>([]);
-  
+
   const currentDateObj = dayjs(
     new Date(dayjs().year(), dayjs().month(), dayIndex)
   );
   const currentDate = currentDateObj.format('YYYY-MM-DD');
-  
+
   // Delete selected booking and re-render bookings
   const handleDelete = async (isDeleteOne: boolean) => {
     try {
@@ -99,6 +100,19 @@ const DayView = ({ day }: DayViewProps) => {
       <div
         onMouseLeave={() => setSelectingBooking(false)}
         className="flex-1 overflow-x-auto rounded-r-xl border-r border-gray-300">
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition={Bounce}
+        />
         <table className="w-max border-collapse">
           <thead>
             <tr className="bg-color-1">
