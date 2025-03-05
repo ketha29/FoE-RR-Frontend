@@ -71,10 +71,10 @@ const DragAndAddBooking = ({
       );
       const bookingEnd = dayjs(
         `${booking.date} ${booking.endTime.split(':')[0]}:00:00`
-      );
+      ).endOf('hour');
       return (
         booking.room.roomName === roomName &&
-        time.isBetween(bookingStart, bookingEnd, null, '[]')
+        time.isBetween(bookingStart, bookingEnd, null, '[)')
       );
     });
   };
