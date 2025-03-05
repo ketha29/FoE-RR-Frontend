@@ -9,6 +9,7 @@ import { getAllRooms } from '../../services/RoomService';
 import { Room, User } from '../Interfaces';
 import { Autocomplete, TextField } from '@mui/material';
 import { getUserByName } from '../../services/UserService';
+import { Bounce, ToastContainer, toast } from 'react-toastify';
 
 const recurrenceTypes = ['none', 'daily', 'weekly'];
 
@@ -108,14 +109,33 @@ const BookingForm = () => {
         'Error adding booking:',
         (error as AxiosError).response?.data || (error as AxiosError).message
       );
-      setErrorMessage((error as AxiosError).message);
+      setErrorMessage(
+        'Error in adding booking (Check whether the selected time slot is available)'
+      );
+    }
+    notify();
+  };
+
+  const notify = () => {
+    if (errorMessage) {
+      toast.error(errorMessage, {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+        transition: Bounce,
+      });
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-70 backdrop-blur-sm z-40">
-        <div className="sm:w-1/2 w-full max-w-2xl overflow-y-auto p-7 shadow-xl rounded-lg bg-white transition-transform transform hover:scale-105 duration-300">
+        <div className="sm:w-1/2 w-full max-w-2xl overflow-y-auto p-7 shadow-xl rounded-lg bg-white transition-transform transform duration-300">
           {/* Header section of the booking form */}
           <header className="flex justify-between items-center border-b pb-3">
             <h1 className="text-xl font-semibold text-gray-800">Add Booking</h1>
@@ -353,11 +373,6 @@ const BookingForm = () => {
             </div>
           </div>
         </div>
-        {/* {errorMessage && (
-                <div style={{ color: 'red', marginTop: '10px' }}>
-                    <p>Error: {errorMessage}</p>
-                </div>
-                )} */}
       </div>
     </form>
   );
