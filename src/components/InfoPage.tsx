@@ -47,32 +47,34 @@ const InfoPage = () => {
               {/* Regular Users */}
               <div className="mt-6">
                 <h3 className="text-lg font-medium text-gray-700">
-                  If you are an academic staff member:
+                  For Academic Staff Members:
                 </h3>
                 <ul className="mt-2 text-gray-600 space-y-2">
                   <li>
-                    1. Log in with your .eng account. If you cannot log in,
-                    contact an administrator.
+                    1. Log in using your .eng account. If you encounter any
+                    issues logging in, please contact an administrator for
+                    assistance.
                   </li>
                   <li>
                     2. Navigate to the booking page and select your preferred
-                    view from the dropdown.
+                    view from the dropdown menu.
                   </li>
                   <li>
-                    3. In month view, available slots appear in green, while
-                    occupied ones are red.
+                    3. In the month view, available time slots are highlighted
+                    in green, while occupied slots are marked in red.
                   </li>
                   <li>
-                    4. Click on a date in month view or use the dropdown to
-                    access day view.
+                    4. To book a room, click on a specific date in the month
+                    view or use the dropdown to switch to the day view.
                   </li>
                   <li>
-                    5. Book rooms using the "Add Booking" button or click and
-                    drag over a time slot.
+                    5. Use the "Add Booking" button or click and drag over your
+                    desired time slot to make a reservation.
                   </li>
                   <li>
-                    6. You cannot book red-marked slots. Contact an admin for
-                    assistance.
+                    6. Please note that red-marked slots are unavailable for
+                    booking. If you require assistance with unavailable slots,
+                    kindly contact an administrator.
                   </li>
                 </ul>
               </div>
@@ -80,12 +82,13 @@ const InfoPage = () => {
               {/* Outsiders */}
               <div className="mt-6">
                 <h3 className="text-lg font-medium text-gray-700">
-                  If you are an outsider:
+                  For External Users:
                 </h3>
                 <p className="mt-2 text-gray-600">
-                  You can view all bookings, but cannot place bookings yourself.{' '}
-                  <br />
-                  If you need a reservation, please contact an administrator.
+                  You are welcome to view all available bookings; however, only
+                  authorized academic staff members can place bookings. <br />{' '}
+                  If you require a reservation, please reach out to an
+                  administrator for further assistance.
                 </p>
               </div>
             </div>
