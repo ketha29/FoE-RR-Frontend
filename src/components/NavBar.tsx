@@ -51,7 +51,7 @@ const NavBar = () => {
           </div>
           <div className="flex items-center justify-center md:items-stretch md:justify-start">
             <div className="flex items-center">
-              <img alt="FoE RR" src={logo} className="h-10 w-auto" />
+              <img alt="FoE RR" src={logo} className="h-10 w-auto" onClick={()=>{navigate("/info")}}/>
             </div>
             <div className="flex items-center text-amber-400 font-semibold text-l pl-5 pr-10">
               <p className="uppercase transform scale-y-150">

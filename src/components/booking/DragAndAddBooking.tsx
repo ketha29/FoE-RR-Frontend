@@ -49,7 +49,7 @@ const DragAndAddBooking = ({
   const isAcademicHour = (hour: dayjs.Dayjs) =>
     hour.isBetween(startTimeDay, endTimeDay, null, '[)');
 
-  const isFuture = currentDateObj.isAfter(dayjs(new Date()))
+  const isFuture = startTimeDay.isAfter(dayjs(new Date()).startOf('day'))
   // Fetch room details
   useEffect(() => {
     const fetchRooms = async () => {
