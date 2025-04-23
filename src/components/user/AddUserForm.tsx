@@ -147,32 +147,6 @@ const AddUserForm = ({ onUserAddition }: AddUserFormProps) => {
             )}
           </div>
 
-          {/* Phone number Field */}
-          <div className="mt-5">
-            <label htmlFor="phoneNo" className="block text-lg font-medium">
-              Phone number
-            </label>
-            <input
-              {...register('phoneNo', {
-                required: 'Phone number is required',
-                pattern: {
-                  value: /^[0-9]{10}$/,
-                  message: 'Enter a valid phone number',
-                },
-              })}
-              id="phoneNo"
-              type="text"
-              className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter the phone number"
-            />
-            {errors.phoneNo && (
-              <p className="text-red-600 mt-1">
-                {typeof errors.phoneNo.message === 'string' &&
-                  errors.phoneNo.message}
-              </p>
-            )}
-          </div>
-
           {/* Display error message if exists */}
           {errorMessage && (
             <div className="mt-4 p-2 bg-red-100 text-red-700 border border-red-300 rounded-md">

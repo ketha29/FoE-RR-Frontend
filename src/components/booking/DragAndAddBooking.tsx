@@ -169,8 +169,8 @@ const DragAndAddBooking = ({
     setSelectingBooking(false);
 
     // If the selected time is beyond allowed time. Set the allowed time as selected time
-    bookingSelection.endTime = (bookingSelection.endTime?.isAfter(endTimeDay))?endTimeDay:bookingSelection.endTime;
-    bookingSelection.startTime = (bookingSelection.startTime?.isBefore(startTimeDay))?startTimeDay:bookingSelection.startTime;
+    bookingSelection.endTime = (regularUser && bookingSelection.endTime?.isAfter(endTimeDay))?endTimeDay:bookingSelection.endTime;
+    bookingSelection.startTime = (regularUser && bookingSelection.startTime?.isBefore(startTimeDay))?startTimeDay:bookingSelection.startTime;
 
     if (
       !(
