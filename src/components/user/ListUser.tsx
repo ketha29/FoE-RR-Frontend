@@ -7,11 +7,9 @@ import { Tooltip } from '@mui/material';
 import GlobalContext from '../../context/GlobalContext';
 import AddUserForm from './AddUserForm';
 import DeleteConformation from '../DeleteConfirmation';
-import { isAdmin, isSuperAdmin } from '../../services/AuthService';
+import { useAuth } from '../../context/AuthContext';
 
 const ListUser = () => {
-  const admin = isAdmin();
-  const superAdmin = isSuperAdmin();
   const [userList, setUserList] = useState<User[]>([]);
   const [showDeleteConformation, setShowDeleteConformation] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -19,6 +17,14 @@ const ListUser = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const { showAddUserForm, setShowAddUserForm } = useContext(GlobalContext);
 
+  const authContext = useAuth();
+    
+      if (!authContext) {
+        throw new Error('useAuth must be used within an AuthProvider');
+      }
+    
+      const { user } = authContext;
+      
   // Get all user details from backend
   const fetchUsers = async () => {
     try {
@@ -36,9 +42,9 @@ const ListUser = () => {
 
   // Filter users according to the search query
   useEffect(() => {
-    const filtered = userList.filter((user) => {
-      const firstName = user.firstName ? user.firstName.toLowerCase() : '';
-      const lastName = user.lastName ? user.lastName.toLowerCase() : '';
+    const filtered = userList.filter((logUser) => {
+      const firstName = logUser.firstName ? logUser.firstName.toLowerCase() : '';
+      const lastName = logUser.lastName ? logUser.lastName.toLowerCase() : '';
       const query = searchQuery.toLowerCase();
       return firstName.includes(query) || lastName.includes(query);
     });
@@ -46,9 +52,9 @@ const ListUser = () => {
   }, [searchQuery, userList]);
 
   // Delete the selected room details
-  const handleDelete = async (user: User) => {
+  const handleDelete = async (logUser: User) => {
     try {
-      await deleteUser(user.userId);
+      await deleteUser(logUser.userId);
       fetchUsers();
     } catch (error) {
       //   setErrorMessage((error as AxiosError).message);
@@ -57,9 +63,9 @@ const ListUser = () => {
   };
 
   // Show the conformation dialog box
-  const confirmDelete = (user: User) => {
+  const confirmDelete = (logUser: User) => {
     setShowDeleteConformation(true);
-    setSelectedUser(user);
+    setSelectedUser(logUser);
   };
 
   // Cancel deletion action
@@ -81,8 +87,8 @@ const ListUser = () => {
             User details
           </div>
 
-          {/* <Add user button /> */}
-          {(admin || superAdmin) && (
+          {/* <Add User button /> */}
+          {((user?.userType == "admin") || (user?.userType == "superAdmin")) && (
             <div>
               <button
                 className="ml-10 rounded-md bg-indigo-600 px-3 py-1 h-9 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
@@ -118,19 +124,19 @@ const ListUser = () => {
                     className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                     Last name
                   </th>
-                  {superAdmin && admin && (
+                  {/* {((user?.userType == "admin") || (user?.userType == "superAdmin")) && (
                     <th
                       scope="col"
                       className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                       Username
                     </th>
-                  )}
+                  )} */}
                   <th
                     scope="col"
                     className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                     Contact info
                   </th>
-                  {(superAdmin || admin) &&(
+                  {((user?.userType == "admin") || (user?.userType == "superAdmin")) &&(
                     <th
                     scope="col"
                     className="text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
@@ -143,32 +149,32 @@ const ListUser = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredUsers.length > 0 ? (
-                  filteredUsers.map((user) => (
+                  filteredUsers.map((logUser) => (
                     <tr
-                      key={user.userId}
+                      key={logUser.userId}
                       className="hover:bg-blue-50 transition duration-200 ease-in-out">
                       <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-600">
-                        {user.firstName}
+                        {logUser.firstName}
                       </td>
                       <td className="whitespace-nowrap text-sm text-gray-600">
-                        {user.lastName}
+                        {logUser.lastName}
                       </td>
-                      {superAdmin && admin && (
+                      {/*{((user?.userType == "admin") || (user?.userType == "superAdmin")) && (
                         <td className="whitespace-nowrap text-sm text-gray-600">
-                          {user.userName}
+                          {logUser.userName}
                         </td>
-                      )}
+                      )} */}
                       <td className="whitespace-nowrap text-sm text-gray-600">
-                        {user.email} <br />
+                        {logUser.email} <br />
                         {/* {user.phoneNo} */}
                       </td>
-                      {(admin || superAdmin) && (<td className="whitespace-nowrap text-sm text-gray-600">
-                        {user.userType}
+                      {((user?.userType == "admin") || (user?.userType == "superAdmin")) && (<td className="whitespace-nowrap text-sm text-gray-600">
+                        {logUser.userType}
                       </td>)}
 
                       <td className="whitespace-nowrap text-right text-sm font-medium">
-                        {((admin && user.userType === 'regularUser') ||
-                          superAdmin) && (
+                        {(((user?.userType == "admin") && logUser.userType === 'regularUser') ||
+                          (user?.userType == "superAdmin")) && (
                           <span className="px-6">
                             <Tooltip title="Edit" arrow>
                               <button className="text-indigo-600 hover:bg-indigo-500 hover:text-white p-0.5 w-8 h-8 rounded-full">
@@ -178,7 +184,7 @@ const ListUser = () => {
                             <Tooltip title="Delete" arrow>
                               <button
                                 className="ml-4 text-red-600 hover:bg-red-500 hover:text-white p-0.5 w-8 h-8 rounded-full"
-                                onClick={() => confirmDelete(user)}>
+                                onClick={() => confirmDelete(logUser)}>
                                 <DeleteOutlinedIcon fontSize="small" />
                               </button>
                             </Tooltip>

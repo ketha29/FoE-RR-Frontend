@@ -3,12 +3,8 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import dayjs from 'dayjs';
 import { useContext, useState } from 'react';
-import {
-  isRegularUser,
-  isAdmin,
-  isSuperAdmin,
-} from '../../services/AuthService';
 import GlobalContext from '../../context/GlobalContext';
+import { useAuth } from '../../context/AuthContext';
 
 interface BookingXtaDetailsProps {
   booking: any;
@@ -26,9 +22,6 @@ const BookingXtaDetails = ({
   const { setShowDeleteConfirmation } =
     useContext(GlobalContext);
 
-  const regularUser = isRegularUser();
-  const admin = isAdmin();
-  const superAdmin = isSuperAdmin();
   const bookingStart = dayjs(`${booking.date} ${booking.startTime}`);
   const bookingEnd = dayjs(`${booking.date} ${booking.endTime}`);
 
@@ -43,15 +36,23 @@ const BookingXtaDetails = ({
     setShowDeleteConfirmation(true);
   };
 
+  const authContext = useAuth();
+  
+    if (!authContext) {
+      throw new Error('useAuth must be used within an AuthProvider');
+    }
+  
+    const { user } = authContext;
+
   // Edit and delete booking access
   const accessible =
-    (dayjs(new Date(booking.date)).isAfter(dayjs(new Date()))) && (superAdmin ||
-      (admin &&
+    (dayjs(new Date(booking.date)).isAfter(dayjs(new Date()))) && ((user?.userType == "superAdmin") ||
+      ((user?.userType == "admin") &&
         (booking.user.userType === 'regularUser' ||
           (booking.user.userType === 'admin' &&
-            booking.user.userId === Number(localStorage.getItem('userId'))))) ||
-      (regularUser &&
-        booking.user.userId === Number(localStorage.getItem('userId'))));
+            booking.user.userId == user?.userId))) ||
+      ((user?.userType == "regularUser") &&
+        booking.user.userId == user?.userId));
 
   return (
     <>

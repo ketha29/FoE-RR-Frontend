@@ -1,36 +1,38 @@
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../utils/api'
 
 // Base URL for the API
-const BASE_URL = 'http://localhost:8082/booking';
+// const BASE_URL = 'http://localhost:8082/booking';
+const BOOKING_ENDPOINT = '/booking';
 
 // Endpoints
-const GET_DAY_BOOKING = (date: string) => `${BASE_URL}/day/${date}`;
+const GET_DAY_BOOKING = (date: string) => `${BOOKING_ENDPOINT}/day/${date}`;
 const GET_WEEK_BOOKING = (weekStartDate: string, weekEndDate: string) =>
-  `${BASE_URL}/week/${weekStartDate}/${weekEndDate}`;
+  `${BOOKING_ENDPOINT}/week/${weekStartDate}/${weekEndDate}`;
 const ADD_BOOKING = (roomName: string) =>
-  `${BASE_URL}/add-booking/${roomName}`;
+  `${BOOKING_ENDPOINT}/add-booking/${roomName}`;
 const UPDATE_BOOKING = (bookingId: number, userId: number) =>
-  `${BASE_URL}/update-booking/${bookingId}/${userId}`;
+  `${BOOKING_ENDPOINT}/update-booking/${bookingId}/${userId}`;
 const DELETE_BOOKING = (bookingId: number, isDeleteOne: boolean) =>
-  `${BASE_URL}/delete-booking/${bookingId}/${isDeleteOne}`;
+  `${BOOKING_ENDPOINT}/delete-booking/${bookingId}/${isDeleteOne}`;
 const CHECK_ROOM_AVAILABILITY = (date: string, roomName: string) =>
-  `${BASE_URL}/is-room-available/${date}/${roomName}`;
+  `${BOOKING_ENDPOINT}/is-room-available/${date}/${roomName}`;
 
-export const getAllBookings = () => axios.get(`${BASE_URL}/all`);
+export const getAllBookings = () => api.get(`${BOOKING_ENDPOINT}/all`);
 
 export const getDayBookings = async (date: string) => {
-  return await axios.get(GET_DAY_BOOKING(date));
+  return await api.get(GET_DAY_BOOKING(date));
 };
 
 export const getWeekBookings = async (
   weekStartDate: string,
   weekEndDate: string
 ) => {
-  return await axios.get(GET_WEEK_BOOKING(weekStartDate, weekEndDate));
+  return await api.get(GET_WEEK_BOOKING(weekStartDate, weekEndDate));
 };
 
 export const addBooking = (roomName: string, booking: any) => {
-  return axios.post(ADD_BOOKING(roomName), booking, {
+  return api.post(ADD_BOOKING(roomName), booking, {
     withCredentials: true,
     headers: {
       'Content-Type': 'application/json',
@@ -43,7 +45,7 @@ export const updateBooking = (
   userId: number,
   booking: any
 ) => {
-  return axios.put(UPDATE_BOOKING(bookingId, userId), booking, {
+  return api.put(UPDATE_BOOKING(bookingId, userId), booking, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -51,11 +53,11 @@ export const updateBooking = (
 };
 
 export const deleteBooking = (bookingId: number, isDeleteOne: boolean) => {
-  return axios.delete(DELETE_BOOKING(bookingId, isDeleteOne),{
+  return api.delete(DELETE_BOOKING(bookingId, isDeleteOne),{
     withCredentials:true
   });
 };
 
 export const isRoomAvailable = async (date: string, roomName: string) => {
-  return await axios.get(CHECK_ROOM_AVAILABILITY(date, roomName));
+  return await api.get(CHECK_ROOM_AVAILABILITY(date, roomName));
 };

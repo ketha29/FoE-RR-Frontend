@@ -13,6 +13,8 @@ import NavBar from './components/NavBar';
 import ListUser from './components/user/ListUser';
 import InfoPage from './components/InfoPage';
 import LoginErrorPage from './components/LoginErrorPage';
+import OAuthSuccess from './components/OAuthSuccess';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   const { monthIndex, weekIndex, dayIndex } = useContext(GlobalContext);
@@ -35,10 +37,12 @@ function App() {
   // console.table(getMonth(3))
   return (
     <React.Fragment>
+      <AuthProvider>
       <BrowserRouter>
         <NavBar />
         <Routes>
           <Route path="/auth/login" element={<LoginUser />}></Route>
+          <Route path="/oauth-success" element={<OAuthSuccess />} />
           <Route path="/login-error" element={<LoginErrorPage />}></Route>
           <Route
             path="/booking/day"
@@ -75,6 +79,7 @@ function App() {
           <Route path="/info" element={<InfoPage />} />
         </Routes>
       </BrowserRouter>
+      </AuthProvider>
     </React.Fragment>
   );
 }

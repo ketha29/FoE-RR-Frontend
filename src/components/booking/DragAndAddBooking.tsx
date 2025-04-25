@@ -1,16 +1,11 @@
 import dayjs from 'dayjs';
 import { useContext, useEffect, useState } from 'react';
 import { getAllRooms } from '../../services/RoomService';
-import {
-  isAdmin,
-  isAuthenticated,
-  isRegularUser,
-  isSuperAdmin,
-} from '../../services/AuthService';
 import GlobalContext from '../../context/GlobalContext';
 import RenderBookings from './RenderBookings';
 import { getDay } from '../../util';
 import { Booking, Room } from '../Interfaces';
+import { useAuth } from '../../context/AuthContext';
 
 interface DragAndAddBookingpRrops {
   bookings: Booking[];
@@ -21,10 +16,15 @@ const DragAndAddBooking = ({
   bookings,
   currentDay,
 }: DragAndAddBookingpRrops) => {
-  const authenticated = isAuthenticated();
-  const regularUser = isRegularUser();
-  const admin = isAdmin();
-  const superAdmin = isSuperAdmin();
+
+  const authContext = useAuth();
+    
+      if (!authContext) {
+        throw new Error('useAuth must be used within an AuthProvider');
+      }
+    
+      const { isAuthenticated, user } = authContext;
+      
   const [roomNames, setRoomNames] = useState<string[]>([]);
   const {
     bookingSelection,
@@ -86,14 +86,14 @@ const DragAndAddBooking = ({
       return;
     }
     setSelectingBooking(true);
-    if (!isWeekend && isAcademicHour(time) && regularUser) {
+    if (!isWeekend && isAcademicHour(time) && (user?.userType == "regularUser")) {
       setBookingSelection({
         roomName,
         startTime: time,
         endTime: time.add(1, 'hour'),
         details: null,
       });
-    } else if (admin || superAdmin) {
+    } else if ((user?.userType == "superAdmin") || (user?.userType == "admin")) {
       setBookingSelection({
         roomName,
         startTime: time,
@@ -125,7 +125,7 @@ const DragAndAddBooking = ({
         isAcademicHour(bookingSelection.endTime.subtract(1, 'hour')) &&
         isAcademicHour(bookingSelection.startTime)
       ) &&
-      regularUser
+      (user?.userType == "regularUser")
     ) {
       setBookingSelection({
         ...bookingSelection,
@@ -169,8 +169,8 @@ const DragAndAddBooking = ({
     setSelectingBooking(false);
 
     // If the selected time is beyond allowed time. Set the allowed time as selected time
-    bookingSelection.endTime = (regularUser && bookingSelection.endTime?.isAfter(endTimeDay))?endTimeDay:bookingSelection.endTime;
-    bookingSelection.startTime = (regularUser && bookingSelection.startTime?.isBefore(startTimeDay))?startTimeDay:bookingSelection.startTime;
+    bookingSelection.endTime = ((user?.userType == "regularUser") && bookingSelection.endTime?.isAfter(endTimeDay))?endTimeDay:bookingSelection.endTime;
+    bookingSelection.startTime = ((user?.userType == "regularUser") && bookingSelection.startTime?.isBefore(startTimeDay))?startTimeDay:bookingSelection.startTime;
 
     if (
       !(
@@ -180,7 +180,7 @@ const DragAndAddBooking = ({
         // isAcademicHour(bookingSelection.endTime) &&
         // isAcademicHour(bookingSelection.startTime)
       ) &&
-      regularUser
+      (user?.userType == "regularUser")
     ) {
       setBookingSelection({
         ...bookingSelection,
@@ -195,7 +195,7 @@ const DragAndAddBooking = ({
         bookingSelection.endTime === null ||
         bookingSelection.roomName === null
       ) &&
-      authenticated && isFuture
+      isAuthenticated && isFuture
     ) {
       setShowBookingForm(true);
     }
@@ -244,14 +244,14 @@ const DragAndAddBooking = ({
               className={`
                         relative w-36 h-11 transition-all duration-300 ease-in-out
                         ${
-                          regularUser && (!isAcademicHour(time) || isWeekend)
+                          (user?.userType == "regularUser") && (!isAcademicHour(time) || isWeekend)
                             ? roomIndex % 2 === 0
                               ? 'bg-red-100  border-red-100'
                               : 'bg-red-80 border-red-80'
                             : ''
                         }
                         ${
-                          authenticated &&
+                          isAuthenticated &&
                           isCellSelected(roomName, time, currentDateObj)
                             ? 'bg-blue-300 border-none z-20'
                             : roomIndex % 2 === 0

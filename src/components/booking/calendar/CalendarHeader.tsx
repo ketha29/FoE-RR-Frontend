@@ -5,13 +5,20 @@ import { Menu, MenuButton, MenuItems } from '@headlessui/react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
-import { isAuthenticated } from '../../../services/AuthService';
 import { MenuItem } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import AddBookingButton from '../AddBookingButton';
+import { useAuth } from '../../../context/AuthContext';
 
 const CalendarHeader = () => {
-  const authenticated = isAuthenticated();
+  const authContext = useAuth();
+  
+    if (!authContext) {
+      throw new Error('useAuth must be used within an AuthProvider');
+    }
+  
+    const { isAuthenticated } = authContext;
+
   const location = useLocation();
   const {
     dayIndex,
@@ -186,7 +193,7 @@ const CalendarHeader = () => {
           </Menu>
 
           {/* {authenticated && <div className="ml-0 h-6 w-px bg-gray-500"></div>} */}
-          {authenticated && <AddBookingButton />}
+          {isAuthenticated && <AddBookingButton />}
         </div>
       </header>
     </>
