@@ -105,13 +105,11 @@ const BookingForm = () => {
       setShowBookingForm(false);
       setFetch(true);
     } catch (error) {
-      console.error(
-        'Error adding booking:',
-        (error as AxiosError).response?.data || (error as AxiosError).message
-      );
-      setErrorMessage(
-        'Error in adding booking (Check whether the selected time slot is available)'
-      );
+      const errorMessage =
+        (error as AxiosError).response?.data?.message ||
+        'Error in adding booking';
+      setErrorMessage(errorMessage);
+      console.error(errorMessage);
     }
     notify();
   };
