@@ -1,18 +1,24 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { FieldValues, useForm } from 'react-hook-form';
-import { isAdmin, isSuperAdmin } from '../../services/AuthService';
 import { addUser } from '../../services/UserService';
 import { AxiosError } from 'axios';
 import { useContext, useState } from 'react';
 import GlobalContext from '../../context/GlobalContext';
+import { useAuth } from '../../context/AuthContext';
 
 interface AddUserFormProps {
   onUserAddition: () => void;
 }
 
 const AddUserForm = ({ onUserAddition }: AddUserFormProps) => {
-  const admin = isAdmin();
-  const superAdmin = isSuperAdmin();
+  const authContext = useAuth();
+  
+    if (!authContext) {
+      throw new Error('useAuth must be used within an AuthProvider');
+    }
+  
+    const { user } = authContext;
+
   const {
     register,
     handleSubmit,
@@ -99,7 +105,7 @@ const AddUserForm = ({ onUserAddition }: AddUserFormProps) => {
           </div>
 
           {/* User type Field */}
-          {admin && (
+          {(user?.userType == "admin") && (
             <div className="mt-5">
               <label htmlFor="userType" className="block text-lg font-medium">
                 User type
@@ -109,7 +115,7 @@ const AddUserForm = ({ onUserAddition }: AddUserFormProps) => {
                 id="userType"
                 className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500">
                 <option value="regularUser">Regular user</option>
-                {superAdmin && <option value="admin">Admin</option>}{' '}
+                {/* {superAdmin && <option value="admin">Admin</option>}{' '} */}
                 {/* <option value="superadmin">Super admin</option> */}
               </select>
               {errors.userType?.type === 'required' && (
@@ -143,32 +149,6 @@ const AddUserForm = ({ onUserAddition }: AddUserFormProps) => {
               <p className="text-red-600 mt-1">
                 {typeof errors.email.message === 'string' &&
                   errors.email.message}
-              </p>
-            )}
-          </div>
-
-          {/* Phone number Field */}
-          <div className="mt-5">
-            <label htmlFor="phoneNo" className="block text-lg font-medium">
-              Phone number
-            </label>
-            <input
-              {...register('phoneNo', {
-                required: 'Phone number is required',
-                pattern: {
-                  value: /^[0-9]{10}$/,
-                  message: 'Enter a valid phone number',
-                },
-              })}
-              id="phoneNo"
-              type="text"
-              className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter the phone number"
-            />
-            {errors.phoneNo && (
-              <p className="text-red-600 mt-1">
-                {typeof errors.phoneNo.message === 'string' &&
-                  errors.phoneNo.message}
               </p>
             )}
           </div>

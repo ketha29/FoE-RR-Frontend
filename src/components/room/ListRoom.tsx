@@ -8,12 +8,18 @@ import AddRoomForm from './AddRoomForm';
 import GlobalContext from '../../context/GlobalContext';
 import UpdateRoom from './UpdateRoom';
 import { Room } from '../Interfaces';
-import { isAdmin, isSuperAdmin } from '../../services/AuthService';
 import { Tooltip } from '@mui/material';
+import { useAuth } from '../../context/AuthContext';
 
 const ListRoom = () => {
-  const admin = isAdmin();
-  const superAdmin = isSuperAdmin();
+  const authContext = useAuth();
+  
+    if (!authContext) {
+      throw new Error('useAuth must be used within an AuthProvider');
+    }
+  
+    const { user } = authContext;
+    
   const [roomList, setRoomList] = useState<Room[]>([]);
   const [adminOnlyRoomList, setAdminOnlyRoomList] = useState<Room[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
@@ -114,7 +120,7 @@ const ListRoom = () => {
             </div>
 
             {/* <AddRoomButton /> */}
-            {(admin || superAdmin) && (
+            {((user?.userType == "admin") || (user?.userType == "superAdmin")) && (
               <div>
                 <button
                   className="ml-10 rounded-md bg-indigo-600 px-3 py-1 h-9 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
@@ -178,7 +184,7 @@ const ListRoom = () => {
                         </td>
 
                         <td className="whitespace-nowrap text-right text-sm font-medium">
-                          {(admin || superAdmin) && (
+                          {((user?.userType == "admin") || (user?.userType == "superAdmin")) && (
                             <span className="px-6">
                               <Tooltip title="Edit" arrow>
                                 <button

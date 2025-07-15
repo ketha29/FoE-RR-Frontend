@@ -1,9 +1,42 @@
 import axios from 'axios';
+import api from '../utils/api'
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const SIGNIN_URL = 'http://localhost:8082/auth/login';
 const LOGOUT_URL = 'http://localhost:8082/logout';
+
+export const loginWithGoogle = async (googleToken: string) => {
+  const response = await api.post('/api/auth/google', { token: googleToken });
+  return response.data;
+};
+
+export const logout1 = async () => {
+  try {
+    await api.post('/auth/logout',{},{
+      withCredentials: true
+    });
+  
+    // Remove access token from localStorage
+    localStorage.removeItem("accessToken");
+  
+    window.location.href = '/booking/month';
+  } catch (error) {
+    console.error('Logout failed:', error);
+    // Force cleanup anyway
+    localStorage.removeItem('accessToken');
+    window.location.href = '/booking/month';
+  }
+  
+};
+
+export const refreshToken = async () => {
+  const response = await api.get('/auth/refresh',{
+    withCredentials: true
+  });
+  console.log(response)
+  return response.data.token;
+};
 
 export const isAuthenticated = () => {
   return localStorage.getItem('userId') ? true : false;

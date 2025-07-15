@@ -4,18 +4,16 @@ import GlobalContext from '../../context/GlobalContext';
 import CloseIcon from '@mui/icons-material/Close';
 import { addBooking } from '../../services/BookingService';
 import { AxiosError } from 'axios';
-import { isAdmin, isSuperAdmin } from '../../services/AuthService';
 import { getAllRooms } from '../../services/RoomService';
 import { Room, User } from '../Interfaces';
 import { Autocomplete, TextField } from '@mui/material';
 import { getUserByName } from '../../services/UserService';
 import { Bounce, ToastContainer, toast } from 'react-toastify';
+import { useAuth } from '../../context/AuthContext';
 
 const recurrenceTypes = ['none', 'daily', 'weekly'];
 
 const BookingForm = () => {
-  const admin = isAdmin();
-  const superAdmin = isSuperAdmin();
   const {
     register,
     handleSubmit,
@@ -33,6 +31,14 @@ const BookingForm = () => {
     setBookingSelection,
     setFetch,
   } = useContext(GlobalContext);
+
+  const authContext = useAuth();
+  
+    if (!authContext) {
+      throw new Error('useAuth must be used within an AuthProvider');
+    }
+  
+    const { user } = authContext;
 
   const closeBookingForm = () => {
     setBookingSelection({
@@ -89,8 +95,8 @@ const BookingForm = () => {
         ...data,
         startTime: formatTime(data.startTime),
         endTime: formatTime(data.endTime),
-        recurrence: admin || superAdmin ? data.recurrence : 'none',
-        recurrencePeriod: admin || superAdmin ? data.recurrencePeriod : 0,
+        recurrence: (user?.userType == "admin") || (user?.userType == "superAdmin") ? data.recurrence : 'none',
+        recurrencePeriod: (user?.userType == "admin") || (user?.userType == "superAdmin") ? data.recurrencePeriod : 0,
       };
       console.log(formattedBooking);
       const response = await addBooking(data.roomName, formattedBooking);
@@ -175,7 +181,7 @@ const BookingForm = () => {
                 )}
               </div>
 
-              {(admin || superAdmin) && (
+              {((user?.userType == "admin") || (user?.userType == "superAdmin")) && (
                 <div className="flex-1">
                   {/* Book for User */}
                   <label
@@ -314,7 +320,7 @@ const BookingForm = () => {
             </div>
 
             {/* Recurrence Type Radio Buttons */}
-            {(admin || superAdmin) && (
+            {((user?.userType == "admin") || (user?.userType == "superAdmin")) && (
               <div className="mt-4">
                 <label className="block text-lg font-medium">
                   Recurrence Type
@@ -339,7 +345,7 @@ const BookingForm = () => {
             )}
 
             {/* Recurrence Period */}
-            {(admin || superAdmin) && (
+            {((user?.userType == "admin") || (user?.userType == "superAdmin")) && (
               <div className="mt-4">
                 <label
                   htmlFor="recurrencePeriod"

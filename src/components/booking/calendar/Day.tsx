@@ -52,8 +52,6 @@ const Day = ({ day, rowIdx }: DayProps) => {
     fetchAdminOnlyRoom();
   }, []);
 
-  console.log(adminOnlyRoomList)
-
   // List of all room names to display
   const importantRooms = ['EoE', 'SR1', 'SR2', 'SR3'];
 

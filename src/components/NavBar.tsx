@@ -10,9 +10,10 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { NavLink, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import user from '../assets/user.jpg';
-import {logout, startOAuth2Flow, isAuthenticated } from '../services/AuthService';
+import { logout, logout1, startOAuth2Flow } from '../services/AuthService';
 import { useContext } from 'react';
 import GlobalContext from '../context/GlobalContext';
+import { useAuth } from '../context/AuthContext';
 
 const navigation = [
   { name: 'Info', href: '/info' },
@@ -22,13 +23,18 @@ const navigation = [
 ];
 
 const NavBar = () => {
-  const authenticated = isAuthenticated();
+  const authContext = useAuth();
+
+  if (!authContext) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+
+  const { isAuthenticated } = authContext;
   const navigate = useNavigate();
   const { view } = useContext(GlobalContext);
-  
+
   const handleLogout = () => {
-    logout();
-    navigate('/booking/month');
+    logout1();
   };
 
   const handleLogin = () => {
@@ -51,7 +57,7 @@ const NavBar = () => {
           </div>
           <div className="flex items-center justify-center md:items-stretch md:justify-start">
             <div className="flex items-center">
-              <img alt="FoE RR" src={logo} className="h-10 w-auto" onClick={()=>{navigate("/info")}}/>
+              <img alt="FoE RR" src={logo} className="h-10 w-auto" onClick={() => { navigate("/info") }} />
             </div>
             <div className="flex items-center text-amber-400 font-semibold text-l pl-5 pr-10">
               <p className="uppercase transform scale-y-150">
@@ -70,7 +76,7 @@ const NavBar = () => {
                   }>
                   Bookings
                 </NavLink>
-                {authenticated && (
+                {isAuthenticated && (
                   <NavLink
                     to="/user/all"
                     className={({ isActive }) =>
@@ -119,15 +125,15 @@ const NavBar = () => {
               <MenuItems
                 transition
                 className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in">
-                {!authenticated && (
+                {!isAuthenticated && (
                   <MenuItem>
                     <a className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
-                    onClick={handleLogin}>
+                      onClick={handleLogin}>
                       login
                     </a>
                   </MenuItem>
                 )}
-                {authenticated && (
+                {isAuthenticated && (
                   <MenuItem>
                     <a
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
